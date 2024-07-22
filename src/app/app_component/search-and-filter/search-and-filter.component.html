@@ -1,0 +1,37 @@
+<label for="searchAndFilter">
+  <h1 class="display-6">Buscar y Filtrar<i class="bi bi-search"></i></h1>
+</label>
+<select
+  class="form-select form-select-lg mb-3"
+  aria-label="Large select filter"
+  id="searchAndFilter"
+  [(ngModel)]="selectFilter"
+  (click)="selectFilter1(selectFilter)"
+>
+  <option selected disabled>Selecciona Una Opción</option>
+  <option value="0">Planta Principal</option>
+  <option value="1">PDV Bogotá</option>
+  <option value="2">PDV Nacionales</option>
+  <option value="3">PDV Internacionales</option>
+</select>
+@if (openFilter == 1) {
+<ul class="searchResults">
+  @for (dataSection of selectFilterSection?.section; track $index) {
+  <li class="searchResults__link" (click)="selectFilter2($index)">
+    {{ dataSection }}
+  </li>
+  }
+</ul>
+}@else if(openFilter == 2){
+<ul>
+  @for (dataHost of selectFilterHost; track $index) {
+  <li class="searchResults__link" (click)="selectFilter3($index)">{{ dataHost }}</li>
+  }
+</ul>
+}@else if(openFilter == 3){
+  <ul>
+    @for (dataPrinter of selectFilterPrinter; track $index) {
+    <li class="searchResults__link">{{ dataPrinter }}</li>
+    }
+  </ul>
+}
