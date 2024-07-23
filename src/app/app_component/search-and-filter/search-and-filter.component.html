@@ -5,33 +5,32 @@
   class="form-select form-select-lg mb-3"
   aria-label="Large select filter"
   id="searchAndFilter"
-  [(ngModel)]="selectFilter"
-  (click)="selectFilter1(selectFilter)"
+  [(ngModel)]="index"
+  (change)="sectionFilter(index!)"
 >
-  <option selected disabled>Selecciona Una Opción</option>
+  <option selected disabled value="select an options">
+    Selecciona Una Opción
+  </option>
   <option value="0">Planta Principal</option>
   <option value="1">PDV Bogotá</option>
   <option value="2">PDV Nacionales</option>
   <option value="3">PDV Internacionales</option>
 </select>
-@if (openFilter == 1) {
+
 <ul class="searchResults">
-  @for (dataSection of selectFilterSection?.section; track $index) {
-  <li class="searchResults__link" (click)="selectFilter2($index)">
-    {{ dataSection }}
+  @switch (openFilter) { @case ("sections") { @for (items of sections; track
+  $index) {
+  <li class="searchResults__link" (click)="hostFilter(index!, $index)">
+    {{ items.name }}
   </li>
-  }
+  } } @case ("host") { @for (items of host; track $index) {
+  <li
+    class="searchResults__link"
+    (click)="selectHostFilter(index!, $index, items)"
+  >
+    {{ items }}
+  </li>
+  } } @case ("selectHost") { @for (items of selectHost; track $index) {
+  <li class="searchResults__link">{{ items }}</li>
+  } } }
 </ul>
-}@else if(openFilter == 2){
-<ul>
-  @for (dataHost of selectFilterHost; track $index) {
-  <li class="searchResults__link" (click)="selectFilter3($index)">{{ dataHost }}</li>
-  }
-</ul>
-}@else if(openFilter == 3){
-  <ul>
-    @for (dataPrinter of selectFilterPrinter; track $index) {
-    <li class="searchResults__link">{{ dataPrinter }}</li>
-    }
-  </ul>
-}

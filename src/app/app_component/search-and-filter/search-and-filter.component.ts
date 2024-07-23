@@ -1,8 +1,7 @@
+import { IdataFiltersProperty } from './../../app_models/search-and-filter.models';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { IdataFilter } from '../../app_models/search-and-filter.models';
-import { dataFilter } from '../../app_models/search-and-filter.models';
-import { Console } from 'console';
+import { dataFilters } from '../../app_models/search-and-filter.models';
 
 @Component({
   selector: 'app-search-and-filter',
@@ -12,26 +11,42 @@ import { Console } from 'console';
   styleUrl: './search-and-filter.component.sass',
 })
 export class SearchAndFilterComponent {
-  openFilter?: number;
-  selectFilter!: string;
-  selectFilterSection?: IdataFilter;
-  selectFilterHost?: string[];
-  selectFilterPrinter?: string[];
+  openFilter?: string;
+  index? = 'select an options';
+  sections?: IdataFiltersProperty[];
+  host?: string[];
+  selectHost?: string[];
 
-  selectFilter1(selectFilter: string): void {
-    const converSelectFilter = parseInt(selectFilter);
-    this.selectFilterSection = dataFilter[converSelectFilter];
-    this.openFilter = 1
+  sectionFilter(index: string): void {
+    const { sections } = dataFilters[parseInt(index)];
+    this.sections = sections;
+    this.openFilter = 'sections';
   }
-  selectFilter2(index: number) {
-    this.selectFilterHost = this.selectFilterSection?.host[index];
-    this.openFilter = 2
-    
+  hostFilter(index: string, $index: number) {
+    const { host } = dataFilters[parseInt(index)];
+    const { name } = host[$index];
+    this.host = [...name];
+    this.openFilter = 'host';
   }
-  selectFilter3(index: number) {
-    this.selectFilterPrinter = this.selectFilterSection?.printer[index];
-    this.openFilter = 3
-    console.log(this.selectFilterPrinter,index)
+  selectHostFilter(index: string, $index: number, $name: string) {
+    const { accessPoint, cameras, printers, switches } =
+      dataFilters[parseInt(index)];
+    this.openFilter = 'selectHost';
+    switch ($name) {
+      case 'Access Point':
+        this.selectHost = [...accessPoint[$index].name];
+        break;
+      case 'Camaras':
+        this.selectHost = [...cameras[$index].name];
+        break;
+      case 'Impresoras':
+        this.selectHost = [...printers[$index].name];
+        break;
+      case 'Switches':
+        this.selectHost = [...switches[$index].name];
+        break;
+      default:
+        break;
+    }
   }
-
 }
