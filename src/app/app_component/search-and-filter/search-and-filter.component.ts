@@ -18,9 +18,12 @@ export class SearchAndFilterComponent {
   selectHost?: string[];
 
   sectionFilter(index: string): void {
-    const { sections } = dataFilters[parseInt(index)];
-    this.sections = sections;
-    this.openFilter = 'sections';
+    if(index != 'select an options'){
+      const { sections } = dataFilters[parseInt(index)];
+      this.sections = sections;
+      this.openFilter = 'sections';
+    }
+    
   }
   hostFilter(index: string, $index: number) {
     const { host } = dataFilters[parseInt(index)];

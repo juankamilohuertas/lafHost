@@ -1,36 +1,41 @@
-<label for="searchAndFilter">
-  <h1 class="display-6">Buscar y Filtrar<i class="bi bi-search"></i></h1>
-</label>
-<select
-  class="form-select form-select-lg mb-3"
-  aria-label="Large select filter"
-  id="searchAndFilter"
-  [(ngModel)]="index"
-  (change)="sectionFilter(index!)"
->
-  <option selected disabled value="select an options">
-    Selecciona Una Opción
-  </option>
-  <option value="0">Planta Principal</option>
-  <option value="1">PDV Bogotá</option>
-  <option value="2">PDV Nacionales</option>
-  <option value="3">PDV Internacionales</option>
-</select>
-
-<ul class="searchResults">
-  @switch (openFilter) { @case ("sections") { @for (items of sections; track
-  $index) {
-  <li class="searchResults__link" (click)="hostFilter(index!, $index)">
-    {{ items.name }}
-  </li>
-  } } @case ("host") { @for (items of host; track $index) {
-  <li
-    class="searchResults__link"
-    (click)="selectHostFilter(index!, $index, items)"
+<section class="searchAndFilter container-md">
+  <label for="selectFilter">
+    <h1 class="display-6">Buscar y Filtrar <i class="fs-3 bi bi-search"></i></h1>
+  </label>
+  <select
+    class="form-select form-select-lg mb-3 d-inline-flex focus-ring focus-ring-light py-1 px-2 text-decoration-none border rounded-2"
+    aria-label="Large select filter"
+    id="selectFilter"
+    [(ngModel)]="index"
+    (click)="sectionFilter(index!)"
   >
-    {{ items }}
-  </li>
-  } } @case ("selectHost") { @for (items of selectHost; track $index) {
-  <li class="searchResults__link">{{ items }}</li>
-  } } }
-</ul>
+    <option selected disabled value="select an options">
+      Selecciona Una Opción
+    </option>
+    <option value="0">Planta Principal</option>
+    <option value="1">PDV Bogotá</option>
+    <option value="2">PDV Nacionales</option>
+    <option value="3">PDV Internacionales</option>
+  </select>
+  
+  @if(openFilter){
+    <ul class="searchAndFilter__searchResults">
+      @switch (openFilter) { @case ("sections") { @for (items of sections; track
+      $index) {
+      <li class="searchAndFilter__searchResults-link" (click)="hostFilter(index!, $index)">
+        {{ items.name }}
+      </li>
+      } } @case ("host") { @for (items of host; track $index) {
+      <li
+        class="searchAndFilter__searchResults-link"
+        (click)="selectHostFilter(index!, $index, items)"
+      >
+        {{ items }}
+      </li>
+      } } @case ("selectHost") { @for (items of selectHost; track $index) {
+      <li class="searchAndFilter__searchResults-link">{{ items }}</li>
+      } } }
+    </ul>
+  }
+</section>
+

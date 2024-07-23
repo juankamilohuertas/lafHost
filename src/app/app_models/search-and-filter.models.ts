@@ -993,7 +993,7 @@ export const dataFilters: IdataFilters[] = [
       { id: 0, name: 'Costa Rica' },
       { id: 1, name: 'Venezuela' },
       { id: 2, name: 'Ecuador' },
-      { id: 3, name: 'Panamá' },
+      { id: 3, name: 'Mexico' },
     ],
     host: [
       {
@@ -1002,6 +1002,14 @@ export const dataFilters: IdataFilters[] = [
       },
       {
         id: 1,
+        name: ['Access Point', 'Camaras', 'Impresoras', 'Switches'],
+      },
+      {
+        id: 2,
+        name: ['Access Point', 'Camaras', 'Impresoras', 'Switches'],
+      },
+      {
+        id: 3,
         name: ['Access Point', 'Camaras', 'Impresoras', 'Switches'],
       },
     ],
