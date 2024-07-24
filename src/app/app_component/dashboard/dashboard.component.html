@@ -3,11 +3,20 @@
   <main class="content__dashboard-main">
     <section class="content__dashboard-section">
       <app-header />
-      <div class="m-4 p-3 bg-light d-flex">
-        <app-search-and-filter />
-        <app-recent-searches/>
+      <div class="conatiner m-4 p-3 bg-light">
+        <div class="row">
+          <div class="col-12">
+            <app-bread-crumb/>
+          </div>
+         <div class="col-6">
+          <app-search-and-filter />
+         </div>
+         <div class="col-6">
+          <app-recent-searches/>
+         </div>
+        </div>
       </div>
     </section>
   </main>
-  <!-- <app-footer /> -->
+  <!-- <app-footer /> --> 
 </div>

@@ -16,7 +16,7 @@ export class SearchAndFilterComponent {
   sections?: IdataFiltersProperty[];
   host?: string[];
   selectHost?: string[];
-
+  
   sectionFilter(index: string): void {
     if(index != 'select an options'){
       const { sections } = dataFilters[parseInt(index)];
