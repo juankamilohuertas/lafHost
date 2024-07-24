@@ -1,11 +1,13 @@
 <div class="content__dashboard">
-  <app-header/>
+  <app-aside />
   <main class="content__dashboard-main">
     <section class="content__dashboard-section">
-      <app-aside/>
-      <app-search-and-filter/>
-      <app-notifications/>
+      <app-header />
+      <div class="m-4 p-3 bg-light d-flex">
+        <app-search-and-filter />
+        <app-recent-searches/>
+      </div>
     </section>
   </main>
-  <app-footer />
+  <!-- <app-footer /> -->
 </div>
