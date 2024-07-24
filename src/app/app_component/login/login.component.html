@@ -1,25 +1,25 @@
 <section class="login">
-    <img src="https://lafayette.com/wp-content/uploads/logo-lafayette.svg" alt="Logo_lafayette">
+    <img class="login__img" src="https://lafayette.com/wp-content/uploads/logo-lafayette.svg" alt="Logo_lafayette">
     <div class="login__div">
-        <form class="login__form px-4 py-3">
+        <div class="login__form px-4 py-3">
           <div class="mb-3">
-            <label for="exampleDropdownFormEmail1" class="form-label">Correo Electrónico</label>
-            <input type="email" class="form-control" id="exampleDropdownFormEmail1" placeholder="email@example.com">
+            <label for="User" class="form-label">Usuario</label>
+            <input type="text" [(ngModel)]="user" class="form-control" id="User" placeholder="User">
           </div>
           <div class="mb-3">
             <label for="exampleDropdownFormPassword1" class="form-label">Contraseña</label>
-            <input type="password" class="form-control" id="exampleDropdownFormPassword1" placeholder="Password">
+            <input type="password" [(ngModel)]="passworld" class="form-control" id="exampleDropdownFormPassword1" placeholder="Password">
           </div>
           <div class="mb-3">
             <div class="form-check">
               <input type="checkbox" class="form-check-input" id="dropdownCheck">
               <label class="form-check-label" for="dropdownCheck">
-                Remember me
+                Recuerdame
               </label>
             </div>
           </div>
-          <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
-        </form>
+          <button type="submit" (click)="startLogin()" class="btn btn-primary">Iniciar Sesión</button>
+        </div>
         <div class="dropdown-divider"></div>
         <!-- <a class="dropdown-item" href="#">New around here? Sign up</a> -->
         <a class="dropdown-item" href="#">
