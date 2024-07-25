@@ -1,6 +1,6 @@
 export interface requestLogin{
-    usuario: string,
-    password: string
+    users: string,
+    passworlds: string
 }
 
 export interface requestApiCentauro{

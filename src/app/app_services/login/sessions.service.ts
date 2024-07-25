@@ -12,23 +12,22 @@ import internal from 'stream';
 export class SessionsService {
 
   private readonly ApiCentauro = environment.apiCentauro;
+  
 constructor(){}
 
-  async login(requestSession: requestLogin):Promise<requestApiCentauro>{
-    const apiData = await fetch(this.ApiCentauro+"/api/SISMO01/IniciarSesion",
+  async login(user:string,passworld:string):Promise<requestApiCentauro>{
+    const apiData = await fetch(this.ApiCentauro+"/api/Login",
       {
         method: "POST",
         body: JSON.stringify({
-          "usuario": requestSession.usuario,         
-          "password": requestSession.password     
+          "usuario": user,         
+          "password": passworld     
          }),
         headers:{"Content-type":"application/json"}
     });
     const resApiData = await apiData.json();
+   console.log(resApiData)
     return resApiData as requestApiCentauro;
   }
 
-  test():number{
-    return 1;
-  }
 }
