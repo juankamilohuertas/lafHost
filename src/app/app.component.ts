@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterLink, RouterOutlet } from '@angular/router';
 import { DashboardComponent } from './app_component/dashboard/dashboard.component';
 import { SearchAndFilterComponent } from './app_component/search-and-filter/search-and-filter.component';
 import { LoginComponent } from './app_component/login/login.component';

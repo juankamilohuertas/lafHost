@@ -17,7 +17,7 @@ export class LoginComponent implements OnInit{
   private readonly _dataService = inject(SessionsService)
   user!:string;
   passworld!:string;
-
+  
   constructor(){}
 
   startLogin(){
