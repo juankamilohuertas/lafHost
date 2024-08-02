@@ -1,42 +1,37 @@
-
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SessionsService } from '../../app_services/login/sessions.service';
-import { requestLogin } from '../../app_models/Sesion/requestLogin.models';
+import { RouterLink } from '@angular/router';
+
 
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule,RouterLink],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.sass'
+  styleUrl: './login.component.sass',
+  providers:[SessionsService]
 })
-export class LoginComponent {
-
+export class LoginComponent implements OnInit{
+  private readonly _dataService = inject(SessionsService)
   user!:string;
   passworld!:string;
 
- /*  _requestLogin:requestLogin ={
-    users:this.user,
-    passworlds:this.passworld
-  } */
-  
-  constructor(
-    private _sessions : SessionsService
-  ){}
-  
-  
-  async startLogin(){
-     const respuesta = await this._sessions.login(this.user,this.passworld);
+  constructor(){}
 
-     console.log("test respuesta api"+respuesta.result);  
-     
-    /*  if( respuesta.httpStatus == 200)
-     {
-       window.alert(respuesta.result); 
-     } */
-     
-    }
+  startLogin(){
+    return this._dataService.getApiCentauro(this.user,this.passworld).subscribe(v=>{
+      console.log(v)
+    })
+  }
+  ngOnInit(): void {
+    this.startLogin
+  }
+  
+
+
+  
+  
 
 }
