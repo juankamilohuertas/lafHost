@@ -12,14 +12,13 @@ import { BreadCrumbComponent } from '../bread-crumb/bread-crumb.component';
   styleUrl: './search-and-filter.component.sass',
 })
 export class SearchAndFilterComponent {
-  searchType?: string;
-
-
+  searchType?: string = "Buscar por...";
   openFilter?: string;
   index? = 'select an options';
   sections?: IdataFiltersProperty[];
   host?: string[];
   selectHost?: string[];
+  ipHost?: string[]; 
   
   sectionFilter(index: string): void {
     if(index != 'select an options'){
@@ -29,14 +28,14 @@ export class SearchAndFilterComponent {
     }
     
   }
-  hostFilter(index: string, $index: number) {
+  hostFilter(index: string, $id: number) {
     const { host } = dataFilters[parseInt(index)];
-    const { name } = host[$index];
+    const { name,id } = host[$id];
     this.host = [...name];
     this.openFilter = 'host';
   }
   selectHostFilter(index: string, $index: number, $name: string) {
-    const { accessPoint, cameras, printers, switches } =
+    const { accessPoint, cameras, printers, switches, ip } =
       dataFilters[parseInt(index)];
     this.openFilter = 'selectHost';
     switch ($name) {
@@ -47,6 +46,8 @@ export class SearchAndFilterComponent {
         this.selectHost = [...cameras[$index].name];
         break;
       case 'Impresoras':
+        this.ipHost = [...ip[$index].name]
+        console.log($index)
         this.selectHost = [...printers[$index].name];
         break;
       case 'Switches':

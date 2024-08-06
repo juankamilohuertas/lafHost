@@ -2,7 +2,7 @@
 <!-- SELECCIONA EL TIPO DE BUSQUEDAD -->
 <section>
   <select name="" id="" [(ngModel)]="searchType!">
-    <option value="" selected disabled>Buscar por...</option>
+    <option value="Buscar por..." selected disabled>Buscar por...</option>
     <option value="codigo">Codigo activo o S/N</option>
     <option value="cascada">Cascada</option>
   </select>
@@ -35,8 +35,8 @@
   @if(openFilter){
     <ul class="searchAndFilter__searchResults">
       @switch (openFilter) { @case ("sections") { @for (items of sections; track
-      $index) {
-      <li class="searchAndFilter__searchResults-link" (click)="hostFilter(index!, $index)">
+      items.id) {
+      <li class="searchAndFilter__searchResults-link" (click)="hostFilter(index!, items.id)">
         {{ items.name }}
       </li>
       } } @case ("host") { @for (items of host; track $index) {
@@ -47,7 +47,12 @@
         {{ items }}
       </li>
       } } @case ("selectHost") { @for (items of selectHost; track $index) {
-      <li class="searchAndFilter__searchResults-link"><a target="_blank" href="http://172.20.24.73/">{{ items }}</a></li>
+      <li class="searchAndFilter__searchResults-link">
+        {{ items }}
+        @for (item of ipHost; track $index) {
+          <a target="_blank" [href]="item">{{ item }}</a>
+        }
+        </li>
       } } }
     </ul>
   }

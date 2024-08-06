@@ -12,7 +12,9 @@ import { LoginService } from '../../../app_services/login/login.service';
 export class AsideComponent implements OnInit {
   private readonly _dataService = inject(LoginService)
   loggedUser?:string;
-  constructor(){ }
+  constructor(){ 
+    
+  }
 
   ngOnInit(): void {
     this.loggedUser = this._dataService.getUser$;

@@ -11,6 +11,7 @@ export interface IdataFilters {
   cameras: IdataFiltersProperty[];
   printers: IdataFiltersProperty[];
   switches: IdataFiltersProperty[];
+  ip: IdataFiltersProperty[];
 }
 
 export const dataFilters: IdataFilters[] = [
@@ -393,6 +394,60 @@ export const dataFilters: IdataFilters[] = [
         name: ['Gigabit', 'TP-Link', 'TrendNet'],
       },
     ],
+    ip: [
+      {
+        id: 0,
+        name: ['Gigabit', 'TP-Link', 'TrendNet'],
+      },
+      {
+        id: 1,
+        name: ['Gigabit', 'TP-Link', 'TrendNet'],
+      },
+      {
+        id: 2,
+        name: ['Gigabit', 'TP-Link', 'TrendNet'],
+      },
+      {
+        id: 3,
+        name: ['Gigabit', 'TP-Link', 'TrendNet'],
+      },
+      {
+        id: 4,
+        name: ['Gigabit', 'TP-Link', 'TrendNet'],
+      },
+      {
+        id: 5,
+        name: ['Gigabit', 'TP-Link', 'TrendNet'],
+      },
+      {
+        id: 6,
+        name: ['Gigabit', 'TP-Link', 'TrendNet'],
+      },
+      {
+        id: 7,
+        name: ['Gigabit', 'TP-Link', 'TrendNet'],
+      },
+      {
+        id: 8,
+        name: ['Gigabit', 'TP-Link', 'TrendNet'],
+      },
+      {
+        id: 9,
+        name: ['Gigabit', 'TP-Link', 'TrendNet'],
+      },
+      {
+        id: 10,
+        name: ['http://172.20.124.59/'],
+      },  
+      {
+        id: 11,
+        name: ['Gigabit', 'TP-Link', 'TrendNet'],
+      },
+      {
+        id: 12,
+        name: ['Gigabit', 'TP-Link', 'TrendNet'],
+      },
+    ]
   },
   /* **************** PDV Bogotá ***************************/
   {
@@ -717,6 +772,52 @@ export const dataFilters: IdataFilters[] = [
         name: ['Gigabit', 'TP-Link', 'TrendNet'],
       },
     ],
+    ip:[
+      {
+        id: 0,
+        name: ['Gigabit', 'TP-Link', 'TrendNet'],
+      },
+      {
+        id: 1,
+        name: ['Gigabit', 'TP-Link', 'TrendNet'],
+      },
+      {
+        id: 2,
+        name: ['Gigabit', 'TP-Link', 'TrendNet'],
+      },
+      {
+        id: 3,
+        name: ['Gigabit', 'TP-Link', 'TrendNet'],
+      },
+      {
+        id: 4,
+        name: ['Gigabit', 'TP-Link', 'TrendNet'],
+      },
+      {
+        id: 5,
+        name: ['Gigabit', 'TP-Link', 'TrendNet'],
+      },
+      {
+        id: 6,
+        name: ['Gigabit', 'TP-Link', 'TrendNet'],
+      },
+      {
+        id: 7,
+        name: ['Gigabit', 'TP-Link', 'TrendNet'],
+      },
+      {
+        id: 8,
+        name: ['Gigabit', 'TP-Link', 'TrendNet'],
+      },
+      {
+        id: 9,
+        name: ['Gigabit', 'TP-Link', 'TrendNet'],
+      },
+      {
+        id: 10,
+        name: ['Gigabit', 'TP-Link', 'TrendNet'],
+      },
+    ]
   },
   /* **************** PDV Nacionales ********************* */
   {
@@ -985,6 +1086,44 @@ export const dataFilters: IdataFilters[] = [
         name: ['Gigabit', 'TP-Link', 'TrendNet'],
       },
     ],
+    ip: [
+      {
+        id: 0,
+        name: ['Gigabit', 'TP-Link', 'TrendNet'],
+      },
+      {
+        id: 1,
+        name: ['Gigabit', 'TP-Link', 'TrendNet'],
+      },
+      {
+        id: 2,
+        name: ['Gigabit', 'TP-Link', 'TrendNet'],
+      },
+      {
+        id: 3,
+        name: ['Gigabit', 'TP-Link', 'TrendNet'],
+      },
+      {
+        id: 4,
+        name: ['Gigabit', 'TP-Link', 'TrendNet'],
+      },
+      {
+        id: 5,
+        name: ['Gigabit', 'TP-Link', 'TrendNet'],
+      },
+      {
+        id: 6,
+        name: ['Gigabit', 'TP-Link', 'TrendNet'],
+      },
+      {
+        id: 7,
+        name: ['Gigabit', 'TP-Link', 'TrendNet'],
+      },
+      {
+        id: 8,
+        name: ['Gigabit', 'TP-Link', 'TrendNet'],
+      },
+    ]
   },
   /* **************** PDV Internacionales***************** */
   {
@@ -1113,5 +1252,23 @@ export const dataFilters: IdataFilters[] = [
         name: ['Gigabit', 'TP-Link', 'TrendNet'],
       },
     ],
+    ip:[
+      {
+        id: 0,
+        name: ['Gigabit', 'TP-Link', 'TrendNet'],
+      },
+      {
+        id: 1,
+        name: ['Gigabit', 'TP-Link', 'TrendNet'],
+      },
+      {
+        id: 2,
+        name: ['Gigabit', 'TP-Link', 'TrendNet'],
+      },
+      {
+        id: 3,
+        name: ['Gigabit', 'TP-Link', 'TrendNet'],
+      },
+    ]
   },
 ];
