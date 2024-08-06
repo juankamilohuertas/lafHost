@@ -2,15 +2,19 @@ import { IdataFiltersProperty } from './../../app_models/search-and-filter.model
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { dataFilters } from '../../app_models/search-and-filter.models';
+import { BreadCrumbComponent } from '../bread-crumb/bread-crumb.component';
 
 @Component({
   selector: 'app-search-and-filter',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule,BreadCrumbComponent],
   templateUrl: './search-and-filter.component.html',
   styleUrl: './search-and-filter.component.sass',
 })
 export class SearchAndFilterComponent {
+  searchType?: string;
+
+
   openFilter?: string;
   index? = 'select an options';
   sections?: IdataFiltersProperty[];

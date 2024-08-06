@@ -1,37 +1,51 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { LoginService } from './../../app_services/login/login.service';
+import { Component, HostListener, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { SessionsService } from '../../app_services/login/sessions.service';
-import { RouterLink } from '@angular/router';
-
-
+import { Router } from '@angular/router';
+import { IrequestApiCentauro } from '../../app_models/Sesion/requestLogin.models';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule,RouterLink],
+  imports: [FormsModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.sass',
-  providers:[SessionsService]
 })
-export class LoginComponent implements OnInit{
-  private readonly _dataService = inject(SessionsService)
-  user!:string;
-  passworld!:string;
-  
-  constructor(){}
+export class LoginComponent {
+  private readonly _dataService = inject(LoginService);
+  private readonly _router = inject(Router);
+  user!: string;
+  passworld!: string;
+  userExpresion = /^\d+$/;
+  passWorldExpresion = /^[\w!@#$%^&*()_+={}\[\]|;:',.?/`~\-]{1,8}$/;
 
-  startLogin(){
-    return this._dataService.getApiCentauro(this.user,this.passworld).subscribe(v=>{
-      console.log(v)
-    })
+  constructor() {}
+  // INICIO DE SESION POR CLICK Y VALIDACION DE USUARIO 
+  startLogin() {
+    //validando campos del inicio de sesion
+    if (!this.userExpresion.test(this.user)) {
+      alert('El usuario Solo Debe Contener Numeros de 0-9');
+    } else if (!this.passWorldExpresion.test(this.passworld)) {
+      alert('La contraseña debe tener como maximo 8 caracteres');
+    } else {
+      //recibiendo datos de la API centauro 
+      this._dataService
+        .getApiCentauro(this.user, this.passworld)
+        .subscribe((dataApi: IrequestApiCentauro) => {
+          if (dataApi.result.usuario != undefined) {
+            this._dataService.getUser$ = dataApi.result.usuario;
+            this._router.navigateByUrl('/panel');
+          } else {
+            alert('Usuario o Contraseña Invalido');
+          }
+        });
+    }
   }
-  ngOnInit(): void {
-    this.startLogin
+  // INICIO DE SESION CON LA TECLA ENTER
+  @HostListener('window:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent): void {
+    if (event.key === 'Enter') {
+      this.startLogin();
+    }
   }
-  
-
-
-  
-  
-
 }

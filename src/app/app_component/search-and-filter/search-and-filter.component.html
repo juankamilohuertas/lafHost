@@ -1,3 +1,17 @@
+<app-bread-crumb/>
+<!-- SELECCIONA EL TIPO DE BUSQUEDAD -->
+<section>
+  <select name="" id="" [(ngModel)]="searchType!">
+    <option value="" selected disabled>Buscar por...</option>
+    <option value="codigo">Codigo activo o S/N</option>
+    <option value="cascada">Cascada</option>
+  </select>
+</section>
+@if(searchType == "codigo"){
+  <!-- busqueda por codigo activo y S/N -->
+  <input type="text" placeholder="codigo">
+}@else if(searchType == "cascada"){
+  <!-- Busqueda por clicks -->
 <section class="searchAndFilter">
   <label for="selectFilter">
     <h1 class="display-6 fs-3">Buscar y Filtrar <i class="fs-4 bi bi-search"></i></h1>
@@ -38,4 +52,7 @@
     </ul>
   }
 </section>
+}
+
+
 

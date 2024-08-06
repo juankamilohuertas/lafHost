@@ -6,8 +6,15 @@ export interface IrequestLogin {
 export interface IrequestApiCentauro {
   httpStatus: number;
   message: string;
-  result: object;
+  result: IrequestUser;
   serverTime: Date;
   token: object;
   type: string;
 }
+
+export interface IrequestUser{
+  codigo_user: string,
+  observacion: string
+  usuario: string
+}
+

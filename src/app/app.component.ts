@@ -1,14 +1,11 @@
 import { Component } from '@angular/core';
-import { RouterLink, RouterOutlet } from '@angular/router';
-import { DashboardComponent } from './app_component/dashboard/dashboard.component';
-import { SearchAndFilterComponent } from './app_component/search-and-filter/search-and-filter.component';
-import { LoginComponent } from './app_component/login/login.component';
+import { RouterOutlet } from '@angular/router';
 
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet,LoginComponent,SearchAndFilterComponent,DashboardComponent],
+  imports: [RouterOutlet],
   templateUrl: './app.component.html',
   styleUrl: './app.component.sass'
 })
