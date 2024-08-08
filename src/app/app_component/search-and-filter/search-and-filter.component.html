@@ -1,27 +1,23 @@
-<app-bread-crumb/>
+<app-bread-crumb />
 <!-- SELECCIONA EL TIPO DE BUSQUEDAD -->
 <section>
-  <select name="" id="" [(ngModel)]="searchType!">
+  <select [(ngModel)]="searchType!">
     <option value="Buscar por..." selected disabled>Buscar por...</option>
     <option value="codigo">Codigo activo o S/N</option>
-    <option value="cascada">Cascada</option>
+    <option value="cascada">Buscar y Filtrar</option>
   </select>
 </section>
 @if(searchType == "codigo"){
-  <!-- busqueda por codigo activo y S/N -->
-  <input type="text" placeholder="codigo">
+<!-- busqueda por codigo activo y S/N -->
+<input type="text" placeholder="codigo" />
 }@else if(searchType == "cascada"){
-  <!-- Busqueda por clicks -->
+<!-- Busqueda por filtrado -->
 <section class="searchAndFilter">
-  <label for="selectFilter">
-    <h1 class="display-6 fs-3">Buscar y Filtrar <i class="fs-4 bi bi-search"></i></h1>
-  </label>
   <select
-    class="form-select form-select-lg mb-3 d-inline-flex focus-ring focus-ring-light py-1 px-2 text-decoration-none border rounded-2"
+    class="form-select form-select-lg d-inline-flex focus-ring focus-ring-light py-1 px-2 text-decoration-none border rounded-2"
     aria-label="Large select filter"
-    id="selectFilter"
     [(ngModel)]="index"
-    (click)="sectionFilter(index!)"
+    (click)="sectionFilter(index!, $event)"
   >
     <option selected disabled value="select an options">
       Selecciona Una Opción
@@ -31,33 +27,25 @@
     <option value="2">PDV Nacionales</option>
     <option value="3">PDV Internacionales</option>
   </select>
-  
   @if(openFilter){
-    <ul class="searchAndFilter__searchResults">
-      @switch (openFilter) { @case ("sections") { @for (items of sections; track
-      items.id) {
-      <li class="searchAndFilter__searchResults-link" (click)="hostFilter(index!, items.id)">
-        {{ items.name }}
-      </li>
-      } } @case ("host") { @for (items of host; track $index) {
-      <li
-        class="searchAndFilter__searchResults-link"
-        (click)="selectHostFilter(index!, $index, items)"
-      >
-        {{ items }}
-      </li>
-      } } @case ("selectHost") { @for (items of selectHost; track $index) {
-      <li class="searchAndFilter__searchResults-link">
-        {{ items }}
-        @for (item of ipHost; track $index) {
-          <a target="_blank" [href]="item">{{ item }}</a>
-        }
-        </li>
-      } } }
-    </ul>
+      <!-- Busquedad por texto -->
+  <div>
+    <input
+      type="text"
+      placeholder="Buscar..."
+      [(ngModel)]="textInputFilter"
+      (input)="getTextInputFilter(textInputFilter!)"
+    />
+  </div>
+  <!-- Resultados de la busquedad -->
+  <ul class="searchAndFilter__searchResults">
+    @switch (openFilter) { @case ("sections") { @for (section of dataItemsFilter;
+    track section.id) {
+    <li class="searchAndFilter__searchResults-link" (click)="selectSections(section.id)">
+      {{ section.name }}
+    </li>
+    } } }
+  </ul>
   }
 </section>
 }
-
-
-

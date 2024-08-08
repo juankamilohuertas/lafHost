@@ -9,7 +9,6 @@ import { Router, RouterOutlet } from '@angular/router';
 import { OptConfigurationComponent } from '../opt-configuration/opt-configuration.component';
 import { LoginService } from '../../app_services/login/login.service';
 
-
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -21,15 +20,15 @@ import { LoginService } from '../../app_services/login/login.service';
     BreadCrumbComponent,
     SearchAndFilterComponent,
     RecentSearchesComponent,
-    OptConfigurationComponent
+    OptConfigurationComponent,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.sass',
 })
 export class DashboardComponent {
-  private readonly _dataService = inject(LoginService)
-  private readonly _router = inject(Router)
-  constructor(){
+  private readonly _dataService = inject(LoginService);
+  private readonly _router = inject(Router);
+  constructor() {
     this._dataService.getUser$ == undefined?this._router.navigateByUrl("login"):undefined;
   }
 }

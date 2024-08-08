@@ -1,8 +1,8 @@
-import { LoginService } from './../../app_services/login/login.service';
 import { Component, HostListener, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { IrequestApiCentauro } from '../../app_models/Sesion/requestLogin.models';
+import { LoginService } from '../../app_services/login/login.service';
 
 @Component({
   selector: 'app-login',
@@ -20,7 +20,7 @@ export class LoginComponent {
   passWorldExpresion = /^[\w!@#$%^&*()_+={}\[\]|;:',.?/`~\-]{1,8}$/;
 
   constructor() {}
-  // INICIO DE SESION POR CLICK Y VALIDACION DE USUARIO 
+  // INICIO DE SESION POR CLICK Y VALIDACION DE USUARIO
   startLogin() {
     //validando campos del inicio de sesion
     if (!this.userExpresion.test(this.user)) {
@@ -28,7 +28,7 @@ export class LoginComponent {
     } else if (!this.passWorldExpresion.test(this.passworld)) {
       alert('La contraseña debe tener como maximo 8 caracteres');
     } else {
-      //recibiendo datos de la API centauro 
+      //recibiendo datos de la API centauro
       this._dataService
         .getApiCentauro(this.user, this.passworld)
         .subscribe((dataApi: IrequestApiCentauro) => {
@@ -48,5 +48,4 @@ export class LoginComponent {
       this.startLogin();
     }
   }
-
 }
