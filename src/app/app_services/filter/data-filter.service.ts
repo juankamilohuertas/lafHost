@@ -380,7 +380,7 @@ export class DataFilterService {
         },
         {
           id: 9,
-          name: ['Gigabit', 'TP-Link', 'TrendNet'],
+          name: ['Gigabit', 'TrendNet'],
         },
         {
           id: 10,

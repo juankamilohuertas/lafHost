@@ -1,8 +1,9 @@
-import { IdataFiltersProperty } from '../../app_models/filter/search-and-filter.models';
+import { IdataFiltersProperty } from './../../app_models/filter/search-and-filter.models';
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BreadCrumbComponent } from '../bread-crumb/bread-crumb.component';
 import { DataFilterService } from '../../app_services/filter/data-filter.service';
+
 
 
 @Component({
@@ -18,9 +19,8 @@ export class SearchAndFilterComponent {
   openFilter?: string;
   textInputFilter?: string;
   index = 'select an options';
-  sections?: IdataFiltersProperty[];
-  host?: IdataFiltersProperty;
-  ipHost?: any;
+  selectFilter?: IdataFiltersProperty[];
+  sections?: number;
 
   dataItemsFilter?: IdataFiltersProperty[];
 
@@ -39,7 +39,7 @@ export class SearchAndFilterComponent {
     let iteratorItemsFilter = [];
     let converTextInputFilter = textInputFilter.trim().toLocaleLowerCase();
 
-    const converSectionName = this.sections?.map((section) => {
+    const converSectionName = this.selectFilter?.map((section) => {
       return (section.name as string).toLowerCase();
     });
 
@@ -62,14 +62,16 @@ export class SearchAndFilterComponent {
         const { sections } = this._dataFilter.dataFilters[parseInt(index)];
   
         this.openFilter = 'sections';
-        this.sections = sections;
+        this.selectFilter = sections;
         this.getTextInputFilter('');
+
       }
     }
   /* SELECCIONANDO UN ELEMENTO DE LA SECCIÓN */
   selectSections(id: number) {
     const { host } = this._dataFilter.dataFilters[parseInt(this.index)];
     this.openFilter = 'host';
+    this.sections =  id
 
     let dataHost = [];
     for (let i = 0; i < host[id].name.length; i++) {
@@ -79,22 +81,45 @@ export class SearchAndFilterComponent {
       };
       dataHost.push(dataItemsFilter);
     }
-    this.sections = dataHost;
+    this.selectFilter = dataHost;
     this.getTextInputFilter('');
   }
   /* SELECCIONANDO UN ELEMENTO DE LOS HOST */
   selectHost(id: number){
-    const { } = this._dataFilter.dataFilters[parseInt(this.index)];
+    const { host, accessPoint, printers, cameras, switches } = this._dataFilter.dataFilters[parseInt(this.index)];
 
-    if(id == 0){
-
-    }else if(id == 1){
-
-    }else if(id == 2){
-
-    }else if(id == 3){
-
+    const selectHost = host[id].name[id].toLocaleLowerCase();
+   
+    if(selectHost == "access point"){
+      this.openFilter = "accessPoint"
+      this.typeHost(0,[accessPoint[this.sections!]])
+    }else if(selectHost == "camaras"){
+      this.openFilter = "cameras"
+      this.typeHost(0,[cameras[this.sections!]])
+    }else if(selectHost == "impresoras"){
+      this.openFilter = "printers"
+      this.typeHost(0,[printers[this.sections!]])
+    }else if(selectHost == "switches"){
+      this.openFilter = "switches"
+      this.typeHost(0,[switches[this.sections!]])
     }
+  }
+/* SELECCIONA LA IP */
+  selectIp(id: number){
+    console.log(id)
+  }
+  /* PASANDO EL TYPO DE ELEMENTO SELECCIONADO YA SEA ACCESS POINT, CAMARAS, IMPRESORAS O SWITCHES*/
+  typeHost(id:number, nameHost: IdataFiltersProperty[]){
+    let dataAccessPoint = [];
+    for (let i = 0; i < nameHost[id].name.length; i++) {
+      const dataItemsFilter: IdataFiltersProperty = {
+        id: i,
+        name: nameHost[id].name[i],
+      };
+      dataAccessPoint.push(dataItemsFilter);
+    }
+    this.selectFilter = dataAccessPoint;
+    this.getTextInputFilter('');
   }
     
 }
