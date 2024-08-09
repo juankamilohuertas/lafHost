@@ -28,7 +28,7 @@
     <option value="3">PDV Internacionales</option>
   </select>
   @if(openFilter){
-      <!-- Busquedad por texto -->
+  <!-- Busquedad por texto -->
   <div>
     <input
       type="text"
@@ -39,9 +39,19 @@
   </div>
   <!-- Resultados de la busquedad -->
   <ul class="searchAndFilter__searchResults">
-    @switch (openFilter) { @case ("sections") { @for (section of dataItemsFilter;
-    track section.id) {
-    <li class="searchAndFilter__searchResults-link" (click)="selectSections(section.id)">
+    @switch (openFilter) { @case ("sections") { @for (section of
+    dataItemsFilter; track section.id) {
+    <li
+      class="searchAndFilter__searchResults-link"
+      (click)="selectSections(section.id)"
+    >
+      {{ section.name }}
+    </li>
+    } }@case ("host") { @for (section of dataItemsFilter; track section.id) {
+    <li
+      class="searchAndFilter__searchResults-link"
+      (click)="selectHost(section.id)"
+    >
       {{ section.name }}
     </li>
     } } }

@@ -1,5 +1,3 @@
-import { LowerCasePipe } from "@angular/common";
-
 export interface IdataFiltersProperty {
   id: number;
   name: string | string[];

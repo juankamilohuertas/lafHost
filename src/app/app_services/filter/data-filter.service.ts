@@ -45,7 +45,7 @@ export class DataFilterService {
         },
         {
           id: 2,
-          name: ['Access Point', 'Camaras', 'Impresoras', 'Switches'],
+          name: ['Access Point', 'Camaras', 'Impresoras'],
         },
         {
           id: 3,

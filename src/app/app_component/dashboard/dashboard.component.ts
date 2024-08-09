@@ -29,6 +29,6 @@ export class DashboardComponent {
   private readonly _dataService = inject(LoginService);
   private readonly _router = inject(Router);
   constructor() {
-    this._dataService.getUser$ == undefined?this._router.navigateByUrl("login"):undefined;
+    /* this._dataService.getUser$ == undefined?this._router.navigateByUrl("login"):undefined; */
   }
 }
