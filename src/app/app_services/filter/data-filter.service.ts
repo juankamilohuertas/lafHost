@@ -1,15 +1,36 @@
 import { inject, Injectable } from '@angular/core';
-import { IdataFilters } from '../../app_models/filter/search-and-filter.models';
+import { IdataFilters, IdataFiltersEnlaces } from '../../app_models/filter/search-and-filter.models';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DataFilterService {
+  /* API BUSQUEDA POR CODIGO */
+  private readonly _ApiEnlaces = environment.apiEnlaces;
+  constructor(private httpClient: HttpClient) {}
+  /* GET */
+  getApiEnlaces(){
+    return this.httpClient.get<IdataFiltersEnlaces>(this._ApiEnlaces);
+  }
+  /* POST */
+  postApiEnlaces(tipo_impresora: string,direccion_ip: string,codigo_activo: string,numero_serie: string,fecha: string){
+    return this.httpClient.post<IdataFiltersEnlaces>(this._ApiEnlaces,{
+      "tipo_impresora": tipo_impresora,
+      "direccion_ip": direccion_ip,
+      "codigo_activo": codigo_activo,
+      "numero_serie": numero_serie,
+      "fecha": fecha
+    });
+  }
+
+/* ************************************************************************ */
   private _dataBehavior = new BehaviorSubject('');
   selectedFilterOptions$ = this._dataBehavior.asObservable();
 
-  constructor() {}
+  
 
   setBreadCrumb(newData: string) {
     this._dataBehavior.next(newData);
@@ -1273,4 +1294,8 @@ export class DataFilterService {
       ],
     },
   ];
+
+
+  
+
 }

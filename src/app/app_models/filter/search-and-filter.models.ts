@@ -1,3 +1,11 @@
+export interface IdataFiltersEnlaces {
+  Id: number;
+  id_impresoras: number;
+  direccion_ip: string;
+  codigo_activo: string;
+  numero_serie: string;
+}
+
 export interface IdataFiltersProperty {
   id: number;
   name: string | string[];

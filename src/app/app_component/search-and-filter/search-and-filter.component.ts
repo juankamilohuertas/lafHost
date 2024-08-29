@@ -1,10 +1,8 @@
-import { IdataFiltersProperty } from './../../app_models/filter/search-and-filter.models';
+import { IdataFiltersEnlaces, IdataFiltersProperty } from './../../app_models/filter/search-and-filter.models';
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BreadCrumbComponent } from '../bread-crumb/bread-crumb.component';
 import { DataFilterService } from '../../app_services/filter/data-filter.service';
-
-
 
 @Component({
   selector: 'app-search-and-filter',
@@ -16,16 +14,24 @@ import { DataFilterService } from '../../app_services/filter/data-filter.service
 export class SearchAndFilterComponent {
   private readonly _dataFilter = inject(DataFilterService);
   searchType?: string = 'Buscar por...';
-  openFilter?: string;
+  searchByCode?: string; // busqueda por Codigo S/N
+  
+  openFilter?: string;  // busqueda por Filtro
   textInputFilter?: string;
   index = 'select an options';
   selectFilter?: IdataFiltersProperty[];
   sections?: number;
-
   dataItemsFilter?: IdataFiltersProperty[];
 
   constructor() {}
-
+  /* ******************************BUSQUEDA POR CODIGO S/N**************************** */
+  searchByCodes(){
+    
+    this._dataFilter.getApiEnlaces().subscribe((v: IdataFiltersEnlaces)=>{
+      console.log(v)
+    })
+  }
+  /* ******************************BUSQUEDA POR FILTRO**************************** */
   /* SELECCIONA LA SECCION Y LA AGREGA A LA MIGAJA DE PAN O PAGINACIÓN EN CADA FILTRO */
   getBreadCrumb(index: string, event: Event) {
     let converSelectArea = event.target as HTMLSelectElement;

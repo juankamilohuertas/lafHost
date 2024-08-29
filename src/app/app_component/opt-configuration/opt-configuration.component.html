@@ -1,1 +1,48 @@
-<p>opt-configuration works!</p>
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary py-0" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    <i class="bi bi-plus fs-5"></i>
+  </button>
+  
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Agregar Host</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- ********************************** -->
+          <div class="login__form px-4 py-3">
+            <select class="form-select" aria-label="Default select example" [(ngModel)]="selectPrint!">
+                <option selected disabled>Tipo de Impresora</option>
+                <option value="Kyocera">Kyocera</option>
+                <option value="Epson">Epson</option>
+                <option value="HP">HP</option>
+              </select>
+            <div class="mb-3">
+                <label for="ip" class="form-label">Dirección IP</label>
+                <input type="text" class="form-control" [(ngModel)]="direccion_ip" id="ip" placeholder="N°">
+            </div>
+            <div class="mb-3">
+                <label for="codigo_activo" class="form-label">Codigo Activo</label>
+                <input type="text" class="form-control" [(ngModel)]="codigo_activo" id="codigo_activo" placeholder="N°">
+            </div>
+            <div class="mb-3">
+                <label for="numero_serie" class="form-label">Numero de Serie</label>
+                <input type="text" class="form-control" [(ngModel)]="numero_serie" id="numero_serie" placeholder="N°">
+            </div>
+            <div class="mb-3">
+                <label for="fecha" class="form-label">Fecha</label>
+                <input type="date" class="form-control" [(ngModel)]="fecha" id="fecha">
+            </div>
+          </div>
+           <!-- ************************************ -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-primary" (click)="searchDataEnlaces()">Guardar Cambios</button>
+        </div>
+      </div>
+    </div>
+  </div>

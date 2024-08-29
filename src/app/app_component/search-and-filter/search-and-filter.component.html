@@ -9,7 +9,11 @@
 </section>
 @if(searchType == "codigo"){
 <!-- busqueda por codigo activo y S/N -->
-<input type="text" placeholder="codigo" />
+ <div class="d-flex align-items-center">
+  <input class="py-1" type="text" [(ngModel)]="searchByCode" placeholder="codigo" />
+  <button class="btn bg-danger" (click)="searchByCodes()">Buscar</button>
+ </div>
+
 }@else if(searchType == "cascada"){
 <!-- Busqueda por filtrado -->
 <section class="searchAndFilter">
