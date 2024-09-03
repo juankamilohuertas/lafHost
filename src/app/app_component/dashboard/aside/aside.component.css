@@ -1,0 +1,40 @@
+.aside {
+  height: 100%;
+  background-color: #212221;
+}
+.aside__LogoLafayette {
+  background-color: #b10000;
+  height: 60px;
+}
+.aside__LogoLafayette-img {
+  width: 80px;
+}
+.aside__user {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #fafafa;
+  padding: 10px;
+  margin-bottom: 15px;
+  color: #b1b1b1;
+}
+.aside__user-icon {
+  font-size: 30px;
+}
+.aside__user-span {
+  padding-left: 15px;
+}
+.aside-link {
+  display: block;
+  padding: 8px 20px;
+  color: #cccccc;
+  list-style: none;
+  text-decoration: none;
+  cursor: pointer;
+}
+.aside-link:hover {
+  background-color: #b10000;
+}
+.aside-link-icons {
+  padding-right: 10px;
+  font-size: 20px;
+}/*# sourceMappingURL=aside.component.css.map */

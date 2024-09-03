@@ -1,0 +1,24 @@
+.form__createHost .validateInput {
+  border: 1px solid #f00;
+}
+.form__createHost-ul {
+  list-style: none;
+  padding: 0;
+}
+.form__createHost-li {
+  cursor: pointer;
+  padding: 5px;
+  background-color: #212221;
+  color: #ffffff;
+}
+.form__createHost-li:hover {
+  background-color: #e20020;
+}
+
+.validateErrorSelectForm {
+  border: solid 1px #f00;
+}
+
+.validateCheckedSelectForm {
+  border: solid 1px #0f0;
+}/*# sourceMappingURL=opt-configuration.component.css.map */

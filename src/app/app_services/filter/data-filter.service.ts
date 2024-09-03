@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { IdataFilters, IdataFiltersEnlaces } from '../../app_models/filter/search-and-filter.models';
+import { IdataFilters, IdataFiltersEnlaces, IdataFiltersSecciones } from '../../app_models/filter/search-and-filter.models';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
@@ -10,21 +10,36 @@ import { HttpClient } from '@angular/common/http';
 export class DataFilterService {
   /* API BUSQUEDA POR CODIGO */
   private readonly _ApiEnlaces = environment.apiEnlaces;
+  private readonly _ApiSecciones = environment.apiSecciones;
   constructor(private httpClient: HttpClient) {}
-  /* GET */
+  /* GET API ENLACES */
   getApiEnlaces(){
     return this.httpClient.get<IdataFiltersEnlaces>(this._ApiEnlaces);
   }
-  /* POST */
-  postApiEnlaces(tipo_impresora: string,direccion_ip: string,codigo_activo: string,numero_serie: string,fecha: string){
+  /* GET API SECCIONES */
+  getApis(nameSelectApi: string){
+      return this.httpClient.get<IdataFiltersSecciones[]>(nameSelectApi);
+  }
+
+  /* POST API ENLACES*/
+  postApiEnlaces(id_secciones: number,id_impresoras: number,direccion_ip: string,codigo_activo: string,numero_serie: string,fecha: string){
     return this.httpClient.post<IdataFiltersEnlaces>(this._ApiEnlaces,{
-      "tipo_impresora": tipo_impresora,
+      "id_secciones": id_secciones,
+      "id_impresoras": id_impresoras,
       "direccion_ip": direccion_ip,
       "codigo_activo": codigo_activo,
       "numero_serie": numero_serie,
       "fecha": fecha
     });
   }
+  /* POST API SECCIONES*/
+  postApiSecciones(api:string, nombre: string, orden: string){
+    return this.httpClient.post<IdataFiltersSecciones>(api,{
+      "nombre": nombre,
+      "orden": orden,
+    });
+  }
+
 
 /* ************************************************************************ */
   private _dataBehavior = new BehaviorSubject('');

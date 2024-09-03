@@ -1,48 +1,155 @@
 <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary py-0" data-bs-toggle="modal" data-bs-target="#exampleModal">
-    <i class="bi bi-plus fs-5"></i>
-  </button>
-  
-  <!-- Modal -->
-  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Agregar Host</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <!-- ********************************** -->
-          <div class="login__form px-4 py-3">
-            <select class="form-select" aria-label="Default select example" [(ngModel)]="selectPrint!">
-                <option selected disabled>Tipo de Impresora</option>
-                <option value="Kyocera">Kyocera</option>
-                <option value="Epson">Epson</option>
-                <option value="HP">HP</option>
-              </select>
-            <div class="mb-3">
-                <label for="ip" class="form-label">Dirección IP</label>
-                <input type="text" class="form-control" [(ngModel)]="direccion_ip" id="ip" placeholder="N°">
-            </div>
-            <div class="mb-3">
-                <label for="codigo_activo" class="form-label">Codigo Activo</label>
-                <input type="text" class="form-control" [(ngModel)]="codigo_activo" id="codigo_activo" placeholder="N°">
-            </div>
-            <div class="mb-3">
-                <label for="numero_serie" class="form-label">Numero de Serie</label>
-                <input type="text" class="form-control" [(ngModel)]="numero_serie" id="numero_serie" placeholder="N°">
-            </div>
-            <div class="mb-3">
-                <label for="fecha" class="form-label">Fecha</label>
-                <input type="date" class="form-control" [(ngModel)]="fecha" id="fecha">
-            </div>
+<button
+  type="button"
+  class="btn btn-primary py-0 d-flex align-items-center"
+  data-bs-toggle="modal"
+  data-bs-target="#exampleModal"
+  (click)="getData()"
+>
+  <span>Crear</span><i class="bi bi-plus fs-5"></i>
+</button>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Crear Host</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <!-- **************FORMULARIO**************** -->
+        <div class="form__createHost px-4 py-3">
+          <!-- campo nombre secciones -->
+          <select
+            class="selectSections validateInput form-select mb-3"
+            aria-label="Default select example"
+            [(ngModel)]="nombre_secciones!"
+            (click)="validateInputs()"
+          >
+            <option selected disabled>selecciona la sección</option>
+            @for (item of getDbSecciones; track item.id) {
+            <option (click)="validateInputs()" value="{{ item.id }}">{{ item.nombre }}</option>
+            }
+          </select>
+          <!-- campo numero de orden -->
+          <div class="mb-3">
+            <label for="orden" class="form-label">Número de Orden</label>
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="orden"
+              id="orden"
+              placeholder="Escribe la orden"
+            />
           </div>
-           <!-- ************************************ -->
+          <!-- campo nombre gerencias -->
+          <select
+            class="selectGerencias validateInput form-select mb-3"
+            aria-label="Default select example"
+            [(ngModel)]="nombre_gerencias!"
+            (click)="validateInputs()"
+          >
+            <option selected disabled>selecciona la gerencia</option>
+            @for (item of getDbGerencias; track item.id) {
+            <option (click)="validateInputs()" value="{{ item.id }}">{{ item.nombre }}</option>
+            }
+          </select>
+          <!-- campo nombre dependencias -->
+          <select
+            class="selectDependencias validateInput form-select mb-3"
+            aria-label="Default select example"
+            [(ngModel)]="nombre_dependencias!"
+            (click)="validateInputs()"
+          >
+            <option selected disabled>selecciona la dependencia</option>
+            @for (item of getDbDependencias; track item.id) {
+            <option (click)="validateInputs()" value="{{ item.id }}">{{ item.nombre }}</option>
+            }
+          </select>
+          <!-- campo impresoras -->
+          <select
+            class="elementImpresoras validateInput form-select mb-3"
+            aria-label="Default select example"
+            [(ngModel)]="id_impresoras!"
+            (click)="validateInputs()"
+          >
+            <option selected disabled>Tipo de Impresora</option>
+            <option value="0">Kyocera</option>
+            <option value="1">Epson</option>
+            <option value="2">HP</option>
+          </select>
+          <!-- campo direccion IP -->
+          <div class="mb-3">
+            <label for="ip" class="form-label">Dirección IP</label>
+            <input
+              type="text"
+              class="direccion_ip form-control validateInput"
+              [(ngModel)]="direccion_ip"
+              placeholder="n°"
+              (input)="validateInputs()"
+              
+            />
+          </div>
+          <!-- campo codigo activo -->
+          <div class="mb-3">
+            <label for="codigo_activo" class="form-label">Codigo Activo</label>
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="codigo_activo"
+              id="codigo_activo"
+              placeholder="n°"
+            />
+          </div>
+          <!-- campo numero de serie -->
+          <div class="mb-3">
+            <label for="numero_serie" class="form-label">Numero de Serie</label>
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="numero_serie"
+              id="numero_serie"
+              placeholder="n°"
+            />
+          </div>
+          <!-- campo fecha -->
+          <div class="mb-3">
+            <label for="fecha" class="form-label">Fecha</label>
+            <input
+              type="date"
+              class="form-control"
+              [(ngModel)]="fecha"
+              id="fecha"
+            />
+          </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-          <button type="button" class="btn btn-primary" (click)="searchDataEnlaces()">Guardar Cambios</button>
-        </div>
+        <!-- ************************************ -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Cerrar
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="validateInputs()"
+          (click)="createNewPrint()"
+        >
+          Guardar Cambios
+        </button>
       </div>
     </div>
   </div>
+</div>
