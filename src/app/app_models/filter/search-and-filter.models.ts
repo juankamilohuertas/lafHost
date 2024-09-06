@@ -12,10 +12,9 @@ export interface IdataFiltersEnlaces {
   numero_serie: string;
 }
 
-export interface IdataFiltersSecciones {
+export interface IdataFiltersApiAgregar {
   id: number;
   nombre: string;
-  orden: string;
 }
 
 export interface IdataFiltersGerencias {

@@ -10,8 +10,8 @@
 @if(searchType == "codigo"){
 <!-- busqueda por codigo activo y S/N -->
  <div class="d-flex align-items-center">
-  <input class="py-1" type="text" [(ngModel)]="searchByCode" placeholder="codigo" />
-  <button class="btn bg-danger" (click)="searchByCodes()">Buscar</button>
+  <input class="py-1" type="text" (input)="btnSearchByCodes()" [(ngModel)]="searchByCode" placeholder="codigo" />
+  <button class="btn bg-danger" (click)="btnSearchByCodes()">Buscar</button>
  </div>
 
 }@else if(searchType == "cascada"){
@@ -95,3 +95,14 @@
   }
 </section>
 }
+
+<!-- VIEWS DATA PRINTERS -->
+ <section>
+  @for (item of getInfoSecciones; track $index) {
+    <div>Sección: {{item.nombre}}</div>
+  }
+  @for (item of getInfoEnlaces; track $index) {
+    <div>Codigo Activo: {{item.codigo_activo}}</div>
+    <div>Dirección Ip: <a href="https://{{item.direccion_ip}}" target="_blank">{{item.direccion_ip}}</a></div>
+  }
+ </section>

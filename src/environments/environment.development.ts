@@ -4,5 +4,6 @@ export const environment = {
     apiEnlaces: "https://localhost:44355/api/Enlaces",
     apiSecciones: "https://localhost:44355/api/Secciones",
     apiGerencias: "https://localhost:44355/api/Gerencias",
-    apiDependencias: "https://localhost:44355/api/Dependencias"
+    apiDependencias: "https://localhost:44355/api/Dependencias",
+    apiAdministraciones: "https://localhost:44355/api/Administraciones"
 };
