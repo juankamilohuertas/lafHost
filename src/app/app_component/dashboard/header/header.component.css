@@ -1,0 +1,8 @@
+.header {
+  height: 60px;
+  background-color: #272727;
+}
+.header__nav {
+  display: flex;
+  align-items: center;
+}/*# sourceMappingURL=header.component.css.map */

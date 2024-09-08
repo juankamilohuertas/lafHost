@@ -1,0 +1,11 @@
+.login {
+  background-color: #ff0000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  color: #ffffff;
+}
+.login__div {
+  width: 400px;
+}/*# sourceMappingURL=login.component.css.map */

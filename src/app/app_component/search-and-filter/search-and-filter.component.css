@@ -1,0 +1,18 @@
+.searchAndFilter {
+  border: 1px solid #d3d3d3;
+}
+.searchAndFilter__searchResults {
+  list-style: none;
+  padding: 0;
+  height: 200px;
+  overflow: scroll;
+}
+.searchAndFilter__searchResults-link {
+  cursor: pointer;
+  padding: 5px;
+  background-color: #212221;
+  color: #ffffff;
+}
+.searchAndFilter__searchResults-link:hover {
+  background-color: #e20020;
+}/*# sourceMappingURL=search-and-filter.component.css.map */
