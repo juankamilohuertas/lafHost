@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
 import { SearchAndFilterComponent } from '../search-and-filter/search-and-filter.component';
@@ -8,6 +8,7 @@ import { BreadCrumbComponent } from '../bread-crumb/bread-crumb.component';
 import { Router, RouterOutlet } from '@angular/router';
 import { OptConfigurationComponent } from '../opt-configuration/opt-configuration.component';
 import { LoginService } from '../../app_services/login/login.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-dashboard',
@@ -25,10 +26,15 @@ import { LoginService } from '../../app_services/login/login.service';
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.sass',
 })
-export class DashboardComponent {
+export class DashboardComponent{
   private readonly _dataService = inject(LoginService);
   private readonly _router = inject(Router);
   constructor() {
     /* this._dataService.getUser$ == undefined?this._router.navigateByUrl("login"):undefined; */
   }
+  
+  
+
+  
+
 }

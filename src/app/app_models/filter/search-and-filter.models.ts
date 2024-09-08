@@ -10,6 +10,7 @@ export interface IdataFiltersEnlaces {
   direccion_ip: string;
   codigo_activo: string;
   numero_serie: string;
+  fecha: string;
 }
 
 export interface IdataFiltersApiAgregar {

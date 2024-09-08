@@ -9,7 +9,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class DataFilterService {
   private readonly _ApiEnlaces = environment.apiEnlaces;
-  private readonly _ApiSecciones = environment.apiSecciones;
+  private readonly _ApiAdministraciones = environment.apiAdministraciones;
   constructor(private httpClient: HttpClient) {}
   /* GET API ENLACES */
   getApiEnlaces(){
@@ -19,6 +19,10 @@ export class DataFilterService {
   getApis(nameSelectApi: string){
       return this.httpClient.get<IdataFiltersApiAgregar[]>(nameSelectApi);
   }
+  /* GET API ADMINISTRACIONES */
+  getApiAdministraciones(){
+    return this.httpClient.get<IdataFiltersAdministraciones[]>(this._ApiAdministraciones);
+}
 
   /* POST API ENLACES */
   postApiEnlaces(id_secciones: number,id_impresoras: number,direccion_ip: string,codigo_activo: string,numero_serie: string,fecha: string){

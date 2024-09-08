@@ -3,7 +3,7 @@ import { DataFilterService } from '../../app_services/filter/data-filter.service
 import { FormsModule } from '@angular/forms';
 import { LowerCasePipe, UpperCasePipe } from '@angular/common';
 import { environment } from '../../../environments/environment';
-import { IdataFiltersApiAgregar } from '../../app_models/filter/search-and-filter.models';
+import { IdataFiltersApiAgregar, IdataFiltersEnlaces } from '../../app_models/filter/search-and-filter.models';
 
 @Component({
   selector: 'app-opt-configuration',
@@ -27,7 +27,7 @@ export class OptConfigurationComponent {
 
   nombre_dependencias = 'selecciona la dependencia';
 
-  id_impresoras = 'Tipo de Impresora';
+  id_impresoras = 'Tipo de dispositivo';
   direccion_ip!: string;
   codigo_activo!: string;
   numero_serie!: string;
@@ -36,6 +36,8 @@ export class OptConfigurationComponent {
   getDbSecciones: IdataFiltersApiAgregar[] = [];
   getDbGerencias: IdataFiltersApiAgregar[] = [];
   getDbDependencias: IdataFiltersApiAgregar[] = [];
+  getDbEnlaces: string[] = [];
+  getDbDireccionesIp: string[] = [];
 
   getApi!: string;
 
@@ -68,6 +70,14 @@ export class OptConfigurationComponent {
             this.getDbDependencias.push(res[key]);
           }
         });
+      /* obteniendo la info desde la db enlaces "codigos activos y direcciones ip" */  
+      this._dataFilter.getApiEnlaces().subscribe(res =>{
+        const resEnlaces = res.map(res => res.codigo_activo);
+        const resDireccionesIp = res.map(res => res.direccion_ip);
+        this.getDbEnlaces.push(...resEnlaces);
+        this.getDbDireccionesIp.push(...resDireccionesIp);
+      })  
+    
       this.openFormCreateNewHost = false;
     }
   }
@@ -134,7 +144,7 @@ export class OptConfigurationComponent {
         )
       : (this.messageError = true);
 
-    this.id_impresoras !== 'Tipo de Impresora'
+    this.id_impresoras !== 'Tipo de dispositivo'
       ? this.selectElementsDom().ImpresorasNewHost?.classList.remove(
           'validateInput'
         )
@@ -150,6 +160,7 @@ export class OptConfigurationComponent {
         'validateInput'
       );
     }
+    
     if (!expCodigoActivo.test(this.codigo_activo)) {
       this.messageError = true;
       this.selectElementsDom().codigoActivoNewHost?.classList.add(
@@ -160,12 +171,33 @@ export class OptConfigurationComponent {
         'validateInput'
       );
     }
+    this.numero_serie != undefined? this.numero_serie: "";
+    this.fecha != undefined? this.fecha: "";
   }
-
+ /* VALIDANDO LOS CAMPOS DE CREAR DISPOSITIVO "CODIGO ACTIVO, IP Y NUMERO DE SERIE NO SE REPITAN"  */
+ repeatInputs(): string{
+  const validateCodigoActivo = this.getDbEnlaces.filter(res => res === this.codigo_activo);
+  const validateDireccionIp = this.getDbDireccionesIp.filter(res => res === this.direccion_ip);
+  console.log(validateDireccionIp)
+  let message = "";
+  if(validateCodigoActivo.length !== 0){
+    this.selectElementsDom().codigoActivoNewHost?.classList.add(
+      'validateInput'
+    );
+    message = "El codigo activo ya existe";
+  }else if(validateDireccionIp.length !== 0){
+    this.selectElementsDom().direccionIpNewHost?.classList.add(
+      'validateInput'
+    );
+    message = "La dirección ip ya existe";
+  }
+  return message;
+ }
   /* ENVIANDO LOS DATOS A LA TABLA ENLACES*/
   createNewPrint() {
     if (!this.messageError) {
-      this._dataFilter
+      if(this.repeatInputs() === ""){
+        this._dataFilter
         .postApiEnlaces(
           parseInt(this.nombre_secciones),
           parseInt(this.id_impresoras),
@@ -175,10 +207,13 @@ export class OptConfigurationComponent {
           this.fecha
         )
         .subscribe();
+        this.newAdministraciones()
       alert('El dispositivo se ha creado correctamente');
       window.location.reload();
+      }else{
+        alert(this.repeatInputs());
+      }
     }
-    this.newAdministraciones()
   }
    /* ENVIANDO LOS DATOS A LA TABLA SECCIONES,GERENCIAS Y DEPENDENCIAS*/
 
@@ -202,7 +237,7 @@ export class OptConfigurationComponent {
     });
   }
 
-  /* **************pruebas***************** */
+  /* VALIDANDO ENTRADAS DEL FORMULARIO "CREACIÓN DE DISPOSITIVO" */
   validateNewInputs(element: string) {
     const domElement = this.selectElementsDom();
     let exp = /^[^\s]{2,}[ \s]*.*$/;

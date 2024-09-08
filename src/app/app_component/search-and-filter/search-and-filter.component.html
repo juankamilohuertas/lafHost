@@ -1,7 +1,10 @@
 <app-bread-crumb />
 <!-- SELECCIONA EL TIPO DE BUSQUEDAD -->
 <section>
-  <select class="form-select form-select-lg d-inline-flex focus-ring focus-ring-light py-1 px-2 text-decoration-none border rounded-2" [(ngModel)]="searchType!">
+  <select
+    class="form-select form-select-lg d-inline-flex focus-ring focus-ring-light py-1 px-2 text-decoration-none border rounded-2"
+    [(ngModel)]="searchType!"
+  >
     <option value="Buscar por..." selected disabled>Buscar por...</option>
     <option value="codigo">Codigo activo o S/N</option>
     <option value="cascada">Buscar y Filtrar</option>
@@ -9,10 +12,15 @@
 </section>
 @if(searchType == "codigo"){
 <!-- busqueda por codigo activo y S/N -->
- <div class="d-flex align-items-center">
-  <input class="py-1" type="text" (input)="btnSearchByCodes()" [(ngModel)]="searchByCode" placeholder="codigo" />
+<div class="d-flex align-items-center">
+  <input
+    class="py-1"
+    type="text"
+    [(ngModel)]="searchByCode"
+    placeholder="codigo"
+  />
   <button class="btn bg-danger" (click)="btnSearchByCodes()">Buscar</button>
- </div>
+</div>
 
 }@else if(searchType == "cascada"){
 <!-- Busqueda por filtrado -->
@@ -66,24 +74,23 @@
     >
       {{ section.name }}
     </li>
-    } }@case ("cameras") { @for (section of dataItemsFilter; track
-    section.id) {
+    } }@case ("cameras") { @for (section of dataItemsFilter; track section.id) {
     <li
       class="searchAndFilter__searchResults-link"
       (click)="selectIp(section.id)"
     >
       {{ section.name }}
     </li>
-    } }@case ("printers") { @for (section of dataItemsFilter; track
-    section.id) {
+    } }@case ("printers") { @for (section of dataItemsFilter; track section.id)
+    {
     <li
       class="searchAndFilter__searchResults-link"
       (click)="selectIp(section.id)"
     >
       {{ section.name }}
     </li>
-    } }@case ("switches") { @for (section of dataItemsFilter; track
-    section.id) {
+    } }@case ("switches") { @for (section of dataItemsFilter; track section.id)
+    {
     <li
       class="searchAndFilter__searchResults-link"
       (click)="selectIp(section.id)"
@@ -97,12 +104,50 @@
 }
 
 <!-- VIEWS DATA PRINTERS -->
- <section>
-  @for (item of getInfoSecciones; track $index) {
-    <div>Sección: {{item.nombre}}</div>
-  }
-  @for (item of getInfoEnlaces; track $index) {
+<section>
+  <table class="table table-dark table-hover fs-6">
+    <thead>
+      <tr style="font-size: 0.9rem;">
+        <th class="fw-light" scope="col">Id</th>
+        <th class="fw-light" scope="col">Sección</th>
+        <th class="fw-light" scope="col">Gerencia</th>
+        <th class="fw-light" scope="col">Dependencia</th>
+        <th class="fw-light" scope="col">Dispositivo de red</th>
+        <th class="fw-light" scope="col">Dirección Ip</th>
+        <th class="fw-light" scope="col">Codigo activo</th>
+        <th class="fw-light" scope="col">Número de Serie</th>
+        <th class="fw-light" scope="col">Fecha de compra</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="font-size: 0.7rem;">
+      <th scope="row">1</th>
+      @for (item of searchBycodeActiveSeccion; track $index) {
+        <td>{{ item.nombre }}</td>
+      }
+      @for (item of searchBycodeActiveGerencia; track $index) {
+        <td>{{ item.nombre }}</td>
+      }
+      @for (item of searchBycodeActiveDependencia; track $index) {
+        <td>{{ item.nombre }}</td>
+      }
+      @for (item of searchBycodeActiveEnlace; track $index) {
+        @switch (item.id_impresoras.toString()) {
+          @case ("0") {<td>IMPRESORA</td>}
+          @case ("1") {<td>SWITCH</td>}
+          @case ("2") {<td>ACCESPOINT</td>}
+        }
+        <td><a href="https://{{item.direccion_ip}}" target="_blank">https://{{ item.direccion_ip }}</a></td>
+        <td>{{ item.codigo_activo }}</td>
+        <td>{{ item.numero_serie }}</td>
+        <td>{{ item.fecha }}</td>
+      }
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- @for (item of getInfoEnlaces; track $index) {
     <div>Codigo Activo: {{item.codigo_activo}}</div>
     <div>Dirección Ip: <a href="https://{{item.direccion_ip}}" target="_blank">{{item.direccion_ip}}</a></div>
-  }
- </section>
+  } -->
+</section>

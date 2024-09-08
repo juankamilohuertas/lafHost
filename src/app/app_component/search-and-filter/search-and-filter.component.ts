@@ -1,9 +1,10 @@
 import {
+  IdataFiltersAdministraciones,
   IdataFiltersApiAgregar,
   IdataFiltersEnlaces,
   IdataFiltersProperty,
 } from './../../app_models/filter/search-and-filter.models';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BreadCrumbComponent } from '../bread-crumb/bread-crumb.component';
 import { DataFilterService } from '../../app_services/filter/data-filter.service';
@@ -16,13 +17,22 @@ import { environment } from '../../../environments/environment';
   templateUrl: './search-and-filter.component.html',
   styleUrl: './search-and-filter.component.sass',
 })
-export class SearchAndFilterComponent {
+export class SearchAndFilterComponent implements OnInit {
   private readonly _dataFilter = inject(DataFilterService);
   private readonly _selectApi = environment;
-  searchType?: string = 'Buscar por...';
+  searchType: string = 'Buscar por...';
   searchByCode?: string; // busqueda por Codigo S/N
   getInfoEnlaces: IdataFiltersEnlaces[] = [];
   getInfoSecciones: IdataFiltersApiAgregar[] = [];
+  getInfoGerencias: IdataFiltersApiAgregar[] = [];
+  getInfoDependencias: IdataFiltersApiAgregar[] = [];
+  getInfoAdministraciones: IdataFiltersAdministraciones[] = [];
+
+  searchBycodeActiveEnlace: IdataFiltersEnlaces[] = [];
+  searchBycodeActiveSeccion: IdataFiltersApiAgregar[] = [];
+  searchBycodeActiveGerencia: IdataFiltersApiAgregar[] = [];
+  searchBycodeActiveDependencia: IdataFiltersApiAgregar[] = [];
+  
 
   openFilter?: string; // busqueda por Filtro
   textInputFilter?: string;
@@ -32,36 +42,60 @@ export class SearchAndFilterComponent {
   dataItemsFilter?: IdataFiltersProperty[];
 
   constructor() {}
-  /* ******************************BUSQUEDA POR CODIGO S/N**************************** */
-  
-  btnSearchByCodes() {
-    let getDataSecciones: IdataFiltersApiAgregar[] = [];
-
-    this._dataFilter.getApis(this._selectApi.apiSecciones).subscribe((res) => {
-      getDataSecciones = res.map((res) => res);
-    });
-
-      this._dataFilter.getApiEnlaces().subscribe((res) => {
-        const getDataEnlaces = res.map((res) => res);
-    
-        const getCodigosActivosEnlaces = getDataEnlaces.map((res) => res.codigo_activo);
-
-        if (getCodigosActivosEnlaces.indexOf(this.searchByCode!) != -1) {
-          const getEnlace = getDataEnlaces.filter(
-            (res) => res.codigo_activo == this.searchByCode
-          );   
-             
-          getDataSecciones.filter((res) => {
-            getEnlace.forEach(resp => {
-              if (res.id == parseInt(resp.id_secciones)) {
-                this.getInfoSecciones[0] = res;
-                this.getInfoEnlaces[0] = getEnlace[0];
-              }
-            });
-          });
-        }
+   /* CARGANDO TODOS LOS DATOS DE LA DB AL DOM */
+  ngOnInit(): void {
+   
+/* GET API ENLACES */
+    this._dataFilter
+      .getApiEnlaces()
+      .subscribe((res) => {
+        this.getInfoEnlaces = res.map((res) => res);
       });
+ /* GET API ADMINISTRACIONES*/
+ this._dataFilter.getApiAdministraciones().subscribe((res) => {
+  this.getInfoAdministraciones = res.map((res) => res);
+});
+/* GET API SECCIONES */
+    this._dataFilter.getApis(this._selectApi.apiSecciones).subscribe((res) => {
+      this.getInfoSecciones = res.map((res) => res);
+    });
+/* GET API GERENCIAS */
+    this._dataFilter.getApis(this._selectApi.apiGerencias).subscribe((res) => {
+      this.getInfoGerencias = res.map((res) => res);
+    });
+/* GET API DEPENDENCIAS */
+    this._dataFilter
+      .getApis(this._selectApi.apiDependencias)
+      .subscribe((res) => {
+        this.getInfoDependencias = res.map((res) => res);
+      });
+  }
+
+  /* ******************************BUSQUEDA POR CODIGO S/N**************************** */
+
+  btnSearchByCodes() {
     
+      /* ENLACE */
+    const enlaceByCodigoActivo = this.getInfoEnlaces?.filter(res => res.codigo_activo === this.searchByCode);
+    if(enlaceByCodigoActivo.length != 0){
+      [...this.searchBycodeActiveEnlace] = enlaceByCodigoActivo!; 
+      /* id secciones */
+        const enlaceByIdSecciones = enlaceByCodigoActivo![0].id_secciones;
+      /* administraciones */
+        const administracionByCodigoActivo = this.getInfoAdministraciones?.filter(res => res.id_secciones === enlaceByIdSecciones);
+      /* SECCION */
+        const seccionName = this.getInfoSecciones?.filter(res => res.id === parseInt(administracionByCodigoActivo![0].id_secciones));
+        [...this.searchBycodeActiveSeccion] = seccionName!;
+      /* GERENCIA */
+        const gerenciaName = this.getInfoGerencias?.filter(res => res.id === parseInt(administracionByCodigoActivo![0].id_gerencias));
+        [...this.searchBycodeActiveGerencia] = gerenciaName!;
+      /* DEPENDENCIA */  
+        const dependenciaName = this.getInfoDependencias?.filter(res => res.id === parseInt(administracionByCodigoActivo![0].id_dependencias));
+        [...this.searchBycodeActiveDependencia] = dependenciaName!;    
+    }else{
+      alert("No se encontrarón resultados")
+    }
+    this.searchByCode = "";
   }
 
   /* ******************************BUSQUEDA POR FILTRO**************************** */
