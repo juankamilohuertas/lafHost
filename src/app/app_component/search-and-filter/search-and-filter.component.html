@@ -21,133 +21,162 @@
   />
   <button class="btn bg-danger" (click)="btnSearchByCodes()">Buscar</button>
 </div>
-
-}@else if(searchType == "cascada"){
-<!-- Busqueda por filtrado -->
-<section class="searchAndFilter">
-  <select
-    class="form-select form-select-lg d-inline-flex focus-ring focus-ring-light py-1 px-2 text-decoration-none border rounded-2"
-    aria-label="Large select filter"
-    [(ngModel)]="index"
-    (click)="sectionFilter(index!, $event)"
-  >
-    <option selected disabled value="select an options">
-      Selecciona Una Opción
-    </option>
-    <option value="0">Planta Principal</option>
-    <option value="1">PDV Bogotá</option>
-    <option value="2">PDV Nacionales</option>
-    <option value="3">PDV Internacionales</option>
-  </select>
-  @if(openFilter){
-  <!-- Busquedad por texto -->
-  <div>
-    <input
-      type="text"
-      placeholder="Buscar..."
-      [(ngModel)]="textInputFilter"
-      (input)="getTextInputFilter(textInputFilter!)"
-    />
-  </div>
-  <!-- Resultados de la busquedad -->
-  <ul class="searchAndFilter__searchResults">
-    @switch (openFilter) { @case ("sections") { @for (section of
-    dataItemsFilter; track section.id) {
-    <li
-      class="searchAndFilter__searchResults-link"
-      (click)="selectSections(section.id)"
-    >
-      {{ section.name }}
-    </li>
-    } }@case ("host") { @for (section of dataItemsFilter; track section.id) {
-    <li
-      class="searchAndFilter__searchResults-link"
-      (click)="selectHost(section.id)"
-    >
-      {{ section.name }}
-    </li>
-    } }@case ("accessPoint") { @for (section of dataItemsFilter; track
-    section.id) {
-    <li
-      class="searchAndFilter__searchResults-link"
-      (click)="selectIp(section.id)"
-    >
-      {{ section.name }}
-    </li>
-    } }@case ("cameras") { @for (section of dataItemsFilter; track section.id) {
-    <li
-      class="searchAndFilter__searchResults-link"
-      (click)="selectIp(section.id)"
-    >
-      {{ section.name }}
-    </li>
-    } }@case ("printers") { @for (section of dataItemsFilter; track section.id)
-    {
-    <li
-      class="searchAndFilter__searchResults-link"
-      (click)="selectIp(section.id)"
-    >
-      {{ section.name }}
-    </li>
-    } }@case ("switches") { @for (section of dataItemsFilter; track section.id)
-    {
-    <li
-      class="searchAndFilter__searchResults-link"
-      (click)="selectIp(section.id)"
-    >
-      {{ section.name }}
-    </li>
-    } } }
-  </ul>
-  }
-</section>
 }
 
-<!-- VIEWS DATA PRINTERS -->
+<!-- VER INFO DE LOS HOSTS -->
 <section>
   <table class="table table-dark table-hover fs-6">
     <thead>
       <tr style="font-size: 0.9rem;">
-        <th class="fw-light" scope="col">Id</th>
-        <th class="fw-light" scope="col">Sección</th>
-        <th class="fw-light" scope="col">Gerencia</th>
-        <th class="fw-light" scope="col">Dependencia</th>
-        <th class="fw-light" scope="col">Dispositivo de red</th>
-        <th class="fw-light" scope="col">Dirección Ip</th>
-        <th class="fw-light" scope="col">Codigo activo</th>
-        <th class="fw-light" scope="col">Número de Serie</th>
-        <th class="fw-light" scope="col">Fecha de compra</th>
+        <th class="fw-light" scope="col">codigo activo</th>
+        <th class="fw-light" scope="col">sección</th>
+        <th class="fw-light" scope="col">responsable</th>
+        <th class="fw-light" scope="col">host</th>
+        <th class="fw-light" scope="col">número de Serie</th>
+        <th class="fw-light" scope="col">descripción</th>
+        <th class="fw-light" scope="col">direccion Ip</th>
+        <th class="fw-light" scope="col">fecha de compra</th>
+        <th class="fw-light" scope="col"></th>
+        <th class="fw-light" scope="col"></th>
       </tr>
     </thead>
     <tbody>
-      <tr style="font-size: 0.7rem;">
-      <th scope="row">1</th>
-      @for (item of searchBycodeActiveSeccion; track $index) {
-        <td>{{ item.nombre }}</td>
-      }
-      @for (item of searchBycodeActiveGerencia; track $index) {
-        <td>{{ item.nombre }}</td>
-      }
-      @for (item of searchBycodeActiveDependencia; track $index) {
-        <td>{{ item.nombre }}</td>
-      }
-      @for (item of searchBycodeActiveEnlace; track $index) {
-        @switch (item.id_impresoras.toString()) {
-          @case ("0") {<td>IMPRESORA</td>}
-          @case ("1") {<td>SWITCH</td>}
-          @case ("2") {<td>ACCESPOINT</td>}
-        }
-        <td><a href="https://{{item.direccion_ip}}" target="_blank">https://{{ item.direccion_ip }}</a></td>
-        <td>{{ item.codigo_activo }}</td>
-        <td>{{ item.numero_serie }}</td>
-        <td>{{ item.fecha }}</td>
-      }
-      </tr>
+      
     </tbody>
   </table>
-
-  <!-- @for (item of getInfoEnlaces; track $index) {
-    <div>Codigo Activo: {{item.codigo_activo}}</div>
-    <div>Dirección Ip: <a href="https://{{item.direccion_ip}}" target="_blank">{{item.direccion_ip}}</a></div>
-  } -->
 </section>
+<!-- ********************* ACTUALIZAR REGISTROS O CREAR UNO NUEVO ************************** -->
+
+<!-- BUTTON CREATE DISPOSITIVO -->
+<button
+  type="button"
+  class="btn btn-primary py-0 d-flex align-items-center"
+  data-bs-toggle="modal"
+  data-bs-target="#dispositivo"
+  (click)="openNewHost()"
+>
+  <span>Crear Dispositivo</span><i class="bi bi-plus fs-5"></i>
+</button>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="dispositivo"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">
+          Crear Host
+        </h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <!-- **************FORMULARIO*************** -->
+        <div class="form__createHost px-4 py-3">
+          <!-- campo nombre secciones -->
+          <select
+            class="selectSections validateInput form-select mb-3"
+            aria-label="Default select example"
+            [(ngModel)]="id_seccion"
+            (click)="validateInputs($event,id_seccion, 'seccion')"
+          >
+            <option selected disabled>nombre de sección</option>
+            @for (item of getDbSecciones; track item.id) {
+            <option (click)="validateInputs($event,id_seccion,'seccion')" value="{{ item.id }}">
+              {{ item.nombreSeccion }}
+            </option>
+            }
+          </select>
+          <!-- campo host -->
+          <select
+            class="elementImpresoras validateInput form-select mb-3"
+            aria-label="Default select example"
+            [(ngModel)]="id_host"
+            (click)="validateInputs($event,id_host,'host')"
+          >
+            <option selected disabled>tipo de host</option>
+            <option value="0">AccessPoint</option>
+            <option value="0">Impresora</option>
+            <option value="1">Impresora epson</option>
+            <option value="3">Impresora epson miniploter</option>
+            <option value="2">Impresora epson de punto</option>
+            <option value="3">Impresora industrial</option>
+            <option value="3">Impresora laser</option>
+            <option value="3">Impresora laser kyocera</option>
+            <option value="3">Impresora multifuncional</option>
+            <option value="1">Impresora sato</option>
+            <option value="3">Impresora de transferencia termica</option>
+            <option value="0">Switch</option>
+            <option value="0">UPS</option>
+          </select>
+          <!-- codigo activo -->
+          <div class="mb-3">
+            <input
+              type="text"
+              class="direccion_ip form-control validateInput"
+              [(ngModel)]="codigo_activo"
+              placeholder="codigo activo"
+              (input)="validateInputs($event,codigo_activo!,'codigo activo')"
+            />
+          </div>
+          <!-- campo serie -->
+          <div class="mb-3">
+            <input
+              type="text"
+              class="direccion_ip form-control"
+              [(ngModel)]="numero_serie"
+              placeholder="número de serie"
+              (input)="validateInputs($event,numero_serie,'numero serie')"
+            />
+          </div>
+          <!-- campo descripcion -->
+          <div class="mb-3">
+            <input
+              type="text"
+              class="direccion_ip form-control"
+              [(ngModel)]="descripcion"
+              placeholder="descripcion"
+              (input)="validateInputs($event,descripcion,'descripcion')"
+            />
+          </div>
+          <!-- campo direccion IP -->
+          <div class="mb-3">
+            <input
+              type="text"
+              class="direccion_ip form-control validateInput"
+              [(ngModel)]="direccion_ip"
+              placeholder="Dirección IP"
+              (input)="validateInputs($event,direccion_ip,'direccion ip')"
+            />
+          </div>
+          <!-- campo fecha -->
+          <div class="mb-3">
+            <input type="date" class="form-control" [(ngModel)]="fecha_compra" />
+          </div>
+        </div>
+        <!-- ************************************ -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Cerrar
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="postNewHost()"
+        >
+          Guardar Cambios
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
