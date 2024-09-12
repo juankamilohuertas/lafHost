@@ -1,55 +1,24 @@
-export interface IdataFiltersImpresoras {
-  Id: number;
-  nombre: string;
-}
-
-export interface IdataFiltersEnlaces {
-  Id: number;
-  id_secciones: string;
-  id_impresoras: string;
-  direccion_ip: string;
-  codigo_activo: string;
-  numero_serie: string;
-  fecha: string;
-}
-
-export interface IdataFiltersApiAgregar {
+export interface IfiltersTipoHosts {
   id: number;
-  nombre: string;
+  NombreTipoHost: string
 }
-
-export interface IdataFiltersGerencias {
-  Id: number;
-  nombre: string;
+export interface IfiltersEnlaces{
+  id: 0,
+  codigoActivo: string,
+  idSeccion: number,
+  idResponsable: number,
+  idTipoHost: number,
+  numeroSerie: string,
+  descripcion: string,
+  direccionIp: string,
+  fecha: string
 }
-
-export interface IdataFiltersDependencias {
-  Id: number;
-  nombre: string;
+export interface IfiltersSecciones{
+  id: number,
+  nombreSeccion: string
 }
-
-export interface IdataFiltersAdministraciones {
-  Id: number;
-  id_secciones: string;
-  id_gerencias: string;
-  id_dependencias: string;
+export interface IfiltersResponsables{
+  id: number,
+  nombreResponsable: string,
+  idSeccion: number
 }
-/* ****************************************************** */
-
-export interface IdataFiltersProperty {
-  id: number;
-  name: string | string[];
-}
-
-export interface IdataFilters {
-  area: string;
-  sections: IdataFiltersProperty[];
-  host: IdataFiltersProperty[];
-  accessPoint: IdataFiltersProperty[];
-  cameras: IdataFiltersProperty[];
-  printers: IdataFiltersProperty[];
-  switches: IdataFiltersProperty[];
-  ipPrinters: IdataFiltersProperty[];
-}
-
-

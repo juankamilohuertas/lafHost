@@ -1,173 +1,22 @@
-<!-- BUTTON CREATE DISPOSITIVO -->
-<button
-  type="button"
-  class="btn btn-primary py-0 d-flex align-items-center"
-  data-bs-toggle="modal"
-  data-bs-target="#dispositivo"
-  (click)="getData()"
->
-  <span>Crear Dispositivo</span><i class="bi bi-plus fs-5"></i>
-</button>
-
-<!-- Modal -->
-<div
-  class="modal fade"
-  id="dispositivo"
-  tabindex="-1"
-  aria-labelledby="exampleModalLabel"
-  aria-hidden="true"
->
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">
-          Crear Dispositivo
-        </h1>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
-      </div>
-      <div class="modal-body">
-        <!-- **************FORMULARIO**************** -->
-        <div class="form__createHost px-4 py-3">
-          <!-- campo nombre secciones -->
-          <select
-            class="selectSections validateInput form-select mb-3"
-            aria-label="Default select example"
-            [(ngModel)]="nombre_secciones!"
-            (click)="validateInputs()"
-          >
-            <option selected disabled>selecciona la sección</option>
-            @for (item of getDbSecciones; track item.id) {
-            <option (click)="validateInputs()" value="{{ item.id }}">
-              {{ item.nombre }}
-            </option>
-            }
-          </select>
-          <!-- campo nombre gerencias -->
-          <select
-            class="selectGerencias validateInput form-select mb-3"
-            aria-label="Default select example"
-            [(ngModel)]="nombre_gerencias!"
-            (click)="validateInputs()"
-          >
-            <option selected disabled>selecciona la gerencia</option>
-            @for (item of getDbGerencias; track item.id) {
-            <option (click)="validateInputs()" value="{{ item.id }}">
-              {{ item.nombre }}
-            </option>
-            }
-          </select>
-          <!-- campo nombre dependencias -->
-          <select
-            class="selectDependencias validateInput form-select mb-3"
-            aria-label="Default select example"
-            [(ngModel)]="nombre_dependencias!"
-            (click)="validateInputs()"
-          >
-            <option selected disabled>selecciona la dependencia</option>
-            @for (item of getDbDependencias; track item.id) {
-            <option (click)="validateInputs()" value="{{ item.id }}">
-              {{ item.nombre }}
-            </option>
-            }
-          </select>
-          <!-- campo impresoras -->
-          <select
-            class="elementImpresoras validateInput form-select mb-3"
-            aria-label="Default select example"
-            [(ngModel)]="id_impresoras!"
-            (click)="validateInputs()"
-          >
-            <option selected disabled>Tipo de dispositivo</option>
-            <option value="0">Impresora</option>
-            <option value="1">Switch</option>
-            <option value="2">AccesPoint</option>
-          </select>
-          <!-- campo direccion IP -->
-          <div class="mb-3">
-            <input
-              type="text"
-              class="direccion_ip form-control validateInput"
-              [(ngModel)]="direccion_ip"
-              placeholder="Dirección IP"
-              (input)="validateInputs()"
-            />
-          </div>
-          <!-- campo codigo activo -->
-          <div class="mb-3">
-            <input
-              type="text"
-              class="form-control codigoActivo validateInput"
-              [(ngModel)]="codigo_activo"
-              placeholder="Codigo Activo"
-              (input)="validateInputs()"
-            />
-          </div>
-          <!-- campo numero de serie -->
-          <div class="mb-3">
-            <input
-              type="text"
-              class="form-control"
-              [(ngModel)]="numero_serie"
-              placeholder="Numero de Serie"
-            />
-          </div>
-          <!-- campo fecha -->
-          <div class="mb-3">
-            <input type="date" class="form-control" [(ngModel)]="fecha" />
-          </div>
-        </div>
-        <!-- ************************************ -->
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" onclick="window.location.reload()" data-bs-dismiss="modal">
-          Cerrar
-        </button>
-        <button
-          type="button"
-          class="btn btn-primary"
-          (click)="validateInputs()"
-          (click)="createNewPrint()"
-        >
-          Guardar Cambios
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
 <!-- BUTTON CREATE SECTION -->
 <button
   type="button"
   class="btn btn-primary"
   data-bs-toggle="modal"
   data-bs-target="#section"
-  (click)="validateNewInputs('Sección')"
+  (click)="addNew('seccion')"
 >
   Agregar Sección
 </button>
-<!-- BUTTON CREATE GERENCIAS -->
+<!-- BUTTON CREATE RESPONSABLE -->
 <button
   type="button"
   class="btn btn-primary"
   data-bs-toggle="modal"
   data-bs-target="#section"
-  (click)="validateNewInputs('Gerencia')"
+  (click)="addNew('responsable')"
 >
-  Agregar Gerencia
-</button>
-<!-- BUTTON CREATE DEPENDENCIAS -->
-<button
-  type="button"
-  class="btn btn-primary"
-  data-bs-toggle="modal"
-  data-bs-target="#section"
-  (click)="validateNewInputs('Dependencia')"
->
-  Agregar Dependencia
+  Agregar Responsable
 </button>
 <!-- Modal -->
 <div
@@ -180,7 +29,9 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Agregar {{openFormAgregar}}</h1>
+        <h1 class="modal-title fs-5" id="exampleModalLabel">
+          Agregar {{ nameForm }}
+        </h1>
         <button
           type="button"
           class="btn-close"
@@ -193,18 +44,34 @@
         <div class="mb-3">
           <input
             type="text"
-            (input)="validateNewInputs(openFormAgregar)"
-            class="form-control openFormAgregar"
-            [(ngModel)]="orden"
-            placeholder="Nombre de {{openFormAgregar}}"
+            [(ngModel)]="inputText"
+            class="form-control nombreInputSeccion"
+            placeholder="Nombre de {{ nameForm }}"
           />
         </div>
+        <!-- campo responsable -->
+        <select
+          class="nombreSelectResponsable validateInput form-select mb-3"
+          aria-label="Default select example"
+          [(ngModel)]="idResponsable"
+        >
+          <option selected disabled>Nombre de seccion</option>
+          @for (item of getDBSections; track $index) {
+          <option value="{{ item.id }}">{{ item.nombreSeccion }}</option>
+          }
+        </select>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" onclick="window.location.reload()" data-bs-dismiss="modal">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
           Cerrar
         </button>
-        <button type="button" class="btn btn-primary" (click)="agregarNew(apiAgregar)">Guardar Cambios</button>
+        <button
+          type="button"
+          class="btnSave btn btn-primary"
+          (click)="submitInfo()"
+        >
+          Guardar Cambios
+        </button>
       </div>
     </div>
   </div>
