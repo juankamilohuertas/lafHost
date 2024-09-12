@@ -41,7 +41,25 @@
       </tr>
     </thead>
     <tbody>
-      
+      @for (item of getDbEnlacesFilters; track $index) {
+      <tr>
+          <td>{{item.codigoActivo}}</td>
+          @for (item of getDbSeccionesFilters; track $index) {
+            <td>{{item.nombreSeccion}}</td>
+          }
+          @for (item of getDbResponsablesFilters; track $index) {
+            <td>{{item.nombreResponsable}}</td>
+          }
+          <td>{{item.idTipoHost}}</td>
+          <td>{{item.numeroSerie}}</td>
+          <td>{{item.descripcion}}</td>
+          <td>{{item.direccionIp}}</td>
+          <td>{{item.fecha}}</td>
+        
+        <td><button type="button" class="btn btn-warning">Actualizar</button></td>
+        <td><button type="button" class="btn btn-danger">Borrar</button></td>
+      </tr>
+    }
     </tbody>
   </table>
 </section>
@@ -53,7 +71,6 @@
   class="btn btn-primary py-0 d-flex align-items-center"
   data-bs-toggle="modal"
   data-bs-target="#dispositivo"
-  (click)="openNewHost()"
 >
   <span>Crear Dispositivo</span><i class="bi bi-plus fs-5"></i>
 </button>
@@ -84,7 +101,7 @@
         <div class="form__createHost px-4 py-3">
           <!-- campo nombre secciones -->
           <select
-            class="selectSections validateInput form-select mb-3"
+            class="secciones validateInput form-select mb-3"
             aria-label="Default select example"
             [(ngModel)]="id_seccion"
             (click)="validateInputs($event,id_seccion, 'seccion')"
@@ -96,9 +113,23 @@
             </option>
             }
           </select>
+          <!-- codigo responsable del dispositivo-->
+          <select
+            class="responsable validateInput form-select mb-3"
+            aria-label="Default select example"
+            [(ngModel)]="id_responsable"
+            (click)="validateInputs($event,id_responsable, 'responsable')"
+          >
+            <option selected disabled>nombre de responsable</option>
+            @for (item of getDbResponsables; track $index) {
+              @if (id_seccion  === item.idSeccion.toString()) {
+                <option value="{{item.id}}">{{item.nombreResponsable}}</option>
+              }
+            }
+          </select>
           <!-- campo host -->
           <select
-            class="elementImpresoras validateInput form-select mb-3"
+            class="host validateInput form-select mb-3"
             aria-label="Default select example"
             [(ngModel)]="id_host"
             (click)="validateInputs($event,id_host,'host')"
@@ -122,7 +153,7 @@
           <div class="mb-3">
             <input
               type="text"
-              class="direccion_ip form-control validateInput"
+              class="codigo_activo form-control validateInput"
               [(ngModel)]="codigo_activo"
               placeholder="codigo activo"
               (input)="validateInputs($event,codigo_activo!,'codigo activo')"
@@ -132,7 +163,7 @@
           <div class="mb-3">
             <input
               type="text"
-              class="direccion_ip form-control"
+              class="numero_serie form-control"
               [(ngModel)]="numero_serie"
               placeholder="número de serie"
               (input)="validateInputs($event,numero_serie,'numero serie')"
@@ -142,7 +173,7 @@
           <div class="mb-3">
             <input
               type="text"
-              class="direccion_ip form-control"
+              class="descripcion form-control"
               [(ngModel)]="descripcion"
               placeholder="descripcion"
               (input)="validateInputs($event,descripcion,'descripcion')"
