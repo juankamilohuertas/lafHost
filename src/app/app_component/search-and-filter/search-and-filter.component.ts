@@ -13,6 +13,7 @@ import {
   IfiltersEnlaces,
   IfiltersResponsables,
   IfiltersSecciones,
+  IfiltersTipoHosts,
 } from '../../app_models/filter/search-and-filter.models';
 import { Console } from 'console';
 
@@ -44,12 +45,16 @@ export class SearchAndFilterComponent implements OnInit {
   getDbEnlaces: IfiltersEnlaces[] = [];
   getDbSecciones: IfiltersSecciones[] = [];
   getDbResponsables: IfiltersResponsables[] = [];
+  getDbTypeHost: IfiltersTipoHosts[] = [];
 
   /* variables que obtienen los resultados de la db filtrados */
   getDbEnlacesFilters: IfiltersEnlaces[] = [];
   getDbSeccionesFilters: IfiltersSecciones[] = [];
   getDbResponsablesFilters: IfiltersResponsables[] = [];
+  getDbTypeHostFilters: IfiltersTipoHosts[] = [];
 
+  
+  
   constructor() {}
 
   ngOnInit(): void {
@@ -64,6 +69,10 @@ export class SearchAndFilterComponent implements OnInit {
     /* get db responsables */
     this._serviceDataFilter.getResponsablesApi().subscribe((res) => {
       this.getDbResponsables = res;
+    });
+     /* get db typehost */
+     this._serviceDataFilter.getTypeHostApi().subscribe((res) => {
+      this.getDbTypeHost = res;
     });
   }
 
@@ -166,6 +175,11 @@ export class SearchAndFilterComponent implements OnInit {
         (res) => res.id == this.getDbEnlacesFilters[0].idResponsable
       );
       this.getDbResponsablesFilters = [...nombreResponsable];
+      /* tipo host */
+      const nombreTipoHost = this.getDbTypeHost.filter(
+        (res) => res.id == this.getDbEnlacesFilters[0].idTipoHost
+      );
+      this.getDbTypeHostFilters = [...nombreTipoHost];
     }
   }
 
@@ -174,5 +188,10 @@ export class SearchAndFilterComponent implements OnInit {
   handleKeyboardEvent(event: KeyboardEvent): void {
     if (event.key === 'Enter') {
     }
+  }
+
+  /* boton de actualiza los datos filtrados */
+  updateFilterByCode(){
+    
   }
 }

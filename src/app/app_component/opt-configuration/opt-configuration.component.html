@@ -1,4 +1,4 @@
-<!-- BUTTON CREATE SECTION -->
+<!-- BOTON DE CREAR SECCION -->
 <button
   type="button"
   class="btn btn-primary"
@@ -8,7 +8,7 @@
 >
   Agregar Sección
 </button>
-<!-- BUTTON CREATE RESPONSABLE -->
+<!-- BOTON DE CREAR UN RESPONSABLE -->
 <button
   type="button"
   class="btn btn-primary"
@@ -17,6 +17,16 @@
   (click)="addNew('responsable')"
 >
   Agregar Responsable
+</button>
+<!-- BOTON DE CREAR HOST -->
+<button
+  type="button"
+  class="btn btn-primary"
+  data-bs-toggle="modal"
+  data-bs-target="#section"
+  (click)="addNew('host')"
+>
+  Agregar Host
 </button>
 <!-- Modal -->
 <div
@@ -45,15 +55,15 @@
           <input
             type="text"
             [(ngModel)]="inputText"
-            class="form-control nombreInputSeccion"
+            class="nameSeccionOrHost form-control"
             placeholder="Nombre de {{ nameForm }}"
           />
         </div>
-        <!-- campo responsable -->
+        <!-- campo responsable o host -->
         <select
-          class="nombreSelectResponsable validateInput form-select mb-3"
+          class="nameSelectResponsable validateInput form-select mb-3"
           aria-label="Default select example"
-          [(ngModel)]="idResponsable"
+          [(ngModel)]="idResponsableOrHost"
         >
           <option selected disabled>Nombre de seccion</option>
           @for (item of getDBSections; track $index) {

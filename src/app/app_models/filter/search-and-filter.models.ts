@@ -1,6 +1,6 @@
 export interface IfiltersTipoHosts {
   id: number;
-  NombreTipoHost: string
+  nombreTipoHost: string
 }
 export interface IfiltersEnlaces{
   id: 0,

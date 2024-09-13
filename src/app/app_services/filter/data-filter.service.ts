@@ -6,6 +6,7 @@ import {
   IfiltersEnlaces,
   IfiltersResponsables,
   IfiltersSecciones,
+  IfiltersTipoHosts,
 } from '../../app_models/filter/search-and-filter.models';
 
 @Injectable({
@@ -25,6 +26,10 @@ export class DataFilterService {
   /* GET API RESPONSABLES */
   getResponsablesApi() {
     return this.httpClient.get<IfiltersResponsables[]>(this._urlsApis.apiResponsables);
+  }
+  /* GET API TYPOHOST */
+  getTypeHostApi(){
+    return this.httpClient.get<IfiltersTipoHosts[]>(this._urlsApis.apiTipoHosts);
   }
 
   /* POST API ENLACES */
@@ -65,6 +70,15 @@ export class DataFilterService {
       {
         "nombreResponsable": nombreResponsable,
         "idSeccion": idSeccion
+      }
+    );
+  }
+  /* POST API TYPOHOST */
+  postTypeHostApi(nombreTipoHost: string) {
+    return this.httpClient.post<IfiltersTipoHosts[]>(
+      this._urlsApis.apiTipoHosts,
+      {
+        "nombreTipoHost": nombreTipoHost
       }
     );
   }

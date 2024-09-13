@@ -50,13 +50,15 @@
           @for (item of getDbResponsablesFilters; track $index) {
             <td>{{item.nombreResponsable}}</td>
           }
-          <td>{{item.idTipoHost}}</td>
+          @for (item of getDbTypeHostFilters; track $index) {
+            <td>{{item.nombreTipoHost}}</td>
+          }
           <td>{{item.numeroSerie}}</td>
           <td>{{item.descripcion}}</td>
           <td>{{item.direccionIp}}</td>
           <td>{{item.fecha}}</td>
         
-        <td><button type="button" class="btn btn-warning">Actualizar</button></td>
+        <td><button type="button" class="btn btn-warning" (click)="updateFilterByCode()">Actualizar</button></td>
         <td><button type="button" class="btn btn-danger">Borrar</button></td>
       </tr>
     }
@@ -135,19 +137,9 @@
             (click)="validateInputs($event,id_host,'host')"
           >
             <option selected disabled>tipo de host</option>
-            <option value="0">AccessPoint</option>
-            <option value="0">Impresora</option>
-            <option value="1">Impresora epson</option>
-            <option value="3">Impresora epson miniploter</option>
-            <option value="2">Impresora epson de punto</option>
-            <option value="3">Impresora industrial</option>
-            <option value="3">Impresora laser</option>
-            <option value="3">Impresora laser kyocera</option>
-            <option value="3">Impresora multifuncional</option>
-            <option value="1">Impresora sato</option>
-            <option value="3">Impresora de transferencia termica</option>
-            <option value="0">Switch</option>
-            <option value="0">UPS</option>
+            @for (item of getDbTypeHost; track $index) {
+              <option value="{{item.id}}">{{item.nombreTipoHost}}</option>
+            }
           </select>
           <!-- codigo activo -->
           <div class="mb-3">
