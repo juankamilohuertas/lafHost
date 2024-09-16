@@ -48,8 +48,8 @@ export class DataFilterService {
       idSeccion: idSeccion,
       idResponsable: idResponsable,
       idTipoHost: idTipoHost,
-      numeroSerie: numeroSerie,
-      descripcion: descripcion,
+      numeroSerie: numeroSerie.toLocaleUpperCase(),
+      descripcion: descripcion.toLocaleUpperCase(),
       direccionIp: direccionIp,
       fecha: fecha,
     });
@@ -59,7 +59,7 @@ export class DataFilterService {
     return this.httpClient.post<IfiltersSecciones[]>(
       this._urlsApis.apiSecciones,
       {
-        "nombreSeccion": nombreSeccion
+        "nombreSeccion": nombreSeccion.toLocaleUpperCase()
       }
     );
   }
@@ -69,7 +69,7 @@ export class DataFilterService {
       this._urlsApis.apiResponsables,
       {
         "codigoCentauro": codigoCentauro,
-        "nombreResponsable": nombreResponsable,
+        "nombreResponsable": nombreResponsable.toLocaleUpperCase(),
         "idSeccion": idSeccion
       }
     );
@@ -79,7 +79,7 @@ export class DataFilterService {
     return this.httpClient.post<IfiltersTipoHosts[]>(
       this._urlsApis.apiTipoHosts,
       {
-        "nombreTipoHost": nombreTipoHost
+        "nombreTipoHost": nombreTipoHost.toLocaleUpperCase()
       }
     );
   }
@@ -99,8 +99,8 @@ export class DataFilterService {
       "idSeccion": idSeccion,
       "idResponsable": idResponsable,
       "idTipoHost": idTipoHost,
-      "numeroSerie": numeroSerie,
-      "descripcion": descripcion,
+      "numeroSerie": numeroSerie.toLocaleUpperCase(),
+      "descripcion": descripcion.toLocaleUpperCase(),
       "direccionIp": direccionIp,
       "fecha": fecha
     })

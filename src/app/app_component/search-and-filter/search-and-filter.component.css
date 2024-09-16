@@ -1,3 +1,12 @@
+/* INPUT DE BUSQUEDA POR CODIGO */
+.inputSearchByCode {
+  outline-color: #990008;
+  padding: 1.5px 0;
+  text-indent: 4px;
+  margin-right: 2px;
+}
+
+/* RESUTADOS DE LA BUSQUEDA POR CODIGO */
 .searchAndFilter {
   border: 1px solid #d3d3d3;
 }
@@ -33,4 +42,20 @@
 
 .validateInput {
   border: 1px solid #f00;
+}
+
+/* info dispositivo */
+.tableInfoDispositivos tr {
+  border: 1px solid #990008;
+}
+.tableInfoDispositivos tr td {
+  text-transform: uppercase;
+  padding: 5px;
+}
+.tableInfoDispositivos tr td:hover {
+  background-color: #990008;
+  color: #ffffff;
+}
+.tableInfoDispositivos tr td span {
+  font-weight: 600;
 }/*# sourceMappingURL=search-and-filter.component.css.map */

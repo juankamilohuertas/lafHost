@@ -1,89 +1,114 @@
 <app-bread-crumb />
-<!-- SELECCIONA EL TIPO DE BUSQUEDAD -->
-<section>
-  <select
-    class="form-select form-select-lg d-inline-flex focus-ring focus-ring-light py-1 px-2 text-decoration-none border rounded-2"
-    [(ngModel)]="searchType!"
-  >
-    <option value="Buscar por..." selected disabled>Buscar por...</option>
-    <option value="codigo">Codigo activo o S/N</option>
-    <option value="cascada">Buscar y Filtrar</option>
-  </select>
-</section>
-@if(searchType == "codigo"){
 <!-- busqueda por codigo activo y S/N -->
 <div class="d-flex align-items-center">
   <input
-    class="py-1"
+    class="inputSearchByCode"
     type="text"
     [(ngModel)]="searchByCode"
     placeholder="codigo"
   />
-  <button class="btn bg-danger" (click)="btnSearchByCodes()">Buscar</button>
+  <button class="btn btn-secondary btn-sm rounded-0 rounded-end" (click)="btnSearchByCodes()">Buscar</button>
 </div>
-}
+
 
 <!-- VER INFO DE LOS HOSTS -->
-<section>
-  <table class="table table-dark table-hover fs-6">
-    <thead>
-      <tr style="font-size: 0.9rem">
-        <th class="fw-light" scope="col">codigo activo</th>
-        <th class="fw-light" scope="col">sección</th>
-        <th class="fw-light" scope="col">responsable</th>
-        <th class="fw-light" scope="col">host</th>
-        <th class="fw-light" scope="col">número de Serie</th>
-        <th class="fw-light" scope="col">descripción</th>
-        <th class="fw-light" scope="col">direccion Ip</th>
-        <th class="fw-light" scope="col">fecha de compra</th>
-        <th class="fw-light" scope="col"></th>
-        <th class="fw-light" scope="col"></th>
-      </tr>
-    </thead>
-    <tbody>
-      @for (item of getDbEnlacesFilters; track $index) {
+<section class="row">
+  @for (item of getDbEnlacesFilters; track $index) {
+  <div class="col-6">
+    <table class="tableInfoDispositivos fs-6 text-black">
+      <h3 class="fs-6 mt-4">Datos de usuario</h3>
+      @for (item of getDbSeccionesFilters; track $index) {
       <tr>
-        <td>{{ item.codigoActivo }}</td>
-        @for (item of getDbSeccionesFilters; track $index) {
-        <td>{{ item.nombreSeccion }}</td>
-        } @for (item of getDbResponsablesFilters; track $index) {
-        <td>{{ item.nombreResponsable }}</td>
-        } @for (item of getDbTypeHostFilters; track $index) {
-        <td>{{ item.nombreTipoHost }}</td>
-        }
-        <td>{{ item.numeroSerie }}</td>
-        <td>{{ item.descripcion }}</td>
-        <td>{{ item.direccionIp }}</td>
-        <td>{{ item.fecha }}</td>
-
-        <td>
-          <button
-            type="button"
-            class="btn btn-warning"
-            data-bs-toggle="modal"
-            data-bs-target="#dispositivo"
-            (click)="controlCrud('updateDispositivo', codigo_activo,direccion_ip)"
-          >
-            Actualizar
-          </button>
-        </td>
-        <td><button type="button" class="btn btn-danger" (click)="deleteRegisterEnlaces()">Borrar</button></td>
+        <td><span>Sección:</span> {{ item.nombreSeccion }}</td>
+      </tr>
+      } @for (item of getDbResponsablesFilters; track $index) {
+      <tr>
+        <td><span>Codigo de Centauro:</span> {{ item.codigoCentauro }}</td>
+      </tr>
+      <tr>
+        <td><span>Nombre de responsable:</span> {{ item.nombreResponsable }}</td>
       </tr>
       }
-    </tbody>
-  </table>
+      <h4 class="fs-6 mt-4">Datos de dispositivo</h4>
+      @for (item of getDbTypeHostFilters; track $index) {
+      <tr>
+        <td><span>Tipo de Host:</span> {{ item.nombreTipoHost }}</td>
+      </tr>
+      }
+      <tr>
+        <td><span>Codigo activo:</span> {{ item.codigoActivo }}</td>
+      </tr>
+      <tr>
+        <td><span>Numero de serie:</span> {{ item.numeroSerie }}</td>
+      </tr>
+      <tr>
+        <td><span>Descripcion del dispositivo:</span> {{ item.descripcion }}</td>
+      </tr>
+      <tr>
+        <td>
+        <span>Dirección ip: </span> 
+        <a href="http://{{ item.direccionIp }}" target="_blank" rel="host"
+          >{{ item.direccionIp }}</a>
+        </td>
+      </tr>
+      <tr>
+        <td><span>Fecha de Compra:</span> {{ item.fecha }}</td>
+      </tr>
+    </table>
+  </div>
+  <div class="col-6">
+    <div class="d-flex flex-column align-items-center">
+      <!-- imagen de dispositivo-->
+      <a
+        class="d-block"
+        style="width: 300px"
+        href="http://{{ item.direccionIp }}"
+        target="_blank"
+        rel="host"
+      >
+        <img
+          class="w-100"
+          src="https://www.kyoceradocumentsolutions.es/renditions/content/dam/kyocera/common/products/mfp/ECOSYSM2040DN/mfp-540x540-angled-ecosysM2040dn.png/jcr%3Acontent/renditions/cq5dam.resized.img.540.medium.time1572607568629.png"
+          alt="host"
+        />
+      </a>
+      <div>
+        <!-- boton actualizar -->
+        <button
+          type="button"
+          class="btn btn-secondary m-2"
+          data-bs-toggle="modal"
+          data-bs-target="#dispositivo"
+          (click)="
+            controlCrud('Actualizar Dispositivo', codigo_activo, direccion_ip)
+          "
+        >
+          Actualizar
+        </button>
+        <!-- boton borrar -->
+        <button
+          type="button"
+          class="btn btn-outline-danger m-2"
+          (click)="deleteRegisterEnlaces()"
+        >
+          Borrar
+        </button>
+      </div>
+    </div>
+  </div>
+  }
 </section>
 <!-- ********************* ACTUALIZAR REGISTROS O CREAR UNO NUEVO ************************** -->
 
 <!-- BUTTON CREATE DISPOSITIVO -->
 <button
   type="button"
-  class="btn btn-primary py-0 d-flex align-items-center"
+  class="btn btn-outline-danger my-5 py-0 d-flex align-items-center"
   data-bs-toggle="modal"
   data-bs-target="#dispositivo"
-  (click)="controlCrud('createDispositivo',codigo_activo,direccion_ip)"
+  (click)="controlCrud('Crear Dispositivo', codigo_activo, direccion_ip)"
 >
-  <span>Crear Dispositivo</span><i class="bi bi-plus fs-5"></i>
+  <span>Crear Nuevo Dispositivo</span><i class="bi bi-plus fs-5"></i>
 </button>
 
 <!-- Modal -->
@@ -97,7 +122,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Crear Host</h1>
+        <h1 class="modal-title fs-5" id="exampleModalLabel">{{saveChanges}}</h1>
         <button
           type="button"
           class="btn-close"
@@ -205,7 +230,11 @@
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
           Cerrar
         </button>
-        <button type="button" class="btn btn-primary" (click)="postNewHost(saveChanges)">
+        <button
+          type="button"
+          class="btn btn-outline-danger"
+          (click)="postNewHost(saveChanges)"
+        >
           Guardar Cambios
         </button>
       </div>

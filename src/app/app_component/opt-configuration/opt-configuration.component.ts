@@ -1,7 +1,6 @@
-import { Component, inject, input, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { DataFilterService } from '../../app_services/filter/data-filter.service';
 import { FormsModule } from '@angular/forms';
-import { environment } from '../../../environments/environment';
 import {
   IfiltersSecciones,
   IfiltersTipoHosts,

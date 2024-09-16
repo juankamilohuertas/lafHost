@@ -19,7 +19,6 @@ import {
 export class SearchAndFilterComponent implements OnInit {
   private readonly _serviceDataFilter = inject(DataFilterService);
 
-  searchType: string = 'Buscar por...';
   searchByCode?: string; // busqueda por Codigo S/N
 
   /* variables para crear un nuevo host */
@@ -158,7 +157,7 @@ export class SearchAndFilterComponent implements OnInit {
   }
   /* crea un nuevo registro de dispositivo o actualizacion de los datos en la db enlaces */
   postNewHost(saveChanges: string) {
-    if (saveChanges === 'createDispositivo') {
+    if (saveChanges === 'Crear Dispositivo') {
       const validateInputsElements =
         document.querySelectorAll('.validateInput');
       if (validateInputsElements.length === 0) {
@@ -178,7 +177,7 @@ export class SearchAndFilterComponent implements OnInit {
         this.refreshFromInputsCreate();
         this.removeOrAddError(saveChanges);
       }
-    } else if (saveChanges === 'updateDispositivo') {
+    } else if (saveChanges === 'Actualizar Dispositivo') {
       this._serviceDataFilter
         .putEnlacesApi(
           this.getDbEnlacesFilters[0].id,
@@ -206,6 +205,11 @@ export class SearchAndFilterComponent implements OnInit {
     const confirmDelete = confirm("Estas seguro que deseas eliminar el registro")
     if(confirmDelete){
       this._serviceDataFilter.deleteEnlacesApi(this.getDbEnlacesFilters[0].id).subscribe();
+       /* actualizando los registros de la tabla enlaces */
+    /* get db enlaces */
+    this._serviceDataFilter.getEnlacesApi().subscribe((res) => {
+      this.getDbEnlaces = res;
+    });
     }
   }
 
@@ -223,9 +227,9 @@ export class SearchAndFilterComponent implements OnInit {
       elementInputsCodigoActivo,
       elementInputsDireccionIp,
     ];
-    if (saveChanges === 'createDispositivo') {
+    if (saveChanges === 'Crear Dispositivo') {
       inputsByAddError.forEach((res) => res?.classList.add('validateInput'));
-    } else if (saveChanges === 'updateDispositivo') {
+    } else if (saveChanges === 'Actualizar Dispositivo') {
       inputsByAddError.forEach((res) => res?.classList.remove('validateInput'));
     }
   }
@@ -292,11 +296,11 @@ export class SearchAndFilterComponent implements OnInit {
 
   /* boton que maneja el control de todas las operaciones del crud */
   controlCrud(op: string, codigoActivo: string, direccionIp: string) {
-    if (op === 'createDispositivo') {
+    if (op === 'Crear Dispositivo') {
       this.saveChanges = op;
       this.refreshFromInputsCreate();
       this.removeOrAddError(this.saveChanges);
-    } else if (op === 'updateDispositivo') {
+    } else if (op === 'Actualizar Dispositivo') {
       this.saveChanges = op;
       this.assignFormImputsUpdate();
       this.removeOrAddError(this.saveChanges);

@@ -1,8 +1,22 @@
 .header {
-  height: 60px;
-  background-color: #272727;
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  height: 64px;
+  background-color: #990008;
+  box-shadow: 2px 2px 10px #404040;
 }
 .header__nav {
   display: flex;
   align-items: center;
+}
+.header__conte {
+  display: flex;
+}
+.header__conte__LogoLafayette {
+  width: 80px;
+}
+.header__conte__LogoLafayette-img {
+  width: 100%;
+  margin-left: 0.7rem;
 }/*# sourceMappingURL=header.component.css.map */
