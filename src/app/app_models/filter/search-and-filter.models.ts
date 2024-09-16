@@ -19,6 +19,7 @@ export interface IfiltersSecciones{
 }
 export interface IfiltersResponsables{
   id: number,
+  codigoCentauro: number,
   nombreResponsable: string,
   idSeccion: number
 }

@@ -1,11 +1,4 @@
-import { map } from 'rxjs';
-import {
-  Component,
-  DebugElement,
-  HostListener,
-  inject,
-  OnInit,
-} from '@angular/core';
+import { Component, HostListener, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BreadCrumbComponent } from '../bread-crumb/bread-crumb.component';
 import { DataFilterService } from '../../app_services/filter/data-filter.service';
@@ -15,7 +8,6 @@ import {
   IfiltersSecciones,
   IfiltersTipoHosts,
 } from '../../app_models/filter/search-and-filter.models';
-import { Console } from 'console';
 
 @Component({
   selector: 'app-search-and-filter',
@@ -33,7 +25,7 @@ export class SearchAndFilterComponent implements OnInit {
   /* variables para crear un nuevo host */
   codigo_activo = '';
   id_seccion = 'nombre de sección';
-  id_responsable = "nombre de responsable";
+  id_responsable = 'nombre de responsable';
   id_host = 'tipo de host';
   numero_serie = '';
   descripcion = '';
@@ -53,8 +45,6 @@ export class SearchAndFilterComponent implements OnInit {
   getDbResponsablesFilters: IfiltersResponsables[] = [];
   getDbTypeHostFilters: IfiltersTipoHosts[] = [];
 
-  
-  
   constructor() {}
 
   ngOnInit(): void {
@@ -70,51 +60,128 @@ export class SearchAndFilterComponent implements OnInit {
     this._serviceDataFilter.getResponsablesApi().subscribe((res) => {
       this.getDbResponsables = res;
     });
-     /* get db typehost */
-     this._serviceDataFilter.getTypeHostApi().subscribe((res) => {
+    /* get db typehost */
+    this._serviceDataFilter.getTypeHostApi().subscribe((res) => {
       this.getDbTypeHost = res;
     });
   }
 
-  /* valida los campos cuando se crea un host */
+  /* valida los campos cuando se crea un nuevo dispositivo */
   validateInputs(event: Event, valueInput: string, nameInput: string) {
     const expCodigoActivo = /^\d{5,}$/;
     const expDireccionIp =
       /^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$|^([0-9a-fA-F]{1,4}:){7}([0-9a-fA-F]{1,4}|:|[0-9a-fA-F]{1,4}:){1,7}$/;
 
     const elementValidate = event.target as HTMLElement;
-    if (valueInput != 'nombre de sección' && valueInput != 'tipo de host' && valueInput != 'nombre de responsable') {
+    if (
+      valueInput != 'nombre de sección' &&
+      valueInput != 'tipo de host' &&
+      valueInput != 'nombre de responsable'
+    ) {
       elementValidate.classList.remove('validateInput');
     } else {
       elementValidate.classList.add('validateInput');
     }
 
     if (nameInput == 'codigo activo') {
-      if (!expCodigoActivo.test(valueInput)) {
-        elementValidate.classList.add('validateInput');
-      } else {
-        elementValidate.classList.remove('validateInput');
-      }
+      this.noRepeatCodigoActivoOrDireccionIp(
+        nameInput,
+        valueInput,
+        elementValidate,
+        expCodigoActivo
+      );
     }
 
     if (nameInput == 'direccion ip') {
-      if (!expDireccionIp.test(valueInput)) {
+      this.noRepeatCodigoActivoOrDireccionIp(
+        nameInput,
+        valueInput,
+        elementValidate,
+        expDireccionIp
+      );
+    }
+  }
+  /* verifica que todos los campos codigo activo y direccion ip de los registros enlaces no se repitan */
+  noRepeatCodigoActivoOrDireccionIp(
+    nameInput: string,
+    valueInput: string,
+    elementValidate: HTMLElement,
+    expCodigoActivoOrDireccionIp: RegExp
+  ) {
+    if (nameInput == 'codigo activo') {
+      let repeatCodigoActivo: number = -1;
+      if (this.noRepeatInputs()[0][0] != undefined) {
+        repeatCodigoActivo = this.noRepeatInputs()[0][0].indexOf(valueInput);
+        if (repeatCodigoActivo !== -1) {
+          alert('El codigo activo ya existe');
+        }
+      }
+      if (
+        !expCodigoActivoOrDireccionIp.test(valueInput) ||
+        repeatCodigoActivo !== -1
+      ) {
+        elementValidate.classList.add('validateInput');
+      } else {
+        elementValidate.classList.remove('validateInput');
+      }
+    } else if (nameInput == 'direccion ip') {
+      let repeatDireccionIp: number = -1;
+      if (this.noRepeatInputs()[0][1] != undefined) {
+        repeatDireccionIp = this.noRepeatInputs()[0][1].indexOf(valueInput);
+        if (repeatDireccionIp !== -1) {
+          alert('La dirección ip ya existe');
+        }
+      }
+      if (
+        !expCodigoActivoOrDireccionIp.test(valueInput) ||
+        repeatDireccionIp !== -1
+      ) {
         elementValidate.classList.add('validateInput');
       } else {
         elementValidate.classList.remove('validateInput');
       }
     }
   }
-  /* verifica que todos los campos codigo activo y direccion ip de los registros enlaces no se repiran */
+  /* trae todos los codigos activos y direcciones ip de la tabla enlaces */
   noRepeatInputs() {
-    return this.getDbEnlaces.map((res) => [res.codigoActivo, res.direccionIp]);
+    let getDbCodigosActivosFilters: string[] = [];
+    let getDbDireccionesIpsFilters: string[] = [];
+    if (this.getDbEnlaces.length != 0) {
+      return this.getDbEnlaces.map((res) => {
+        getDbCodigosActivosFilters.push(res.codigoActivo);
+        getDbDireccionesIpsFilters.push(res.direccionIp);
+        return [getDbCodigosActivosFilters, getDbDireccionesIpsFilters];
+      });
+    } else {
+      return [getDbCodigosActivosFilters, getDbDireccionesIpsFilters];
+    }
   }
-  /* crea un nuevo registro de host en la db */
-  postNewHost() {
-    const validateInputsElements = document.querySelectorAll('.validateInput');
-    if (validateInputsElements.length === 0) {
+  /* crea un nuevo registro de dispositivo o actualizacion de los datos en la db enlaces */
+  postNewHost(saveChanges: string) {
+    if (saveChanges === 'createDispositivo') {
+      const validateInputsElements =
+        document.querySelectorAll('.validateInput');
+      if (validateInputsElements.length === 0) {
+        this._serviceDataFilter
+          .postEnlacesApi(
+            this.codigo_activo,
+            parseInt(this.id_seccion),
+            parseInt(this.id_responsable),
+            parseInt(this.id_host),
+            this.numero_serie,
+            this.descripcion,
+            this.direccion_ip,
+            this.fecha_compra
+          )
+          .subscribe();
+        alert('El dispositivo se creo correctamente');
+        this.refreshFromInputsCreate();
+        this.removeOrAddError(saveChanges);
+      }
+    } else if (saveChanges === 'updateDispositivo') {
       this._serviceDataFilter
-        .postEnlacesApi(
+        .putEnlacesApi(
+          this.getDbEnlacesFilters[0].id,
           this.codigo_activo,
           parseInt(this.id_seccion),
           parseInt(this.id_responsable),
@@ -125,34 +192,67 @@ export class SearchAndFilterComponent implements OnInit {
           this.fecha_compra
         )
         .subscribe();
-      alert('El host se creo correctamente');
-      this.codigo_activo = '';
-      this.id_seccion = 'nombre de sección';
-      this.id_responsable = "nombre de responsable";
-      this.id_host = 'tipo de host';
-      this.numero_serie = '';
-      this.descripcion = '';
-      this.direccion_ip = '';
-      this.fecha_compra = '';
-      const elementInputsSeccion = document.querySelector('.secciones');
-      const elementInputsResponsable = document.querySelector('.responsable');
-      const elementInputsHost = document.querySelector('.host');
-      const elementInputsCodigoActivo =
-        document.querySelector('.codigo_activo');
-      const elementInputsDireccionIp = document.querySelector('.direccion_ip');
-      const inputsByAddError = [
-        elementInputsSeccion,
-        elementInputsResponsable,
-        elementInputsHost,
-        elementInputsCodigoActivo,
-        elementInputsDireccionIp,
-      ];
-      inputsByAddError.forEach((res) => res?.classList.add('validateInput'));
+      alert('El dispositivo se actializó correctamente');
+      this.removeOrAddError(saveChanges);
+    }
+    /* actualizando los registros de la tabla enlaces */
+    /* get db enlaces */
+    this._serviceDataFilter.getEnlacesApi().subscribe((res) => {
+      this.getDbEnlaces = res;
+    });
+  }
+  /* eliminar un registro de la db enlaces */
+  deleteRegisterEnlaces(){
+    const confirmDelete = confirm("Estas seguro que deseas eliminar el registro")
+    if(confirmDelete){
+      this._serviceDataFilter.deleteEnlacesApi(this.getDbEnlacesFilters[0].id).subscribe();
     }
   }
 
+  /* elimina o agrega la clase de error en todos los inputs*/
+  removeOrAddError(saveChanges: string) {
+    const elementInputsSeccion = document.querySelector('.secciones');
+    const elementInputsResponsable = document.querySelector('.responsable');
+    const elementInputsHost = document.querySelector('.host');
+    const elementInputsCodigoActivo = document.querySelector('.codigo_activo');
+    const elementInputsDireccionIp = document.querySelector('.direccion_ip');
+    const inputsByAddError = [
+      elementInputsSeccion,
+      elementInputsResponsable,
+      elementInputsHost,
+      elementInputsCodigoActivo,
+      elementInputsDireccionIp,
+    ];
+    if (saveChanges === 'createDispositivo') {
+      inputsByAddError.forEach((res) => res?.classList.add('validateInput'));
+    } else if (saveChanges === 'updateDispositivo') {
+      inputsByAddError.forEach((res) => res?.classList.remove('validateInput'));
+    }
+  }
+  /* limpia los campos del formulario crear dispositivo */
+  refreshFromInputsCreate() {
+    this.codigo_activo = '';
+    this.id_seccion = 'nombre de sección';
+    this.id_responsable = 'nombre de responsable';
+    this.id_host = 'tipo de host';
+    this.numero_serie = '';
+    this.descripcion = '';
+    this.direccion_ip = '';
+    this.fecha_compra = '';
+  }
+  /* Asigna los valores buscados por codigo activo en el formulario update */
+  assignFormImputsUpdate() {
+    this.codigo_activo = this.getDbEnlacesFilters[0].codigoActivo;
+    this.id_seccion = this.getDbEnlacesFilters[0].idSeccion.toString();
+    this.id_responsable = this.getDbEnlacesFilters[0].idResponsable.toString();
+    this.id_host = this.getDbEnlacesFilters[0].idTipoHost.toString();
+    this.numero_serie = this.getDbEnlacesFilters[0].numeroSerie;
+    this.descripcion = this.getDbEnlacesFilters[0].descripcion;
+    this.direccion_ip = this.getDbEnlacesFilters[0].direccionIp;
+    this.fecha_compra = this.getDbEnlacesFilters[0].fecha;
+  }
   /* ************************************************************* */
-  /* buscar el codigo*/
+  /* buscar por codigo*/
   btnSearchByCodes() {
     const codigosActivos: string[] = [];
     let dataEnlacesFilter: IfiltersEnlaces[] = [];
@@ -190,8 +290,16 @@ export class SearchAndFilterComponent implements OnInit {
     }
   }
 
-  /* boton de actualiza los datos filtrados */
-  updateFilterByCode(){
-    
+  /* boton que maneja el control de todas las operaciones del crud */
+  controlCrud(op: string, codigoActivo: string, direccionIp: string) {
+    if (op === 'createDispositivo') {
+      this.saveChanges = op;
+      this.refreshFromInputsCreate();
+      this.removeOrAddError(this.saveChanges);
+    } else if (op === 'updateDispositivo') {
+      this.saveChanges = op;
+      this.assignFormImputsUpdate();
+      this.removeOrAddError(this.saveChanges);
+    }
   }
 }

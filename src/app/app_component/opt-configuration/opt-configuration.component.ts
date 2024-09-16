@@ -16,18 +16,19 @@ import {
 })
 export class OptConfigurationComponent implements OnInit {
   private readonly _serviceDataFilter = inject(DataFilterService);
-  private readonly _selectApi = environment;
-  inputText = ''; //lo que el usuario escribe en el input
+  inputText = ''; //lo que el usuario escribe en el input seccion
+  inputTextCentauro = ''; //lo que el usuario escribe en el input Usuario Centauro
   nameForm!: string; //nombre del formulario seleccionado
   idResponsableOrHost = `Nombre de seccion`; //valor seleccionado del formulario responsable
   idHost = `Nombre de host`; //valor seleccionado del formulario responsable
-  getDBSections: IfiltersSecciones[] = []; // trae todos los registros de la tabla secciones
+  getDBSecciones: IfiltersSecciones[] = []; // trae todos los registros de la tabla secciones
   getDBhost: IfiltersTipoHosts[] = []; // trae todos los registros de la tabla typeHost
+  getDBcodigoCentauro: number[] = []; // trae los registros de la columna CodigoCentauro de la tabla Responsable
   constructor() {}
   ngOnInit(): void {
     /* get db secciones */
     this._serviceDataFilter.getSeccionesApi().subscribe((res) => {
-      this.getDBSections = res;
+      this.getDBSecciones = res;
     });
     /* get db typehost */
     this._serviceDataFilter.getTypeHostApi().subscribe((res) => {
@@ -43,34 +44,66 @@ export class OptConfigurationComponent implements OnInit {
     const elementSeccionOrHost = document.querySelector(
       '.nameSeccionOrHost'
     ) as HTMLSelectElement;
+    const elementUserCentauro = document.querySelector(
+      '.nameUserCentauro'
+    ) as HTMLSelectElement;
     document
       .querySelector('.nameSeccionOrHost')
       ?.classList.add('validateInput');
+    document.querySelector('.nameUserCentauro')?.classList.add('validateInput');
     if (agregar == 'seccion') {
       elementSeccionOrHost.style.display = 'block';
       elementResponsable.style.display = 'none';
+      elementUserCentauro.style.display = 'none';
     } else if (agregar == 'responsable') {
       this.idResponsableOrHost = `Nombre de seccion`;
       elementSeccionOrHost.style.display = 'block';
       elementResponsable.style.display = 'block';
+      elementUserCentauro.style.display = 'block';
+       /* get db responsables */
+     this._serviceDataFilter.getResponsablesApi().subscribe((res) => {
+      res.map(res => {
+        this.getDBcodigoCentauro.push(res.codigoCentauro);
+      })
+      
+    });
     } else if (agregar == 'host') {
       this.idResponsableOrHost = `Nombre de host`;
       elementResponsable.style.display = 'none';
+      elementUserCentauro.style.display = 'none';
       elementSeccionOrHost.style.display = 'block';
     }
   }
 
-  /*BOTON GUARDAR CAMBIOS, CREA UN REGISTRO A LAS TABLAS SECCIONES O RESPONSABLES */
+  /*BOTON GUARDAR CAMBIOS, CREA UN REGISTRO A LAS TABLAS SECCIONES, RESPONSABLES O TYPEHOST*/
   submitInfo() {
     const expSecciones = /^[A-Za-z0-9][A-Za-z0-9\s]*[A-Za-z0-9]$/;
+    const expCodigoCentauro = /^\d{3,}$/;
+
+    const validateCodigoCentauro = this.getDBcodigoCentauro.filter(res => res == parseInt(this.inputTextCentauro));
+    if(validateCodigoCentauro.length != 0){
+      alert("El codigo de centauro ya existe");
+      document
+        .querySelector('.nameUserCentauro')!
+        .classList.add('validateInput');
+      }
+
     if (!expSecciones.test(this.inputText) || this.inputText == '') {
       document
         .querySelector('.nameSeccionOrHost')!
+        .classList.add('validateInput');
+    } else if (!expCodigoCentauro.test(this.inputTextCentauro) || this.inputTextCentauro == '') {
+      document
+        .querySelector('.nameUserCentauro')!
         .classList.add('validateInput');
     } else {
       document
         .querySelector('.nameSeccionOrHost')!
         .classList.remove('validateInput');
+      document
+        .querySelector('.nameUserCentauro')!
+        .classList.remove('validateInput');
+
       if (this.nameForm == 'seccion') {
         /* POST CREAR NUEVA SECCION */
         this._serviceDataFilter.postSeccionesApi(this.inputText).subscribe();
@@ -89,11 +122,13 @@ export class OptConfigurationComponent implements OnInit {
             ?.classList.remove('validateInput');
           this._serviceDataFilter
             .postResponsablesApi(
+              parseInt(this.inputTextCentauro),
               this.inputText,
               parseInt(this.idResponsableOrHost)
             )
             .subscribe();
           alert('El responsable se creo con exito!');
+          this.inputTextCentauro = '';
           this.inputText = '';
           this.idResponsableOrHost = 'Nombre de seccion';
         } else {

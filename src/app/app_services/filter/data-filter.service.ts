@@ -64,10 +64,11 @@ export class DataFilterService {
     );
   }
   /* POST API RESPONSABLES */
-  postResponsablesApi(nombreResponsable: string, idSeccion: number) {
+  postResponsablesApi(codigoCentauro:number, nombreResponsable: string, idSeccion: number) {
     return this.httpClient.post<IfiltersResponsables[]>(
       this._urlsApis.apiResponsables,
       {
+        "codigoCentauro": codigoCentauro,
         "nombreResponsable": nombreResponsable,
         "idSeccion": idSeccion
       }
@@ -82,7 +83,32 @@ export class DataFilterService {
       }
     );
   }
-
+  /* PUT API ENLACES */
+  putEnlacesApi(id:number,
+    codigoActivo: string,
+    idSeccion: number,
+    idResponsable: number,
+    idTipoHost: number,
+    numeroSerie: string,
+    descripcion: string,
+    direccionIp: string,
+    fecha: string){
+    return this.httpClient.put<IfiltersEnlaces[]>(`${this._urlsApis.apiEnlaces}/${id}`,{
+      "id": id,
+      "codigoActivo": codigoActivo,
+      "idSeccion": idSeccion,
+      "idResponsable": idResponsable,
+      "idTipoHost": idTipoHost,
+      "numeroSerie": numeroSerie,
+      "descripcion": descripcion,
+      "direccionIp": direccionIp,
+      "fecha": fecha
+    })
+  }
+  /* DELETE API ENLACES */
+  deleteEnlacesApi(id:number){
+    return this.httpClient.delete<IfiltersEnlaces[]>(`${this._urlsApis.apiEnlaces}/${id}`);
+  }
   /* ************************************************************************ */
   private _dataBehavior = new BehaviorSubject('');
   selectedFilterOptions$ = this._dataBehavior.asObservable();

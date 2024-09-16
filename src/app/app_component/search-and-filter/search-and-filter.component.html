@@ -27,7 +27,7 @@
 <section>
   <table class="table table-dark table-hover fs-6">
     <thead>
-      <tr style="font-size: 0.9rem;">
+      <tr style="font-size: 0.9rem">
         <th class="fw-light" scope="col">codigo activo</th>
         <th class="fw-light" scope="col">sección</th>
         <th class="fw-light" scope="col">responsable</th>
@@ -43,25 +43,33 @@
     <tbody>
       @for (item of getDbEnlacesFilters; track $index) {
       <tr>
-          <td>{{item.codigoActivo}}</td>
-          @for (item of getDbSeccionesFilters; track $index) {
-            <td>{{item.nombreSeccion}}</td>
-          }
-          @for (item of getDbResponsablesFilters; track $index) {
-            <td>{{item.nombreResponsable}}</td>
-          }
-          @for (item of getDbTypeHostFilters; track $index) {
-            <td>{{item.nombreTipoHost}}</td>
-          }
-          <td>{{item.numeroSerie}}</td>
-          <td>{{item.descripcion}}</td>
-          <td>{{item.direccionIp}}</td>
-          <td>{{item.fecha}}</td>
-        
-        <td><button type="button" class="btn btn-warning" (click)="updateFilterByCode()">Actualizar</button></td>
-        <td><button type="button" class="btn btn-danger">Borrar</button></td>
+        <td>{{ item.codigoActivo }}</td>
+        @for (item of getDbSeccionesFilters; track $index) {
+        <td>{{ item.nombreSeccion }}</td>
+        } @for (item of getDbResponsablesFilters; track $index) {
+        <td>{{ item.nombreResponsable }}</td>
+        } @for (item of getDbTypeHostFilters; track $index) {
+        <td>{{ item.nombreTipoHost }}</td>
+        }
+        <td>{{ item.numeroSerie }}</td>
+        <td>{{ item.descripcion }}</td>
+        <td>{{ item.direccionIp }}</td>
+        <td>{{ item.fecha }}</td>
+
+        <td>
+          <button
+            type="button"
+            class="btn btn-warning"
+            data-bs-toggle="modal"
+            data-bs-target="#dispositivo"
+            (click)="controlCrud('updateDispositivo', codigo_activo,direccion_ip)"
+          >
+            Actualizar
+          </button>
+        </td>
+        <td><button type="button" class="btn btn-danger" (click)="deleteRegisterEnlaces()">Borrar</button></td>
       </tr>
-    }
+      }
     </tbody>
   </table>
 </section>
@@ -73,6 +81,7 @@
   class="btn btn-primary py-0 d-flex align-items-center"
   data-bs-toggle="modal"
   data-bs-target="#dispositivo"
+  (click)="controlCrud('createDispositivo',codigo_activo,direccion_ip)"
 >
   <span>Crear Dispositivo</span><i class="bi bi-plus fs-5"></i>
 </button>
@@ -88,9 +97,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">
-          Crear Host
-        </h1>
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Crear Host</h1>
         <button
           type="button"
           class="btn-close"
@@ -106,11 +113,14 @@
             class="secciones validateInput form-select mb-3"
             aria-label="Default select example"
             [(ngModel)]="id_seccion"
-            (click)="validateInputs($event,id_seccion, 'seccion')"
+            (click)="validateInputs($event, id_seccion, 'seccion')"
           >
             <option selected disabled>nombre de sección</option>
             @for (item of getDbSecciones; track item.id) {
-            <option (click)="validateInputs($event,id_seccion,'seccion')" value="{{ item.id }}">
+            <option
+              (click)="validateInputs($event, id_seccion, 'seccion')"
+              value="{{ item.id }}"
+            >
               {{ item.nombreSeccion }}
             </option>
             }
@@ -120,25 +130,24 @@
             class="responsable validateInput form-select mb-3"
             aria-label="Default select example"
             [(ngModel)]="id_responsable"
-            (click)="validateInputs($event,id_responsable, 'responsable')"
+            (click)="validateInputs($event, id_responsable, 'responsable')"
           >
             <option selected disabled>nombre de responsable</option>
-            @for (item of getDbResponsables; track $index) {
-              @if (id_seccion  === item.idSeccion.toString()) {
-                <option value="{{item.id}}">{{item.nombreResponsable}}</option>
-              }
-            }
+            @for (item of getDbResponsables; track $index) { @if (id_seccion ===
+            item.idSeccion.toString()) {
+            <option value="{{ item.id }}">{{ item.nombreResponsable }}</option>
+            } }
           </select>
           <!-- campo host -->
           <select
             class="host validateInput form-select mb-3"
             aria-label="Default select example"
             [(ngModel)]="id_host"
-            (click)="validateInputs($event,id_host,'host')"
+            (click)="validateInputs($event, id_host, 'host')"
           >
             <option selected disabled>tipo de host</option>
             @for (item of getDbTypeHost; track $index) {
-              <option value="{{item.id}}">{{item.nombreTipoHost}}</option>
+            <option value="{{ item.id }}">{{ item.nombreTipoHost }}</option>
             }
           </select>
           <!-- codigo activo -->
@@ -148,7 +157,7 @@
               class="codigo_activo form-control validateInput"
               [(ngModel)]="codigo_activo"
               placeholder="codigo activo"
-              (input)="validateInputs($event,codigo_activo!,'codigo activo')"
+              (input)="validateInputs($event, codigo_activo!, 'codigo activo')"
             />
           </div>
           <!-- campo serie -->
@@ -158,7 +167,7 @@
               class="numero_serie form-control"
               [(ngModel)]="numero_serie"
               placeholder="número de serie"
-              (input)="validateInputs($event,numero_serie,'numero serie')"
+              (input)="validateInputs($event, numero_serie, 'numero serie')"
             />
           </div>
           <!-- campo descripcion -->
@@ -168,7 +177,7 @@
               class="descripcion form-control"
               [(ngModel)]="descripcion"
               placeholder="descripcion"
-              (input)="validateInputs($event,descripcion,'descripcion')"
+              (input)="validateInputs($event, descripcion, 'descripcion')"
             />
           </div>
           <!-- campo direccion IP -->
@@ -178,12 +187,16 @@
               class="direccion_ip form-control validateInput"
               [(ngModel)]="direccion_ip"
               placeholder="Dirección IP"
-              (input)="validateInputs($event,direccion_ip,'direccion ip')"
+              (input)="validateInputs($event, direccion_ip, 'direccion ip')"
             />
           </div>
           <!-- campo fecha -->
           <div class="mb-3">
-            <input type="date" class="form-control" [(ngModel)]="fecha_compra" />
+            <input
+              type="date"
+              class="form-control"
+              [(ngModel)]="fecha_compra"
+            />
           </div>
         </div>
         <!-- ************************************ -->
@@ -192,11 +205,7 @@
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
           Cerrar
         </button>
-        <button
-          type="button"
-          class="btn btn-primary"
-          (click)="postNewHost()"
-        >
+        <button type="button" class="btn btn-primary" (click)="postNewHost(saveChanges)">
           Guardar Cambios
         </button>
       </div>
