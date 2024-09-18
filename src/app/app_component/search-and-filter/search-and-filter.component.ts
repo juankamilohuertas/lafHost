@@ -257,7 +257,7 @@ export class SearchAndFilterComponent implements OnInit {
     this.fecha_compra = this.getDbEnlacesFilters[0].fecha;
   }
   /* ************************************************************* */
-  /* buscar por codigo*/
+  /* buscar por codigo activo*/
   btnSearchByCodes() {
     const codigosActivos: string[] = [];
     let dataEnlacesFilter: IfiltersEnlaces[] = [];
@@ -285,7 +285,10 @@ export class SearchAndFilterComponent implements OnInit {
         (res) => res.id == this.getDbEnlacesFilters[0].idTipoHost
       );
       this.getDbTypeHostFilters = [...nombreTipoHost];
+    }else if(this.searchByCode !== undefined){
+      alert("No se encontro el codigo activo");
     }
+    this.searchByCode = "";
   }
 
   /* boton que maneja el control de todas las operaciones del crud */
@@ -322,24 +325,27 @@ btnSearchByCodesCentauro(){
 
     const typeHost = this.getDbTypeHost.filter(res => res.id === hostAdminByUser[0].idTipoHost);
     this.getDbTipoHostByCentauro = [...typeHost];
-    
-    this.searchByCodeCentauro = "";
-  }else{
-    alert("No se encontraron resultados");
-    this.searchByCodeCentauro = "";
+  }else if(this.searchByCodeCentauro !== undefined){
+    alert("No se encontro el usuario centauro");
   }
-  
+  this.searchByCodeCentauro = "";
 }
 
 
-
+validateSearch(): void{
+  if(this.searchByCode !== undefined){
+    this.btnSearchByCodes();
+  }else if(this.searchByCodeCentauro !== undefined){
+    this.btnSearchByCodesCentauro();
+  }
+}
 
    /* Presionando la tecla enter hace la busqueda por codigo activo */
    @HostListener('window:keydown', ['$event'])
    handleKeyboardEvent(event: KeyboardEvent): void {
      if (event.key === 'Enter') {
-      this.btnSearchByCodes();
-      this.btnSearchByCodesCentauro();
+      this.validateSearch();
      }
    }
+   
 }
