@@ -20,6 +20,7 @@ export class SearchAndFilterComponent implements OnInit {
   private readonly _serviceDataFilter = inject(DataFilterService);
 
   searchByCode?: string; // busqueda por Codigo S/N
+  searchByCodeCentauro?: string // busqueda por codigo centauro
 
   /* variables para crear un nuevo host */
   codigo_activo = '';
@@ -287,13 +288,6 @@ export class SearchAndFilterComponent implements OnInit {
     }
   }
 
-  /* Presionando la tecla enter hace la busqueda por codigo activo */
-  @HostListener('window:keydown', ['$event'])
-  handleKeyboardEvent(event: KeyboardEvent): void {
-    if (event.key === 'Enter') {
-    }
-  }
-
   /* boton que maneja el control de todas las operaciones del crud */
   controlCrud(op: string, codigoActivo: string, direccionIp: string) {
     if (op === 'Crear Dispositivo') {
@@ -306,4 +300,46 @@ export class SearchAndFilterComponent implements OnInit {
       this.removeOrAddError(this.saveChanges);
     }
   }
+
+/* buscar por codigo de centauro */
+getDbEnlacesByCentauro: IfiltersEnlaces[] = [];
+getDbSeccionesByCentauro: IfiltersSecciones[] = [];
+getDbResponsableByCentauro: IfiltersResponsables[] = [];
+getDbTipoHostByCentauro: IfiltersTipoHosts[] = [];
+btnSearchByCodesCentauro(){
+  
+  const responsables = this.getDbResponsables.filter(res => res.codigoCentauro === parseInt(this.searchByCodeCentauro!));
+
+  if(responsables.length !== 0){
+    const hostAdminByUser = this.getDbEnlaces.filter(res => res.idResponsable === responsables[0].id);
+    this.getDbEnlacesByCentauro = [...hostAdminByUser];
+
+    const secciones = this.getDbSecciones.filter(res => res.id === hostAdminByUser[0].idSeccion); 
+    this.getDbSeccionesByCentauro = [...secciones];
+
+    const responsable = this.getDbResponsables.filter(res => res.codigoCentauro === responsables[0].codigoCentauro);
+    this.getDbResponsableByCentauro = [...responsable];
+
+    const typeHost = this.getDbTypeHost.filter(res => res.id === hostAdminByUser[0].idTipoHost);
+    this.getDbTipoHostByCentauro = [...typeHost];
+    
+    this.searchByCodeCentauro = "";
+  }else{
+    alert("No se encontraron resultados");
+    this.searchByCodeCentauro = "";
+  }
+  
+}
+
+
+
+
+   /* Presionando la tecla enter hace la busqueda por codigo activo */
+   @HostListener('window:keydown', ['$event'])
+   handleKeyboardEvent(event: KeyboardEvent): void {
+     if (event.key === 'Enter') {
+      this.btnSearchByCodes();
+      this.btnSearchByCodesCentauro();
+     }
+   }
 }

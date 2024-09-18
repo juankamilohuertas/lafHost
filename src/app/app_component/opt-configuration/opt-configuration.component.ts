@@ -78,7 +78,6 @@ export class OptConfigurationComponent implements OnInit {
   submitInfo() {
     const expSecciones = /^[A-Za-z0-9][A-Za-z0-9\s]*[A-Za-z0-9]$/;
     const expCodigoCentauro = /^\d{3,}$/;
-
     const validateCodigoCentauro = this.getDBcodigoCentauro.filter(res => res == parseInt(this.inputTextCentauro));
     if(validateCodigoCentauro.length != 0){
       alert("El codigo de centauro ya existe");
@@ -86,23 +85,7 @@ export class OptConfigurationComponent implements OnInit {
         .querySelector('.nameUserCentauro')!
         .classList.add('validateInput');
       }
-
-    if (!expSecciones.test(this.inputText) || this.inputText == '') {
-      document
-        .querySelector('.nameSeccionOrHost')!
-        .classList.add('validateInput');
-    } else if (!expCodigoCentauro.test(this.inputTextCentauro) || this.inputTextCentauro == '') {
-      document
-        .querySelector('.nameUserCentauro')!
-        .classList.add('validateInput');
-    } else {
-      document
-        .querySelector('.nameSeccionOrHost')!
-        .classList.remove('validateInput');
-      document
-        .querySelector('.nameUserCentauro')!
-        .classList.remove('validateInput');
-
+      
       if (this.nameForm == 'seccion') {
         /* POST CREAR NUEVA SECCION */
         this._serviceDataFilter.postSeccionesApi(this.inputText).subscribe();
@@ -136,6 +119,24 @@ export class OptConfigurationComponent implements OnInit {
             ?.classList.add('validateInput');
         }
       }
+      
+    if (!expSecciones.test(this.inputText) || this.inputText == '') {
+      document
+        .querySelector('.nameSeccionOrHost')!
+        .classList.add('validateInput');
+    } else if (!expCodigoCentauro.test(this.inputTextCentauro) || this.inputTextCentauro == '') {
+      document
+        .querySelector('.nameUserCentauro')!
+        .classList.add('validateInput');
+    } else {
+      document
+        .querySelector('.nameSeccionOrHost')!
+        .classList.remove('validateInput');
+      document
+        .querySelector('.nameUserCentauro')!
+        .classList.remove('validateInput');
+
+      
     }
   }
 }

@@ -1,17 +1,38 @@
 <app-bread-crumb />
-<!-- busqueda por codigo activo y S/N -->
 <div class="d-flex align-items-center">
-  <input
-    class="inputSearchByCode"
-    type="text"
-    [(ngModel)]="searchByCode"
-    placeholder="codigo"
-  />
-  <button class="btn btn-secondary btn-sm rounded-0 rounded-end" (click)="btnSearchByCodes()">Buscar</button>
+  <div class="d-flex me-3">
+    <!-- busqueda por codigo activo y S/N -->
+    <input
+      class="inputSearchByCode"
+      type="text"
+      [(ngModel)]="searchByCode"
+      placeholder="codigo activo"
+    />
+    <button
+      class="btn btn-secondary btn-sm rounded-0 rounded-end"
+      (click)="btnSearchByCodes()"
+    >
+      Buscar
+    </button>
+  </div>
+  <!-- busqueda por codigo de centauro -->
+  <div class="d-flex">
+    <input
+      class="inputSearchByCodeCentauro"
+      type="text"
+      [(ngModel)]="searchByCodeCentauro"
+      placeholder="codigo centauro"
+    />
+    <button
+      class="btn btn-secondary btn-sm rounded-0 rounded-end"
+      (click)="btnSearchByCodesCentauro()"
+    >
+      Buscar
+    </button>
+  </div>
 </div>
 
-
-<!-- VER INFO DE LOS HOSTS -->
+<!-- VER INFO DE LOS DISPOSITIVOS POR CODIGO ACTIVO-->
 <section class="row">
   @for (item of getDbEnlacesFilters; track $index) {
   <div class="col-6">
@@ -26,7 +47,9 @@
         <td><span>Codigo de Centauro:</span> {{ item.codigoCentauro }}</td>
       </tr>
       <tr>
-        <td><span>Nombre de responsable:</span> {{ item.nombreResponsable }}</td>
+        <td>
+          <span>Nombre de responsable:</span> {{ item.nombreResponsable }}
+        </td>
       </tr>
       }
       <h4 class="fs-6 mt-4">Datos de dispositivo</h4>
@@ -42,13 +65,16 @@
         <td><span>Numero de serie:</span> {{ item.numeroSerie }}</td>
       </tr>
       <tr>
-        <td><span>Descripcion del dispositivo:</span> {{ item.descripcion }}</td>
+        <td>
+          <span>Descripcion del dispositivo:</span> {{ item.descripcion }}
+        </td>
       </tr>
       <tr>
         <td>
-        <span>Dirección ip: </span> 
-        <a href="http://{{ item.direccionIp }}" target="_blank" rel="host"
-          >{{ item.direccionIp }}</a>
+          <span>Dirección ip: </span>
+          <a href="http://{{ item.direccionIp }}" target="_blank" rel="host">{{
+            item.direccionIp
+          }}</a>
         </td>
       </tr>
       <tr>
@@ -98,6 +124,51 @@
   </div>
   }
 </section>
+<!-- VER LOS REGISTROS DE HOST POR CODIGO CENTAURO -->
+<section>
+  <table class="table table-dark table-hover">
+    <thead>
+      <tr>
+        <th>Codigo Activo</th>
+        <th>Sección</th>
+        <th>Responsable</th>
+        <th>Tipo de Host</th>
+        <th>Numero de Serie</th>
+        <th>Descripción</th>
+        <th>Dirección IP</th>
+        <th>Fecha de Compra</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (item of getDbEnlacesByCentauro; track $index) {
+      <tr>
+        <td>{{ item.codigoActivo }}</td>
+        
+        @for (item of getDbSeccionesByCentauro; track $index) {
+          <td>{{ item.nombreSeccion }}</td>
+        }
+        
+        @for (item of getDbResponsableByCentauro; track $index) {
+          <td>{{ item.nombreResponsable }}</td>
+        }
+
+        @for (item of getDbTipoHostByCentauro; track $index) {
+          <td>{{ item.nombreTipoHost }}</td>
+        }
+      
+
+        <td>{{ item.numeroSerie }}</td>
+      
+        <td>{{ item.descripcion }}</td>
+      
+        <td>{{ item.direccionIp }}</td>
+  
+        <td>{{ item.fecha }}</td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</section>
 <!-- ********************* ACTUALIZAR REGISTROS O CREAR UNO NUEVO ************************** -->
 
 <!-- BUTTON CREATE DISPOSITIVO -->
@@ -122,7 +193,9 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">{{saveChanges}}</h1>
+        <h1 class="modal-title fs-5" id="exampleModalLabel">
+          {{ saveChanges }}
+        </h1>
         <button
           type="button"
           class="btn-close"
