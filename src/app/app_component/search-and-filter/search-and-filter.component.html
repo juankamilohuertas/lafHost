@@ -1,9 +1,9 @@
 <app-bread-crumb />
-<div class="d-flex align-items-center">
-  <div class="d-flex me-3">
+<div class="d-flex align-items-center mb-3">
+  <div class="d-flex me-4">
     <!-- busqueda por codigo activo y S/N -->
     <input
-      class="inputSearchByCode"
+      class="inputSearchByCode me-1"
       type="text"
       [(ngModel)]="searchByCode"
       placeholder="codigo activo"
@@ -15,13 +15,13 @@
       Buscar
     </button>
   </div>
-  <!-- busqueda por codigo de centauro -->
-  <div class="d-flex">
+  <div class="d-flex me-4">
+    <!-- busqueda por codigo de centauro -->
     <input
-      class="inputSearchByCodeCentauro"
+      class="inputSearchByCodeCentauro me-1"
       type="text"
       [(ngModel)]="searchByCodeCentauro"
-      placeholder="codigo centauro"
+      placeholder="codigo de nomina"
     />
     <button
       class="btn btn-secondary btn-sm rounded-0 rounded-end"
@@ -30,6 +30,28 @@
       Buscar
     </button>
   </div>
+  <div class="d-flex">
+    <!-- busqueda por sección -->
+    <input
+      class="me-1"
+      [(ngModel)]="searchBySeccion"
+      list="inputSearchByseccion"
+      placeholder="seccion"
+    />
+    <datalist id="inputSearchByseccion">
+      @for (item of getDbSecciones; track $index) {
+        <option value="{{item.nombreSeccion}}"></option>
+      }
+      
+    </datalist>
+    <button
+      class="btn btn-secondary btn-sm rounded-0 rounded-end"
+      (click)="btnSearchByCodesSeccion()"
+    >
+      Buscar
+    </button>
+  </div>
+  
 </div>
 
 <!-- VER INFO DE LOS DISPOSITIVOS POR CODIGO ACTIVO-->
@@ -44,7 +66,7 @@
       </tr>
       } @for (item of getDbResponsablesFilters; track $index) {
       <tr>
-        <td><span>Codigo de Centauro:</span> {{ item.codigoCentauro }}</td>
+        <td><span>Codigo de Nomina:</span> {{ item.codigoCentauro }}</td>
       </tr>
       <tr>
         <td>
@@ -124,11 +146,12 @@
   </div>
   }
 </section>
-<!-- VER LOS REGISTROS DE HOST POR CODIGO CENTAURO -->
+<!-- VER LOS REGISTROS DE HOST POR CODIGO DE NOMINA -->
 <section>
-  <table class="table table-dark table-hover">
+  <table class="tableInfoByCodigoNomina table table-dark table-hover">
     <thead>
       <tr>
+        <th>ID</th>
         <th>Codigo Activo</th>
         <th>Sección</th>
         <th>Responsable</th>
@@ -139,33 +162,61 @@
         <th>Fecha de Compra</th>
       </tr>
     </thead>
-    <tbody>
-      @for (item of getDbEnlacesByCentauro; track $index) {
-      <tr>
-        <td>{{ item.codigoActivo }}</td>
-        
-        @for (item of getDbSeccionesByCentauro; track $index) {
-          <td>{{ item.nombreSeccion }}</td>
-        }
-        
-        @for (item of getDbResponsableByCentauro; track $index) {
-          <td>{{ item.nombreResponsable }}</td>
-        }
-
-        @for (item of getDbTipoHostByCentauro; track $index) {
-          <td>{{ item.nombreTipoHost }}</td>
-        }
-
-        <td>{{ item.numeroSerie }}</td>
-      
-        <td>{{ item.descripcion }}</td>
-      
-        <td>{{ item.direccionIp }}</td>
+    @if (this.searchBySeccion === undefined) {
+      <tbody class="tableInfoByCodigoNomina__tbody fs-6">
+        @for (item of getDbEnlacesByCentauro; track $index) {
+        <tr class="tableInfoByCodigoNomina__tr user-select-none" (click)="itemSelectByCodesCentauro($event, item.codigoActivo)">
+          <td>{{$index + 1}}</td>
+          <td>{{ item.codigoActivo }}</td>
+          
+          @for (item of getDbSeccionesByCentauro; track $index) {
+            <td>{{ item.nombreSeccion }}</td>
+          }
+          
+          @for (item of getDbResponsableByCentauro; track $index) {
+            <td>{{ item.nombreResponsable }}</td>
+          }
   
-        <td>{{ item.fecha }}</td>
-      </tr>
-      }
-    </tbody>
+          @for (item of getDbTipoHostByCentauro; track $index) {
+            <td>{{ item.nombreTipoHost }}</td>
+          }
+  
+          <td>{{ item.numeroSerie }}</td>
+        
+          <td>{{ item.descripcion }}</td>
+        
+          <td>{{ item.direccionIp }}</td>
+    
+          <td>{{ item.fecha }}</td>
+        </tr>
+        }
+      </tbody>
+    }@else {
+      <tbody>
+        @for (enlace of getEnlacesFilter; track $index) {
+          <tr class="tableInfoByCodigoNomina__tr user-select-none" (click)="itemSelectByCodesCentauro($event, enlace.codigoActivo)">
+            <td>{{$index + 1}}</td>
+            <td>{{enlace.codigoActivo}}</td>
+            <td>{{getSeccionesFilter}}</td>
+            @for (responsable of getResponsablesFilter; track $index) {
+              @if(responsable.id === enlace.idResponsable){
+                <td>{{responsable.nombreResponsable}}</td>
+              }
+            }
+            @for (typeHost of getTypeHostFilter; track $index) {
+              @if(typeHost.id == enlace.idTipoHost){
+                <td>{{typeHost.nombreTipoHost}}</td>
+              }
+            }
+            <td>{{enlace.numeroSerie}}</td>
+            <td>{{enlace.descripcion}}</td>
+            <td>{{enlace.direccionIp}}</td>
+            <td>{{enlace.fecha}}</td>
+          </tr>
+        }
+      </tbody>
+    }
+   
   </table>
 </section>
 <!-- ********************* ACTUALIZAR REGISTROS O CREAR UNO NUEVO ************************** -->

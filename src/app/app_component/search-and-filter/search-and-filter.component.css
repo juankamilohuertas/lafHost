@@ -6,26 +6,6 @@
   margin-right: 2px;
 }
 
-/* RESUTADOS DE LA BUSQUEDA POR CODIGO */
-.searchAndFilter {
-  border: 1px solid #d3d3d3;
-}
-.searchAndFilter__searchResults {
-  list-style: none;
-  padding: 0;
-  height: 200px;
-  overflow: scroll;
-}
-.searchAndFilter__searchResults-link {
-  cursor: pointer;
-  padding: 5px;
-  background-color: #212221;
-  color: #ffffff;
-}
-.searchAndFilter__searchResults-link:hover {
-  background-color: #e20020;
-}
-
 .form__createHost-ul {
   list-style: none;
   padding: 0;
@@ -40,17 +20,18 @@
   background-color: #e20020;
 }
 
+/* VALIDACION DE CAMPOS DE LA CREACION DEL HOST */
 .validateInput {
   border: 1px solid #f00;
 }
 
-/* info dispositivo */
+/* RESUTADOS DE LA BUSQUEDA POR CODIGO ACTIVO*/
 .tableInfoDispositivos tr {
   border: 1px solid #990008;
 }
 .tableInfoDispositivos tr td {
   text-transform: uppercase;
-  padding: 5px;
+  padding: 5px 10px;
 }
 .tableInfoDispositivos tr td:hover {
   background-color: #990008;
@@ -58,4 +39,14 @@
 }
 .tableInfoDispositivos tr td span {
   font-weight: 600;
+}
+
+/* RESULTADOS DE LA BUSQUEDA POR CODIGO DE NOMINA */
+.tableInfoByCodigoNomina__tr {
+  cursor: pointer;
+}
+
+.selectRowElement {
+  outline: 1px solid #ff000d;
+  opacity: 0.8;
 }/*# sourceMappingURL=search-and-filter.component.css.map */

@@ -21,6 +21,7 @@ export class SearchAndFilterComponent implements OnInit {
 
   searchByCode?: string; // busqueda por Codigo S/N
   searchByCodeCentauro?: string // busqueda por codigo centauro
+  searchBySeccion?: string // busqueda por sección
 
   /* variables para crear un nuevo host */
   codigo_activo = '';
@@ -44,6 +45,12 @@ export class SearchAndFilterComponent implements OnInit {
   getDbSeccionesFilters: IfiltersSecciones[] = [];
   getDbResponsablesFilters: IfiltersResponsables[] = [];
   getDbTypeHostFilters: IfiltersTipoHosts[] = [];
+
+  /* variables que obtienen los datos filtrados de la busqueda secciones */
+  getEnlacesFilter: IfiltersEnlaces[] = [];
+  getSeccionesFilter: string = "";
+  getResponsablesFilter: IfiltersResponsables[] = [];
+  getTypeHostFilter: IfiltersTipoHosts[] = [];
 
   constructor() {}
 
@@ -309,6 +316,7 @@ getDbEnlacesByCentauro: IfiltersEnlaces[] = [];
 getDbSeccionesByCentauro: IfiltersSecciones[] = [];
 getDbResponsableByCentauro: IfiltersResponsables[] = [];
 getDbTipoHostByCentauro: IfiltersTipoHosts[] = [];
+
 btnSearchByCodesCentauro(){
   
   const responsables = this.getDbResponsables.filter(res => res.codigoCentauro === parseInt(this.searchByCodeCentauro!));
@@ -326,21 +334,69 @@ btnSearchByCodesCentauro(){
     const typeHost = this.getDbTypeHost.filter(res => res.id === hostAdminByUser[0].idTipoHost);
     this.getDbTipoHostByCentauro = [...typeHost];
   }else if(this.searchByCodeCentauro !== undefined){
-    alert("No se encontro el usuario centauro");
+    alert("No se encontro el usuario");
   }
   this.searchByCodeCentauro = "";
 }
 
+/* busqueda por clic de item en la tabla busqueda por codigo de nomina y sección*/
+itemSelectByCodesCentauro($event: Event,itemSelect: string){
+  this.searchByCode = itemSelect
+  this.btnSearchByCodes();
+
+  if(document.querySelectorAll(".selectRowElement").length != 0){
+    const allElementsTable = document.querySelectorAll(".selectRowElement");
+    allElementsTable.forEach(ele => {
+      ele.classList.remove("selectRowElement");
+    })
+  }
+  const elementSelect = $event.target as HTMLTableRowElement;
+  const el = elementSelect.parentNode as Element;
+  el.classList.add("selectRowElement");
+}
+
+/* buscar por sección */
+btnSearchByCodesSeccion(){
+  
+  const getSecciones = this.getDbSecciones.filter(res => res.nombreSeccion == this.searchBySeccion);
+  
+  if(this.searchBySeccion !== undefined && getSecciones[0] !== undefined){
+    /* enlaces */
+   const filterEnlaces = this.getDbEnlaces.filter(res => res.idSeccion == getSecciones[0].id)
+   this.getEnlacesFilter = filterEnlaces; 
+   /* secciones */
+   this.getSeccionesFilter = getSecciones[0].nombreSeccion; 
+   /* responsables */
+   const filterResponsables = this.getDbResponsables.filter(res => res.idSeccion === getSecciones[0].id)
+   this.getResponsablesFilter = filterResponsables;
+  /* tipohost */
+  
+  this.getTypeHostFilter = [];
+  let getTypeHost: Set<IfiltersTipoHosts> = new Set();
+  this.getDbTypeHost.filter(host => {
+    filterEnlaces.filter(enlaces => {
+      if(enlaces.idTipoHost === host.id){
+        getTypeHost.add(host);
+      }
+    })
+  })
+  let convertGetTypeHost = Array.from(getTypeHost);
+  this.getTypeHostFilter = convertGetTypeHost;
+  this.searchBySeccion = "";
+  }else{
+    alert("No se encontraton resultados");
+  }
+}
 
 validateSearch(): void{
-  if(this.searchByCode !== undefined){
+  if(this.searchByCode !== undefined && this.searchByCode !== ""){
     this.btnSearchByCodes();
-  }else if(this.searchByCodeCentauro !== undefined){
+  }else if(this.searchByCodeCentauro !== undefined && this.searchByCodeCentauro !== ""){
     this.btnSearchByCodesCentauro();
   }
 }
 
-   /* Presionando la tecla enter hace la busqueda por codigo activo */
+   /* Presionando la tecla enter hace la busqueda por codigo activo,nomina o sección */
    @HostListener('window:keydown', ['$event'])
    handleKeyboardEvent(event: KeyboardEvent): void {
      if (event.key === 'Enter') {
