@@ -1,48 +1,222 @@
 <app-bread-crumb />
-<!-- SELECCIONA EL TIPO DE BUSQUEDAD -->
-<section>
-  <select
-    class="form-select form-select-lg d-inline-flex focus-ring focus-ring-light py-1 px-2 text-decoration-none border rounded-2"
-    [(ngModel)]="searchType!"
-  >
-    <option value="Buscar por..." selected disabled>Buscar por...</option>
-    <option value="codigo">Codigo activo o S/N</option>
-    <option value="cascada">Buscar y Filtrar</option>
-  </select>
-</section>
-@if(searchType == "codigo"){
-<!-- busqueda por codigo activo y S/N -->
-<div class="d-flex align-items-center">
-  <input
-    class="py-1"
-    type="text"
-    [(ngModel)]="searchByCode"
-    placeholder="codigo"
-  />
-  <button class="btn bg-danger" (click)="btnSearchByCodes()">Buscar</button>
+<div class="d-flex align-items-center mb-3">
+  <div class="d-flex me-4">
+    <!-- busqueda por codigo activo y S/N -->
+    <input
+      class="inputSearchByCode me-1"
+      type="text"
+      [(ngModel)]="searchByCode"
+      placeholder="codigo activo"
+    />
+    <button
+      class="btn btn-secondary btn-sm rounded-0 rounded-end"
+      (click)="btnSearchByCodes()"
+    >
+      Buscar
+    </button>
+  </div>
+  <div class="d-flex me-4">
+    <!-- busqueda por codigo de centauro -->
+    <input
+      class="inputSearchByCodeCentauro me-1"
+      type="text"
+      [(ngModel)]="searchByCodeCentauro"
+      placeholder="codigo de nomina"
+    />
+    <button
+      class="btn btn-secondary btn-sm rounded-0 rounded-end"
+      (click)="btnSearchByCodesCentauro()"
+    >
+      Buscar
+    </button>
+  </div>
+  <div class="d-flex">
+    <!-- busqueda por sección -->
+    <input
+      class="me-1"
+      [(ngModel)]="searchBySeccion"
+      list="inputSearchByseccion"
+      placeholder="seccion"
+    />
+    <datalist id="inputSearchByseccion">
+      @for (item of getDbSecciones; track $index) {
+        <option value="{{item.nombreSeccion}}"></option>
+      }
+      
+    </datalist>
+    <button
+      class="btn btn-secondary btn-sm rounded-0 rounded-end"
+      (click)="btnSearchByCodesSeccion()"
+    >
+      Buscar
+    </button>
+  </div>
+  
 </div>
-}
 
-<!-- VER INFO DE LOS HOSTS -->
+<!-- VER INFO DE LOS DISPOSITIVOS POR CODIGO ACTIVO-->
+<section class="row">
+  @for (item of getDbEnlacesFilters; track $index) {
+  <div class="col-6">
+    <table class="tableInfoDispositivos fs-6 text-black">
+      <h3 class="fs-6 mt-4">Datos de usuario</h3>
+      @for (item of getDbSeccionesFilters; track $index) {
+      <tr>
+        <td><span>Sección:</span> {{ item.nombreSeccion }}</td>
+      </tr>
+      } @for (item of getDbResponsablesFilters; track $index) {
+      <tr>
+        <td><span>Codigo de Nomina:</span> {{ item.codigoCentauro }}</td>
+      </tr>
+      <tr>
+        <td>
+          <span>Nombre de responsable:</span> {{ item.nombreResponsable }}
+        </td>
+      </tr>
+      }
+      <h4 class="fs-6 mt-4">Datos de dispositivo</h4>
+      @for (item of getDbTypeHostFilters; track $index) {
+      <tr>
+        <td><span>Tipo de Host:</span> {{ item.nombreTipoHost }}</td>
+      </tr>
+      }
+      <tr>
+        <td><span>Codigo activo:</span> {{ item.codigoActivo }}</td>
+      </tr>
+      <tr>
+        <td><span>Numero de serie:</span> {{ item.numeroSerie }}</td>
+      </tr>
+      <tr>
+        <td>
+          <span>Descripcion del dispositivo:</span> {{ item.descripcion }}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <span>Dirección ip: </span>
+          <a href="http://{{ item.direccionIp }}" target="_blank" rel="host">{{
+            item.direccionIp
+          }}</a>
+        </td>
+      </tr>
+      <tr>
+        <td><span>Fecha de Compra:</span> {{ item.fecha }}</td>
+      </tr>
+    </table>
+  </div>
+  <div class="col-6">
+    <div class="d-flex flex-column align-items-center">
+      <!-- imagen de dispositivo-->
+      <a
+        class="d-block"
+        style="width: 300px"
+        href="http://{{ item.direccionIp }}"
+        target="_blank"
+        rel="host"
+      >
+        <img
+          class="w-100"
+          src="https://www.kyoceradocumentsolutions.es/renditions/content/dam/kyocera/common/products/mfp/ECOSYSM2040DN/mfp-540x540-angled-ecosysM2040dn.png/jcr%3Acontent/renditions/cq5dam.resized.img.540.medium.time1572607568629.png"
+          alt="host"
+        />
+      </a>
+      <div>
+        <!-- boton actualizar -->
+        <button
+          type="button"
+          class="btn btn-secondary m-2"
+          data-bs-toggle="modal"
+          data-bs-target="#dispositivo"
+          (click)="
+            controlCrud('Actualizar Dispositivo', codigo_activo, direccion_ip)
+          "
+        >
+          Actualizar
+        </button>
+        <!-- boton borrar -->
+        <button
+          type="button"
+          class="btn btn-outline-danger m-2"
+          (click)="deleteRegisterEnlaces()"
+        >
+          Borrar
+        </button>
+      </div>
+    </div>
+  </div>
+  }
+</section>
+<!-- VER LOS REGISTROS DE HOST POR CODIGO DE NOMINA -->
 <section>
-  <table class="table table-dark table-hover fs-6">
+  <table class="tableInfoByCodigoNomina table table-dark table-hover">
     <thead>
-      <tr style="font-size: 0.9rem;">
-        <th class="fw-light" scope="col">codigo activo</th>
-        <th class="fw-light" scope="col">sección</th>
-        <th class="fw-light" scope="col">responsable</th>
-        <th class="fw-light" scope="col">host</th>
-        <th class="fw-light" scope="col">número de Serie</th>
-        <th class="fw-light" scope="col">descripción</th>
-        <th class="fw-light" scope="col">direccion Ip</th>
-        <th class="fw-light" scope="col">fecha de compra</th>
-        <th class="fw-light" scope="col"></th>
-        <th class="fw-light" scope="col"></th>
+      <tr>
+        <th>ID</th>
+        <th>Codigo Activo</th>
+        <th>Sección</th>
+        <th>Responsable</th>
+        <th>Tipo de Host</th>
+        <th>Numero de Serie</th>
+        <th>Descripción</th>
+        <th>Dirección IP</th>
+        <th>Fecha de Compra</th>
       </tr>
     </thead>
-    <tbody>
-      
-    </tbody>
+    @if (this.searchBySeccion === undefined) {
+      <tbody class="tableInfoByCodigoNomina__tbody fs-6">
+        @for (item of getDbEnlacesByCentauro; track $index) {
+        <tr class="tableInfoByCodigoNomina__tr user-select-none" (click)="itemSelectByCodesCentauro($event, item.codigoActivo)">
+          <td>{{$index + 1}}</td>
+          <td>{{ item.codigoActivo }}</td>
+          
+          @for (item of getDbSeccionesByCentauro; track $index) {
+            <td>{{ item.nombreSeccion }}</td>
+          }
+          
+          @for (item of getDbResponsableByCentauro; track $index) {
+            <td>{{ item.nombreResponsable }}</td>
+          }
+  
+          @for (item of getDbTipoHostByCentauro; track $index) {
+            <td>{{ item.nombreTipoHost }}</td>
+          }
+  
+          <td>{{ item.numeroSerie }}</td>
+        
+          <td>{{ item.descripcion }}</td>
+        
+          <td>{{ item.direccionIp }}</td>
+    
+          <td>{{ item.fecha }}</td>
+        </tr>
+        }
+      </tbody>
+    }@else {
+      <tbody>
+        @for (enlace of getEnlacesFilter; track $index) {
+          <tr class="tableInfoByCodigoNomina__tr user-select-none" (click)="itemSelectByCodesCentauro($event, enlace.codigoActivo)">
+            <td>{{$index + 1}}</td>
+            <td>{{enlace.codigoActivo}}</td>
+            <td>{{getSeccionesFilter}}</td>
+            @for (responsable of getResponsablesFilter; track $index) {
+              @if(responsable.id === enlace.idResponsable){
+                <td>{{responsable.nombreResponsable}}</td>
+              }
+            }
+            @for (typeHost of getTypeHostFilter; track $index) {
+              @if(typeHost.id == enlace.idTipoHost){
+                <td>{{typeHost.nombreTipoHost}}</td>
+              }
+            }
+            <td>{{enlace.numeroSerie}}</td>
+            <td>{{enlace.descripcion}}</td>
+            <td>{{enlace.direccionIp}}</td>
+            <td>{{enlace.fecha}}</td>
+          </tr>
+        }
+      </tbody>
+    }
+   
   </table>
 </section>
 <!-- ********************* ACTUALIZAR REGISTROS O CREAR UNO NUEVO ************************** -->
@@ -50,12 +224,12 @@
 <!-- BUTTON CREATE DISPOSITIVO -->
 <button
   type="button"
-  class="btn btn-primary py-0 d-flex align-items-center"
+  class="btn btn-outline-danger my-5 py-0 d-flex align-items-center"
   data-bs-toggle="modal"
   data-bs-target="#dispositivo"
-  (click)="openNewHost()"
+  (click)="controlCrud('Crear Dispositivo', codigo_activo, direccion_ip)"
 >
-  <span>Crear Dispositivo</span><i class="bi bi-plus fs-5"></i>
+  <span>Crear Nuevo Dispositivo</span><i class="bi bi-plus fs-5"></i>
 </button>
 
 <!-- Modal -->
@@ -70,7 +244,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="exampleModalLabel">
-          Crear Host
+          {{ saveChanges }}
         </h1>
         <button
           type="button"
@@ -84,68 +258,74 @@
         <div class="form__createHost px-4 py-3">
           <!-- campo nombre secciones -->
           <select
-            class="selectSections validateInput form-select mb-3"
+            class="secciones validateInput form-select mb-3"
             aria-label="Default select example"
             [(ngModel)]="id_seccion"
-            (click)="validateInputs($event,id_seccion, 'seccion')"
+            (click)="validateInputs($event, id_seccion, 'seccion')"
           >
             <option selected disabled>nombre de sección</option>
             @for (item of getDbSecciones; track item.id) {
-            <option (click)="validateInputs($event,id_seccion,'seccion')" value="{{ item.id }}">
+            <option
+              (click)="validateInputs($event, id_seccion, 'seccion')"
+              value="{{ item.id }}"
+            >
               {{ item.nombreSeccion }}
             </option>
             }
           </select>
+          <!-- codigo responsable del dispositivo-->
+          <select
+            class="responsable validateInput form-select mb-3"
+            aria-label="Default select example"
+            [(ngModel)]="id_responsable"
+            (click)="validateInputs($event, id_responsable, 'responsable')"
+          >
+            <option selected disabled>nombre de responsable</option>
+            @for (item of getDbResponsables; track $index) { @if (id_seccion ===
+            item.idSeccion.toString()) {
+            <option value="{{ item.id }}">{{ item.nombreResponsable }}</option>
+            } }
+          </select>
           <!-- campo host -->
           <select
-            class="elementImpresoras validateInput form-select mb-3"
+            class="host validateInput form-select mb-3"
             aria-label="Default select example"
             [(ngModel)]="id_host"
-            (click)="validateInputs($event,id_host,'host')"
+            (click)="validateInputs($event, id_host, 'host')"
           >
             <option selected disabled>tipo de host</option>
-            <option value="0">AccessPoint</option>
-            <option value="0">Impresora</option>
-            <option value="1">Impresora epson</option>
-            <option value="3">Impresora epson miniploter</option>
-            <option value="2">Impresora epson de punto</option>
-            <option value="3">Impresora industrial</option>
-            <option value="3">Impresora laser</option>
-            <option value="3">Impresora laser kyocera</option>
-            <option value="3">Impresora multifuncional</option>
-            <option value="1">Impresora sato</option>
-            <option value="3">Impresora de transferencia termica</option>
-            <option value="0">Switch</option>
-            <option value="0">UPS</option>
+            @for (item of getDbTypeHost; track $index) {
+            <option value="{{ item.id }}">{{ item.nombreTipoHost }}</option>
+            }
           </select>
           <!-- codigo activo -->
           <div class="mb-3">
             <input
               type="text"
-              class="direccion_ip form-control validateInput"
+              class="codigo_activo form-control validateInput"
               [(ngModel)]="codigo_activo"
               placeholder="codigo activo"
-              (input)="validateInputs($event,codigo_activo!,'codigo activo')"
+              (input)="validateInputs($event, codigo_activo!, 'codigo activo')"
             />
           </div>
           <!-- campo serie -->
           <div class="mb-3">
             <input
               type="text"
-              class="direccion_ip form-control"
+              class="numero_serie form-control"
               [(ngModel)]="numero_serie"
               placeholder="número de serie"
-              (input)="validateInputs($event,numero_serie,'numero serie')"
+              (input)="validateInputs($event, numero_serie, 'numero serie')"
             />
           </div>
           <!-- campo descripcion -->
           <div class="mb-3">
             <input
               type="text"
-              class="direccion_ip form-control"
+              class="descripcion form-control"
               [(ngModel)]="descripcion"
               placeholder="descripcion"
-              (input)="validateInputs($event,descripcion,'descripcion')"
+              (input)="validateInputs($event, descripcion, 'descripcion')"
             />
           </div>
           <!-- campo direccion IP -->
@@ -155,12 +335,16 @@
               class="direccion_ip form-control validateInput"
               [(ngModel)]="direccion_ip"
               placeholder="Dirección IP"
-              (input)="validateInputs($event,direccion_ip,'direccion ip')"
+              (input)="validateInputs($event, direccion_ip, 'direccion ip')"
             />
           </div>
           <!-- campo fecha -->
           <div class="mb-3">
-            <input type="date" class="form-control" [(ngModel)]="fecha_compra" />
+            <input
+              type="date"
+              class="form-control"
+              [(ngModel)]="fecha_compra"
+            />
           </div>
         </div>
         <!-- ************************************ -->
@@ -171,8 +355,8 @@
         </button>
         <button
           type="button"
-          class="btn btn-primary"
-          (click)="postNewHost()"
+          class="btn btn-outline-danger"
+          (click)="postNewHost(saveChanges)"
         >
           Guardar Cambios
         </button>

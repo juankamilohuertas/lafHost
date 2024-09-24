@@ -6,4 +6,8 @@
 }
 .content__dashboard-section {
   height: 100%;
+}
+.content__dashboard-content {
+  box-shadow: 1px 1px 10px #404040;
+  margin: 5rem 1rem 1rem 1rem;
 }/*# sourceMappingURL=dashboard.component.css.map */

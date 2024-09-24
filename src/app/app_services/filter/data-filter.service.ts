@@ -6,6 +6,7 @@ import {
   IfiltersEnlaces,
   IfiltersResponsables,
   IfiltersSecciones,
+  IfiltersTipoHosts,
 } from '../../app_models/filter/search-and-filter.models';
 
 @Injectable({
@@ -26,6 +27,10 @@ export class DataFilterService {
   getResponsablesApi() {
     return this.httpClient.get<IfiltersResponsables[]>(this._urlsApis.apiResponsables);
   }
+  /* GET API TYPOHOST */
+  getTypeHostApi(){
+    return this.httpClient.get<IfiltersTipoHosts[]>(this._urlsApis.apiTipoHosts);
+  }
 
   /* POST API ENLACES */
   postEnlacesApi(
@@ -43,8 +48,8 @@ export class DataFilterService {
       idSeccion: idSeccion,
       idResponsable: idResponsable,
       idTipoHost: idTipoHost,
-      numeroSerie: numeroSerie,
-      descripcion: descripcion,
+      numeroSerie: numeroSerie.toLocaleUpperCase(),
+      descripcion: descripcion.toLocaleUpperCase(),
       direccionIp: direccionIp,
       fecha: fecha,
     });
@@ -54,21 +59,56 @@ export class DataFilterService {
     return this.httpClient.post<IfiltersSecciones[]>(
       this._urlsApis.apiSecciones,
       {
-        "nombreSeccion": nombreSeccion
+        "nombreSeccion": nombreSeccion.toLocaleUpperCase()
       }
     );
   }
   /* POST API RESPONSABLES */
-  postResponsablesApi(nombreResponsable: string, idSeccion: number) {
+  postResponsablesApi(codigoCentauro:number, nombreResponsable: string, idSeccion: number) {
     return this.httpClient.post<IfiltersResponsables[]>(
       this._urlsApis.apiResponsables,
       {
-        "nombreResponsable": nombreResponsable,
+        "codigoCentauro": codigoCentauro,
+        "nombreResponsable": nombreResponsable.toLocaleUpperCase(),
         "idSeccion": idSeccion
       }
     );
   }
-
+  /* POST API TYPOHOST */
+  postTypeHostApi(nombreTipoHost: string) {
+    return this.httpClient.post<IfiltersTipoHosts[]>(
+      this._urlsApis.apiTipoHosts,
+      {
+        "nombreTipoHost": nombreTipoHost.toLocaleUpperCase()
+      }
+    );
+  }
+  /* PUT API ENLACES */
+  putEnlacesApi(id:number,
+    codigoActivo: string,
+    idSeccion: number,
+    idResponsable: number,
+    idTipoHost: number,
+    numeroSerie: string,
+    descripcion: string,
+    direccionIp: string,
+    fecha: string){
+    return this.httpClient.put<IfiltersEnlaces[]>(`${this._urlsApis.apiEnlaces}/${id}`,{
+      "id": id,
+      "codigoActivo": codigoActivo,
+      "idSeccion": idSeccion,
+      "idResponsable": idResponsable,
+      "idTipoHost": idTipoHost,
+      "numeroSerie": numeroSerie.toLocaleUpperCase(),
+      "descripcion": descripcion.toLocaleUpperCase(),
+      "direccionIp": direccionIp,
+      "fecha": fecha
+    })
+  }
+  /* DELETE API ENLACES */
+  deleteEnlacesApi(id:number){
+    return this.httpClient.delete<IfiltersEnlaces[]>(`${this._urlsApis.apiEnlaces}/${id}`);
+  }
   /* ************************************************************************ */
   private _dataBehavior = new BehaviorSubject('');
   selectedFilterOptions$ = this._dataBehavior.asObservable();

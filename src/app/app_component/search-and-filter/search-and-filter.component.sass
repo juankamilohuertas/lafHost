@@ -1,17 +1,9 @@
-.searchAndFilter
-    border: 1px solid #d3d3d3
-    &__searchResults
-        list-style: none
-        padding: 0
-        height: 200px
-        overflow: scroll
-        &-link
-            cursor: pointer
-            padding: 5px 
-            background-color: #212221
-            color: #ffffff
-            &:hover 
-                background-color: #e20020
+/* INPUT DE BUSQUEDA POR CODIGO */
+.inputSearchByCode
+    outline-color: #990008  
+    padding: 1.5px 0
+    text-indent: 4px   
+    margin-right: 2px 
 
 .form__createHost
     &-ul
@@ -25,6 +17,29 @@
         &:hover
             background-color: #e20020
     
+/* VALIDACION DE CAMPOS DE LA CREACION DEL HOST */
 
 .validateInput
     border: 1px solid #f00      
+
+/* RESUTADOS DE LA BUSQUEDA POR CODIGO ACTIVO*/
+.tableInfoDispositivos
+    tr
+        border: 1px solid #990008
+        td
+            text-transform: uppercase
+            padding: 5px 10px
+            &:hover
+                background-color: #990008
+                color: #ffffff
+            span
+                font-weight: 600
+/* RESULTADOS DE LA BUSQUEDA POR CODIGO DE NOMINA */
+.tableInfoByCodigoNomina
+    &__tr
+        cursor: pointer
+.selectRowElement
+    outline: 1px solid #ff000d      
+    opacity: 0.8     
+            
+    

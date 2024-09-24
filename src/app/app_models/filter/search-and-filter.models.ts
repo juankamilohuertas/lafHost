@@ -1,6 +1,6 @@
 export interface IfiltersTipoHosts {
   id: number;
-  NombreTipoHost: string
+  nombreTipoHost: string
 }
 export interface IfiltersEnlaces{
   id: 0,
@@ -19,6 +19,7 @@ export interface IfiltersSecciones{
 }
 export interface IfiltersResponsables{
   id: number,
+  codigoCentauro: number,
   nombreResponsable: string,
   idSeccion: number
 }
