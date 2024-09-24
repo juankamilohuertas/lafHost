@@ -23,6 +23,8 @@ export class SearchAndFilterComponent implements OnInit {
   searchByCodeCentauro?: string // busqueda por codigo centauro
   searchBySeccion?: string // busqueda por sección
 
+  selectTypeSearch = "";
+
   /* variables para crear un nuevo host */
   codigo_activo = '';
   id_seccion = 'nombre de sección';
@@ -318,7 +320,7 @@ getDbResponsableByCentauro: IfiltersResponsables[] = [];
 getDbTipoHostByCentauro: IfiltersTipoHosts[] = [];
 
 btnSearchByCodesCentauro(){
-  
+  this.selectTypeSearch = "nomina";
   const responsables = this.getDbResponsables.filter(res => res.codigoCentauro === parseInt(this.searchByCodeCentauro!));
 
   if(responsables.length !== 0){
@@ -337,6 +339,7 @@ btnSearchByCodesCentauro(){
     alert("No se encontro el usuario");
   }
   this.searchByCodeCentauro = "";
+  window.scroll(0,600)
 }
 
 /* busqueda por clic de item en la tabla busqueda por codigo de nomina y sección*/
@@ -353,11 +356,13 @@ itemSelectByCodesCentauro($event: Event,itemSelect: string){
   const elementSelect = $event.target as HTMLTableRowElement;
   const el = elementSelect.parentNode as Element;
   el.classList.add("selectRowElement");
+  window.scroll(0,200)
+  
 }
 
 /* buscar por sección */
 btnSearchByCodesSeccion(){
-  
+  this.selectTypeSearch = "sección";
   const getSecciones = this.getDbSecciones.filter(res => res.nombreSeccion == this.searchBySeccion);
   
   if(this.searchBySeccion !== undefined && getSecciones[0] !== undefined){
@@ -386,6 +391,7 @@ btnSearchByCodesSeccion(){
   }else{
     alert("No se encontraton resultados");
   }
+  window.scroll(0,600)
 }
 
 validateSearch(): void{
@@ -393,6 +399,8 @@ validateSearch(): void{
     this.btnSearchByCodes();
   }else if(this.searchByCodeCentauro !== undefined && this.searchByCodeCentauro !== ""){
     this.btnSearchByCodesCentauro();
+  }else if(this.searchBySeccion !== undefined && this.searchBySeccion !== ""){
+    this.btnSearchByCodesSeccion()
   }
 }
 

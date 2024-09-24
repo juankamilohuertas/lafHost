@@ -1,5 +1,6 @@
 <app-bread-crumb />
-<div class="d-flex align-items-center mb-3">
+<h1 class="h4">Buscar por...</h1>
+<div class="typesOfSearches d-flex align-items-center mb-3">
   <div class="d-flex me-4">
     <!-- busqueda por codigo activo y S/N -->
     <input
@@ -33,7 +34,7 @@
   <div class="d-flex">
     <!-- busqueda por sección -->
     <input
-      class="me-1"
+      class="inputSearchByseccion me-1"
       [(ngModel)]="searchBySeccion"
       list="inputSearchByseccion"
       placeholder="seccion"
@@ -55,7 +56,7 @@
 </div>
 
 <!-- VER INFO DE LOS DISPOSITIVOS POR CODIGO ACTIVO-->
-<section class="row">
+<section class="row mb-5">
   @for (item of getDbEnlacesFilters; track $index) {
   <div class="col-6">
     <table class="tableInfoDispositivos fs-6 text-black">
@@ -104,7 +105,7 @@
       </tr>
     </table>
   </div>
-  <div class="col-6">
+  <div class="d-flex align-items-center justify-content-center col-6">
     <div class="d-flex flex-column align-items-center">
       <!-- imagen de dispositivo-->
       <a
@@ -149,20 +150,22 @@
 <!-- VER LOS REGISTROS DE HOST POR CODIGO DE NOMINA -->
 <section>
   <table class="tableInfoByCodigoNomina table table-dark table-hover">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Codigo Activo</th>
-        <th>Sección</th>
-        <th>Responsable</th>
-        <th>Tipo de Host</th>
-        <th>Numero de Serie</th>
-        <th>Descripción</th>
-        <th>Dirección IP</th>
-        <th>Fecha de Compra</th>
-      </tr>
-    </thead>
-    @if (this.searchBySeccion === undefined) {
+    @if(this.selectTypeSearch !== ""){
+      <thead class="tableInfoByCodigoNomina__thead">
+        <tr>
+          <th>ID</th>
+          <th>Codigo Activo</th>
+          <th>Sección</th>
+          <th>Responsable</th>
+          <th>Host</th>
+          <th>N° Serie</th>
+          <th>Descripción</th>
+          <th>Dirección IP</th>
+          <th>Fecha de Compra</th>
+        </tr>
+      </thead>
+    }
+    @if (this.selectTypeSearch !== "sección") {
       <tbody class="tableInfoByCodigoNomina__tbody fs-6">
         @for (item of getDbEnlacesByCentauro; track $index) {
         <tr class="tableInfoByCodigoNomina__tr user-select-none" (click)="itemSelectByCodesCentauro($event, item.codigoActivo)">
@@ -185,13 +188,13 @@
         
           <td>{{ item.descripcion }}</td>
         
-          <td>{{ item.direccionIp }}</td>
+          <td><a class="text-danger" href="http://{{item.direccionIp}}" target="_blank" rel="noopener noreferrer"></a>{{ item.direccionIp }}</td>
     
           <td>{{ item.fecha }}</td>
         </tr>
         }
       </tbody>
-    }@else {
+    }@else{
       <tbody>
         @for (enlace of getEnlacesFilter; track $index) {
           <tr class="tableInfoByCodigoNomina__tr user-select-none" (click)="itemSelectByCodesCentauro($event, enlace.codigoActivo)">
@@ -224,7 +227,8 @@
 <!-- BUTTON CREATE DISPOSITIVO -->
 <button
   type="button"
-  class="btn btn-outline-danger my-5 py-0 d-flex align-items-center"
+  style="background-color: #990008;"
+  class="btn my-5 text-light py-0 d-flex align-items-center"
   data-bs-toggle="modal"
   data-bs-target="#dispositivo"
   (click)="controlCrud('Crear Dispositivo', codigo_activo, direccion_ip)"

@@ -1,0 +1,44 @@
+<section>
+  <table class="table table-dark table-hover">
+    <thead>
+      <tr style="font-size: small;">
+        <th>ID</th>
+        <th>Codigo Activo</th>
+        <th>Sección</th>
+        <th>Responsable</th>
+        <th>Tipo de Host</th>
+        <th>Numero de Serie</th>
+        <th>Descripción</th>
+        <th>Dirección IP</th>
+        <th>Fecha de Compra</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (enlaces of getDbEnlaces; track $index) {
+      <tr tabindex="{{$index + 1}}" style="font-size: small;">
+        <td>{{ $index + 1}}</td>
+        <td>{{enlaces.codigoActivo}}</td>
+        @for (secciones of getDbSecciones; track $index) {
+            @if(secciones.id === enlaces.idSeccion){
+                <td>{{secciones.nombreSeccion}}</td>
+            }
+        }
+        @for (responsable of getDbResponsables; track $index) {
+            @if(responsable.id === enlaces.idResponsable){
+                <td>{{responsable.nombreResponsable}}</td>
+            }
+        }
+        @for (typoHost of getDbTypeHost; track $index) {
+            @if(typoHost.id === enlaces.idTipoHost){
+                <td>{{typoHost.nombreTipoHost}}</td>
+            }
+        }
+        <td>{{enlaces.numeroSerie}}</td>
+        <td>{{enlaces.descripcion}}</td>
+        <td>{{enlaces.direccionIp}}</td>
+        <td>{{enlaces.fecha}}</td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</section>
