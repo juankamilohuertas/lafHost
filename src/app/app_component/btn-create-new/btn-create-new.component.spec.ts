@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SearchAndFilterComponent } from './search-and-filter.component';
+import { BtncreateNewComponent } from './btn-create-new.component';
 
-describe('SearchAndFilterComponent', () => {
-  let component: SearchAndFilterComponent;
-  let fixture: ComponentFixture<SearchAndFilterComponent>;
+describe('BtncreateNewComponent', () => {
+  let component: BtncreateNewComponent;
+  let fixture: ComponentFixture<BtncreateNewComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SearchAndFilterComponent]
+      imports: [BtncreateNewComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(SearchAndFilterComponent);
+    fixture = TestBed.createComponent(BtncreateNewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

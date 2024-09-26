@@ -1,19 +1,26 @@
-<!-- actualizar y guardar cambios -->
-<section>
-  <button
-    class="btn text-light m-3"
-    type="button"
-    style="background-color: #990008"
-  >
-    Editar
-  </button>
-  <button
-    class="btn text-light"
-    type="button"
-    style="background-color: #990008"
-  >
-    Guardar cambios
-  </button>
+<!-- mostrando detalles del registro filtrado -->
+<section class="d-flex bg-dark" style="font-size: small;">
+  <div class="table d-flex text-light p-2">
+    <div>
+      @for (item of moreInfoHeaders; track $index) {
+      <div class="border p-2">
+        {{ item }}
+      </div>
+      }
+    </div>
+    <div>
+      @for (item of moreInfo; track $index) {
+      <div class="border border-start-0 p-2">
+        {{ item }}
+      </div>
+      }
+    </div>
+  </div>
+  <div class="d-flex justify-content-center align-items-center">
+    <a class="d-inline-block w-50 text-center" href="http://{{direccionIp}}" target="_blank" rel="noopener noreferrer">
+        <img class="w-100" src="assets/Kyocera.jpg" alt="Img-Kyocera-Printer">
+    </a>
+  </div>
 </section>
 <!-- muestra todos los registros de los dispositivos -->
 <section class="conte__tableRegisters">
@@ -26,7 +33,7 @@
         <th class="position-relative">
           <input
             class="w-100 position-absolute bottom-0 start-0 border border-secondary"
-            style="outline-color: #990008"
+            style="outline-color: #990008;"
             type="text"
             list="inputSearchByCodigoActivo"
             [(ngModel)]="filterCodigoActivo"
@@ -167,229 +174,44 @@
         </th>
       </tr>
     </thead>
-    <tbody>
-      <!-- FILTRADO DE BUSQUEDA POR CODIGO ACTIVO -->
-      @if (filterCodigoActivo.length > 0 && getDbCodigoAactivoFilters.length >
-      0) { @for (enlaces of getDbCodigoAactivoFilters; track $index) {
+    <tbody (click)="selectRegisterStyles($event)" class="conte__resultSearches">
+      <!-- FILTRADO DE BUSQUEDA  -->
+      @if (filterCodigoActivo.length > 0 || filterSeccion.length > 0 ||
+      filterCodigoNomina.length > 0 || filterResponsable.length > 0 ||
+      filterTypeHost.length > 0 || filterNumeroSerie.length > 0 ||
+      filterDescripcion.length > 0 || filterDireccionIp.length > 0 ||
+      filterFecha.length > 0 && getDbFilters.length > 0) { @for (enlaces of
+      getDbFilters; track $index) {
       <tr class="searchByCodigoActivo">
-        <td></td>
-        <td contenteditable="true">{{ enlaces.codigoActivo }}</td>
-        @for (secciones of getDbSecciones; track $index) { @if(secciones.id ===
-        enlaces.idSeccion){
-        <td contenteditable="true">{{ secciones.nombreSeccion }}</td>
-        } } @for (responsable of getDbResponsables; track $index) {
-        @if(responsable.id === enlaces.idResponsable){
-        <td contenteditable="true">{{ responsable.codigoCentauro }}</td>
-        <td contenteditable="true">{{ responsable.nombreResponsable }}</td>
-        } } @for (typoHost of getDbTypeHost; track $index) { @if(typoHost.id ===
-        enlaces.idTipoHost){
-        <td contenteditable="true">{{ typoHost.nombreTipoHost }}</td>
-        } }
-        <td contenteditable="true">{{ enlaces.numeroSerie }}</td>
-        <td contenteditable="true">{{ enlaces.descripcion }}</td>
-        <td contenteditable="true">{{ enlaces.direccionIp }}</td>
-        <td contenteditable="true">{{ enlaces.fecha }}</td>
-      </tr>
-      } }
-      <!-- FILTRADO DE BUSQUEDA POR SECCIÓN -->
-      @if (filterSeccion.length > 0 && getDbSeccionesFilters.length > 0) { @for
-      (enlaces of getDbSeccionesFilters; track $index) {
-      <tr class="searchByCodigoActivo">
-        <td></td>
-        <td contenteditable="true">{{ enlaces.codigoActivo }}</td>
-        @for (secciones of getDbSecciones; track $index) { @if(secciones.id ===
-        enlaces.idSeccion){
-        <td contenteditable="true">{{ secciones.nombreSeccion }}</td>
-        } } @for (responsable of getDbResponsables; track $index) {
-        @if(responsable.id === enlaces.idResponsable){
-        <td contenteditable="true">{{ responsable.codigoCentauro }}</td>    
-        <td contenteditable="true">{{ responsable.nombreResponsable }}</td>
-        } } @for (typoHost of getDbTypeHost; track $index) { @if(typoHost.id ===
-        enlaces.idTipoHost){
-        <td contenteditable="true">{{ typoHost.nombreTipoHost }}</td>
-        } }
-        <td contenteditable="true">{{ enlaces.numeroSerie }}</td>
-        <td contenteditable="true">{{ enlaces.descripcion }}</td>
-        <td contenteditable="true">{{ enlaces.direccionIp }}</td>
-        <td contenteditable="true">{{ enlaces.fecha }}</td>
-      </tr>
-      } }
-      <!-- FILTRADO DE BUSQUEDA POR CODIGO DE NOMINA -->
-      @if (filterCodigoNomina.length > 0 && getDbCodigoNominaFilters.length > 0)
-      { @for (enlaces of getDbCodigoNominaFilters; track $index) {
-      <tr class="searchByCodigoActivo">
-        <td></td>
-        <td contenteditable="true">{{ enlaces.codigoActivo }}</td>
-        @for (secciones of getDbSecciones; track $index) { @if(secciones.id ===
-        enlaces.idSeccion){
-        <td contenteditable="true">{{ secciones.nombreSeccion }}</td>
-        } } @for (responsable of getDbResponsables; track $index) {    
-        @if(responsable.id === enlaces.idResponsable){
-        <td contenteditable="true">{{ responsable.codigoCentauro }}</td>
-        <td contenteditable="true">{{ responsable.nombreResponsable }}</td>
-        } } @for (typoHost of getDbTypeHost; track $index) { @if(typoHost.id ===
-        enlaces.idTipoHost){
-        <td contenteditable="true">{{ typoHost.nombreTipoHost }}</td>
-        } }
-        <td contenteditable="true">{{ enlaces.numeroSerie }}</td>
-        <td contenteditable="true">{{ enlaces.descripcion }}</td>
-        <td contenteditable="true">{{ enlaces.direccionIp }}</td>
-        <td contenteditable="true">{{ enlaces.fecha }}</td>
-      </tr>
-      } }
-      <!-- FILTRADO DE BUSQUEDA POR RESPONSABLE -->
-      @if (filterResponsable.length > 0 && getDbResponsablesFilters.length > 0)
-      { @for (enlaces of getDbResponsablesFilters; track $index) {
-      <tr class="searchByCodigoActivo">
-        <td></td>
-        <td contenteditable="true">{{ enlaces.codigoActivo }}</td>
-        @for (secciones of getDbSecciones; track $index) { @if(secciones.id ===
-        enlaces.idSeccion){
-        <td contenteditable="true">{{ secciones.nombreSeccion }}</td>
-        } } @for (responsable of getDbResponsables; track $index) {
-        @if(responsable.id === enlaces.idResponsable){
-        <td contenteditable="true">{{ responsable.codigoCentauro }}</td>
-        <td contenteditable="true">{{ responsable.nombreResponsable }}</td>
-        } } @for (typoHost of getDbTypeHost; track $index) { @if(typoHost.id ===
-        enlaces.idTipoHost){
-        <td contenteditable="true">{{ typoHost.nombreTipoHost }}</td>
-        } }
-        <td contenteditable="true">{{ enlaces.numeroSerie }}</td>
-        <td contenteditable="true">{{ enlaces.descripcion }}</td>
-        <td contenteditable="true">{{ enlaces.direccionIp }}</td>
-        <td contenteditable="true">{{ enlaces.fecha }}</td>
-      </tr>
-      } }
-      <!-- FILTRADO DE BUSQUEDA POR TIPO DE DISPOSITIVO -->
-      @if (filterTypeHost.length > 0 && getDbTypeHostFilters.length > 0) { @for
-      (enlaces of getDbTypeHostFilters; track $index) {
-      <tr class="searchByCodigoActivo">
-        <td></td>
-        <td contenteditable="true">{{ enlaces.codigoActivo }}</td>
-        @for (secciones of getDbSecciones; track $index) { @if(secciones.id ===
-        enlaces.idSeccion){
-        <td contenteditable="true">{{ secciones.nombreSeccion }}</td>
-        } } @for (responsable of getDbResponsables; track $index) {
-        @if(responsable.id === enlaces.idResponsable){
-        <td contenteditable="true">{{ responsable.codigoCentauro }}</td>
-        <td contenteditable="true">{{ responsable.nombreResponsable }}</td>
-        } } @for (typoHost of getDbTypeHost; track $index) { @if(typoHost.id ===
-        enlaces.idTipoHost){
-        <td contenteditable="true">{{ typoHost.nombreTipoHost }}</td>
-        } }
-        <td contenteditable="true">{{ enlaces.numeroSerie }}</td>
-        <td contenteditable="true">{{ enlaces.descripcion }}</td>
-        <td contenteditable="true">{{ enlaces.direccionIp }}</td>
-        <td contenteditable="true">{{ enlaces.fecha }}</td>
-      </tr>
-      } }
-      <!-- FILTRADO DE BUSQUEDA POR NÚMERO DE SERIE -->
-      @if (filterNumeroSerie.length > 0 && getDbNumeroSerieFilters.length > 0) {
-      @for (enlaces of getDbNumeroSerieFilters; track $index) {
-      <tr class="searchByCodigoActivo">
-        <td></td>
-        <td contenteditable="true">{{ enlaces.codigoActivo }}</td>
-        @for (secciones of getDbSecciones; track $index) { @if(secciones.id ===
-        enlaces.idSeccion){
-        <td contenteditable="true">{{ secciones.nombreSeccion }}</td>
-        } } @for (responsable of getDbResponsables; track $index) {
-        @if(responsable.id === enlaces.idResponsable){
-        <td contenteditable="true">{{ responsable.codigoCentauro }}</td>
-        <td contenteditable="true">{{ responsable.nombreResponsable }}</td>
-        } } @for (typoHost of getDbTypeHost; track $index) { @if(typoHost.id ===
-        enlaces.idTipoHost){
-        <td contenteditable="true">{{ typoHost.nombreTipoHost }}</td>
-        } }
-        <td contenteditable="true">{{ enlaces.numeroSerie }}</td>
-        <td contenteditable="true">{{ enlaces.descripcion }}</td>
-        <td contenteditable="true">{{ enlaces.direccionIp }}</td>
-        <td contenteditable="true">{{ enlaces.fecha }}</td>
-      </tr>
-      } }
-      <!-- FILTRADO DE BUSQUEDA POR DESCRIPCIÓN -->
-      @if (filterDescripcion.length > 0 && getDbDescripcionFilters.length > 0) {
-      @for (enlaces of getDbDescripcionFilters; track $index) {
-      <tr class="searchByCodigoActivo">
-        <td></td>
-        <td contenteditable="true">{{ enlaces.codigoActivo }}</td>
-        @for (secciones of getDbSecciones; track $index) { @if(secciones.id ===
-        enlaces.idSeccion){
-        <td contenteditable="true">{{ secciones.nombreSeccion }}</td>
-        } } @for (responsable of getDbResponsables; track $index) {
-        @if(responsable.id === enlaces.idResponsable){
-        <td contenteditable="true">{{ responsable.codigoCentauro }}</td>
-        <td contenteditable="true">{{ responsable.nombreResponsable }}</td>
-        } } @for (typoHost of getDbTypeHost; track $index) { @if(typoHost.id ===
-        enlaces.idTipoHost){
-        <td contenteditable="true">{{ typoHost.nombreTipoHost }}</td>
-        } }
-        <td contenteditable="true">{{ enlaces.numeroSerie }}</td>
-        <td contenteditable="true">{{ enlaces.descripcion }}</td>
-        <td contenteditable="true">{{ enlaces.direccionIp }}</td>
-        <td contenteditable="true">{{ enlaces.fecha }}</td>
-      </tr>
-      } }
-      <!-- FILTRADO DE BUSQUEDA POR DIRECCIÓN IP -->
-      @if (filterDireccionIp.length > 0 && getDbDireccionIpFilters.length > 0) {
-      @for (enlaces of getDbDireccionIpFilters; track $index) {
-      <tr class="searchByCodigoActivo">
-        <td></td>
-        <td contenteditable="true">{{ enlaces.codigoActivo }}</td>
-        @for (secciones of getDbSecciones; track $index) { @if(secciones.id ===
-        enlaces.idSeccion){
-        <td contenteditable="true">{{ secciones.nombreSeccion }}</td>
-        } } @for (responsable of getDbResponsables; track $index) {
-        @if(responsable.id === enlaces.idResponsable){
-        <td contenteditable="true">{{ responsable.codigoCentauro }}</td>
-        <td contenteditable="true">{{ responsable.nombreResponsable }}</td>
-        } } @for (typoHost of getDbTypeHost; track $index) { @if(typoHost.id ===
-        enlaces.idTipoHost){
-        <td contenteditable="true">{{ typoHost.nombreTipoHost }}</td>
-        } }
-        <td contenteditable="true">{{ enlaces.numeroSerie }}</td>
-        <td contenteditable="true">{{ enlaces.descripcion }}</td>
-        <td contenteditable="true">{{ enlaces.direccionIp }}</td>
-        <td contenteditable="true">{{ enlaces.fecha }}</td>
-      </tr>
-      } }
-      <!-- FILTRADO DE BUSQUEDA POR FECHA DE COMPRA -->
-      @if (filterFecha.length > 0 && getDbFechaFilters.length > 0) { @for
-      (enlaces of getDbFechaFilters; track $index) {
-      <tr class="searchByCodigoActivo">
-        <td></td>
-        <td contenteditable="true">{{ enlaces.codigoActivo }}</td>
-        @for (secciones of getDbSecciones; track $index) { @if(secciones.id ===
-        enlaces.idSeccion){
-        <td contenteditable="true">{{ secciones.nombreSeccion }}</td>
-        } } @for (responsable of getDbResponsables; track $index) {
-        @if(responsable.id === enlaces.idResponsable){
-        <td contenteditable="true">{{ responsable.codigoCentauro }}</td>
-        <td contenteditable="true">{{ responsable.nombreResponsable }}</td>
-        } } @for (typoHost of getDbTypeHost; track $index) { @if(typoHost.id ===
-        enlaces.idTipoHost){
-        <td contenteditable="true">{{ typoHost.nombreTipoHost }}</td>
-        } }
-        <td contenteditable="true">{{ enlaces.numeroSerie }}</td>
-        <td contenteditable="true">{{ enlaces.descripcion }}</td>
-        <td contenteditable="true">{{ enlaces.direccionIp }}</td>
-        <td contenteditable="true">{{ enlaces.fecha }}</td>
-      </tr>
-      } }
-      <!-- MUESTRA TODOS LOS REGISTROS DE LOS DISPOSITIVOS -->
-      @if(filterCodigoActivo.length === 0 && filterSeccion.length === 0 &&
-      filterResponsable.length === 0 && filterTypeHost.length === 0 &&
-      filterNumeroSerie.length === 0 && filterDescripcion.length === 0 &&
-      filterDireccionIp.length === 0 && filterFecha.length === 0 &&
-      filterCodigoNomina.length === 0){ @for (enlaces of getDbEnlaces; track
-      $index) {
-      <tr tabindex="{{ $index + 1 }}">
-        <td>{{ $index + 1 }}</td>
-        <td contenteditable="true">{{ enlaces.codigoActivo }}</td>
+        <td>#</td>
+        <td>{{ enlaces.codigoActivo }}</td>
         @for (secciones of getDbSecciones; track $index) { @if(secciones.id ===
         enlaces.idSeccion){
         <td>{{ secciones.nombreSeccion }}</td>
-        } } 
-         @for (responsable of getDbResponsables; track $index) {
+        } } @for (responsable of getDbResponsables; track $index) {
+        @if(responsable.id === enlaces.idResponsable){
+        <td>{{ responsable.codigoCentauro }}</td>
+        <td>{{ responsable.nombreResponsable }}</td>
+        } } @for (typoHost of getDbTypeHost; track $index) { @if(typoHost.id ===
+        enlaces.idTipoHost){
+        <td>{{ typoHost.nombreTipoHost }}</td>
+        } }
+        <td>{{ enlaces.numeroSerie }}</td>
+        <td>{{ enlaces.descripcion }}</td>
+        <td>{{ enlaces.direccionIp }}</td>
+        <td>{{ enlaces.fecha }}</td>
+      </tr>
+      } }
+      <!-- MUESTRA TODOS LOS REGISTROS DE LOS DISPOSITIVOS -->
+      @if(getDbFilters.length == 0){ @for (enlaces of getDbEnlaces; track
+      $index) {
+      <tr tabindex="{{ $index + 1 }}">
+        <td>{{ $index + 1 }}</td>
+        <td>{{ enlaces.codigoActivo }}</td>
+        @for (secciones of getDbSecciones; track $index) { @if(secciones.id ===
+        enlaces.idSeccion){
+        <td>{{ secciones.nombreSeccion }}</td>
+        } } @for (responsable of getDbResponsables; track $index) {
         @if(responsable.id === enlaces.idResponsable){
         <td>{{ responsable.codigoCentauro }}</td>
         <td>{{ responsable.nombreResponsable }}</td>

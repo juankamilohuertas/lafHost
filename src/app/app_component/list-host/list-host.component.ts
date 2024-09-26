@@ -34,15 +34,12 @@ export class ListHostComponent implements OnInit {
   getDbResponsables: IfiltersResponsables[] = [];
   getDbTypeHost: IfiltersTipoHosts[] = [];
   /* variables que obtienen los resultados de la db filtrados */
-  getDbCodigoAactivoFilters: IfiltersEnlaces[] = [];
-  getDbSeccionesFilters: IfiltersEnlaces[] = [];
-  getDbCodigoNominaFilters: IfiltersEnlaces[] = [];
-  getDbResponsablesFilters: IfiltersEnlaces[] = [];
-  getDbTypeHostFilters: IfiltersEnlaces[] = [];
-  getDbNumeroSerieFilters: IfiltersEnlaces[] = [];
-  getDbDescripcionFilters: IfiltersEnlaces[] = [];
-  getDbDireccionIpFilters: IfiltersEnlaces[] = [];
-  getDbFechaFilters: IfiltersEnlaces[] = [];
+  getDbFilters: IfiltersEnlaces[] = [];
+  /* variable que obtiene el registro seleccionado y muestra mejor la informacion */
+  moreInfo: string[] = [];
+  moreInfoHeaders: string[] = [];
+  direccionIp: string | null = "";
+  /* *************************************************** */
   ngOnInit(): void {
     this._serviceDataFilter.setBreadCrumb('Lista de dispositivos');
     /* get db enlaces */
@@ -62,7 +59,7 @@ export class ListHostComponent implements OnInit {
       this.getDbTypeHost = res;
     });
   }
-
+  /* elimina los campos que no estan en focus */
   validateInputTable(event: Event, inputSelect: string) {
     const selectElementInput = document.querySelectorAll(
       '.conte__tableRegisters input'
@@ -74,27 +71,24 @@ export class ListHostComponent implements OnInit {
       const converElement = selectElementInput[index] as HTMLInputElement;
       if (converElement !== ElementSelect) {
         converElement.value = '';
-        this.getDbCodigoAactivoFilters = [];
-        this.getDbSeccionesFilters = [];
-        this.getDbResponsablesFilters = [];
-        this.getDbTypeHostFilters = [];
-        this.getDbNumeroSerieFilters = [];
-        this.getDbDescripcionFilters = [];
-        this.getDbDireccionIpFilters = [];
-        this.getDbFechaFilters = [];
+        this.getDbFilters = [];
       }
     }
 
     this.filterInputValue(inputSelect);
+     /* actualizando los registros de la tabla enlaces */
+     this._serviceDataFilter.getEnlacesApi().subscribe((res) => {
+      this.getDbEnlaces = res;
+    });
   }
-
+  /* asigna el contenido de filtrado para mostrar en el DOM */
   filterInputValue(inputSelect: string) {
     switch (inputSelect) {
       case 'Codigo Activo':
         /* buscar por codigo activo */
         this.getDbEnlaces.filter((res) => {
           if (res.codigoActivo == this.filterCodigoActivo) {
-            this.getDbCodigoAactivoFilters = [res];
+            this.getDbFilters = [res];
           }
         });
         break;
@@ -110,21 +104,23 @@ export class ListHostComponent implements OnInit {
             }
           });
         });
-        this.getDbSeccionesFilters = dataSecciones;
+        this.getDbFilters = dataSecciones;
         break;
-        case 'Código Nomina':
+      case 'Código Nomina':
         /* busqueda por Código Nomina */
         let dataCodigoNomina: IfiltersEnlaces[] = [];
         this.getDbEnlaces.filter((enlaces) => {
           this.getDbResponsables.filter((codigoNomina) => {
-            if (codigoNomina.codigoCentauro == parseInt(this.filterCodigoNomina)) {
+            if (
+              codigoNomina.codigoCentauro == parseInt(this.filterCodigoNomina)
+            ) {
               if (enlaces.idResponsable === codigoNomina.id) {
                 dataCodigoNomina.push(enlaces);
               }
             }
           });
         });
-        this.getDbCodigoNominaFilters = dataCodigoNomina;
+        this.getDbFilters = dataCodigoNomina;
         break;
       case 'Responsable':
         /* busqueda por responsables */
@@ -138,7 +134,7 @@ export class ListHostComponent implements OnInit {
             }
           });
         });
-        this.getDbResponsablesFilters = dataResponsables;
+        this.getDbFilters = dataResponsables;
         break;
       case 'Tipo de Host':
         /* busqueda por responsables */
@@ -152,7 +148,7 @@ export class ListHostComponent implements OnInit {
             }
           });
         });
-        this.getDbTypeHostFilters = dataTypeHost;
+        this.getDbFilters = dataTypeHost;
         break;
       case 'Número de Serie':
         /* busqueda por número de serie */
@@ -162,7 +158,7 @@ export class ListHostComponent implements OnInit {
             dataNumeroSerie.push(enlaces);
           }
         });
-        this.getDbNumeroSerieFilters = dataNumeroSerie;
+        this.getDbFilters = dataNumeroSerie;
         break;
       case 'Descripción':
         /* busqueda por Descripción */
@@ -172,7 +168,7 @@ export class ListHostComponent implements OnInit {
             dataDescripcion.push(descripcion);
           }
         });
-        this.getDbDescripcionFilters = dataDescripcion;
+        this.getDbFilters = dataDescripcion;
         break;
       case 'Dirección IP':
         /* busqueda por Dirección IP */
@@ -182,7 +178,7 @@ export class ListHostComponent implements OnInit {
             dataDireccionIp.push(direccionIp);
           }
         });
-        this.getDbDireccionIpFilters = dataDireccionIp;
+        this.getDbFilters = dataDireccionIp;
         break;
       case 'Fecha de Compra':
         /* busqueda por Fecha de Compra */
@@ -192,10 +188,51 @@ export class ListHostComponent implements OnInit {
             dataFecha.push(fecha);
           }
         });
-        this.getDbFechaFilters = dataFecha;
+        this.getDbFilters = dataFecha;
         break;
       default:
         break;
     }
+  }
+  /* agerga estilos a los elementos filtrados seleccionados */
+  selectRegisterStyles(event: Event) {
+    const pruebaConverEle = document.querySelector(
+      '.conte__resultSearches'
+    ) as HTMLElement;
+
+    /* elimina los elementos que estan seleccionados */
+    for (let index = 0; index < pruebaConverEle.children.length; index++) {
+      if (
+        pruebaConverEle.children[index].classList.contains('validateRegisters')
+      ) {
+        pruebaConverEle.children[index].classList.remove('validateRegisters');
+      }
+    }
+    this.selectRegisterInfo(event);
+  }
+  /* muestra la informacion a detalle del registro buscado */
+  selectRegisterInfo(event: Event) {
+    const elementSelect = event.target as HTMLTableRowElement;
+    const elementSelectFilter = elementSelect.parentElement;
+    elementSelectFilter!.classList.add('validateRegisters');
+ 
+    let elementsSelectTd: string[] = [];
+    for (let index = 0; index < elementSelectFilter!.children.length; index++) {
+      elementsSelectTd.push(elementSelectFilter!.children[index].textContent!);
+    }
+    this.moreInfo = elementsSelectTd;
+    this.moreInfoHeaders = [
+    'ID',
+    'CODIGO ACTIVO',
+    'SECCIÓN',
+    'CÓDIGO NOMINA',
+    'RESPONSABLE',
+    'TYPO DE HOST',
+    'NÚMERO DE SERIE',
+    'DESCRIPCIÓN',
+    'DIRECCIÓN IP',
+    'FECHA DE COMPRA',]
+    this.direccionIp = elementSelectFilter!.children[8].textContent;
+    window.scroll(0,100);
   }
 }
