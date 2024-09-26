@@ -2,7 +2,7 @@
 .typesOfSearches {
   display: flex;
   justify-content: center;
-  border: 1px solid #404040;
+  border: 1px dashed #404040;
   padding: 20px 0;
 }
 

@@ -20,10 +20,10 @@ export class SearchAndFilterComponent implements OnInit {
   private readonly _serviceDataFilter = inject(DataFilterService);
 
   searchByCode?: string; // busqueda por Codigo S/N
-  searchByCodeCentauro?: string // busqueda por codigo centauro
-  searchBySeccion?: string // busqueda por sección
+  searchByCodeCentauro?: string; // busqueda por codigo centauro
+  searchBySeccion?: string; // busqueda por sección
 
-  selectTypeSearch = "";
+  selectTypeSearch = '';
 
   /* variables para crear un nuevo host */
   codigo_activo = '';
@@ -50,13 +50,14 @@ export class SearchAndFilterComponent implements OnInit {
 
   /* variables que obtienen los datos filtrados de la busqueda secciones */
   getEnlacesFilter: IfiltersEnlaces[] = [];
-  getSeccionesFilter: string = "";
+  getSeccionesFilter: string = '';
   getResponsablesFilter: IfiltersResponsables[] = [];
   getTypeHostFilter: IfiltersTipoHosts[] = [];
 
   constructor() {}
 
   ngOnInit(): void {
+    this._serviceDataFilter.setBreadCrumb('');
     /* get db enlaces */
     this._serviceDataFilter.getEnlacesApi().subscribe((res) => {
       this.getDbEnlaces = res;
@@ -74,7 +75,6 @@ export class SearchAndFilterComponent implements OnInit {
       this.getDbTypeHost = res;
     });
   }
-
   /* valida los campos cuando se crea un nuevo dispositivo */
   validateInputs(event: Event, valueInput: string, nameInput: string) {
     const expCodigoActivo = /^\d{5,}$/;
@@ -211,15 +211,19 @@ export class SearchAndFilterComponent implements OnInit {
     });
   }
   /* eliminar un registro de la db enlaces */
-  deleteRegisterEnlaces(){
-    const confirmDelete = confirm("Estas seguro que deseas eliminar el registro")
-    if(confirmDelete){
-      this._serviceDataFilter.deleteEnlacesApi(this.getDbEnlacesFilters[0].id).subscribe();
-       /* actualizando los registros de la tabla enlaces */
-    /* get db enlaces */
-    this._serviceDataFilter.getEnlacesApi().subscribe((res) => {
-      this.getDbEnlaces = res;
-    });
+  deleteRegisterEnlaces() {
+    const confirmDelete = confirm(
+      'Estas seguro que deseas eliminar el registro'
+    );
+    if (confirmDelete) {
+      this._serviceDataFilter
+        .deleteEnlacesApi(this.getDbEnlacesFilters[0].id)
+        .subscribe();
+      /* actualizando los registros de la tabla enlaces */
+      /* get db enlaces */
+      this._serviceDataFilter.getEnlacesApi().subscribe((res) => {
+        this.getDbEnlaces = res;
+      });
     }
   }
 
@@ -294,10 +298,10 @@ export class SearchAndFilterComponent implements OnInit {
         (res) => res.id == this.getDbEnlacesFilters[0].idTipoHost
       );
       this.getDbTypeHostFilters = [...nombreTipoHost];
-    }else if(this.searchByCode !== undefined){
-      alert("No se encontro el codigo activo");
+    } else if (this.searchByCode !== undefined) {
+      alert('No se encontro el codigo activo');
     }
-    this.searchByCode = "";
+    this.searchByCode = '';
   }
 
   /* boton que maneja el control de todas las operaciones del crud */
@@ -313,103 +317,123 @@ export class SearchAndFilterComponent implements OnInit {
     }
   }
 
-/* buscar por codigo de centauro */
-getDbEnlacesByCentauro: IfiltersEnlaces[] = [];
-getDbSeccionesByCentauro: IfiltersSecciones[] = [];
-getDbResponsableByCentauro: IfiltersResponsables[] = [];
-getDbTipoHostByCentauro: IfiltersTipoHosts[] = [];
+  /* buscar por codigo de centauro */
+  getDbEnlacesByCentauro: IfiltersEnlaces[] = [];
+  getDbSeccionesByCentauro: IfiltersSecciones[] = [];
+  getDbResponsableByCentauro: IfiltersResponsables[] = [];
+  getDbTipoHostByCentauro: IfiltersTipoHosts[] = [];
 
-btnSearchByCodesCentauro(){
-  this.selectTypeSearch = "nomina";
-  const responsables = this.getDbResponsables.filter(res => res.codigoCentauro === parseInt(this.searchByCodeCentauro!));
+  btnSearchByCodesCentauro() {
+    this.selectTypeSearch = 'nomina';
+    const responsables = this.getDbResponsables.filter(
+      (res) => res.codigoCentauro === parseInt(this.searchByCodeCentauro!)
+    );
 
-  if(responsables.length !== 0){
-    const hostAdminByUser = this.getDbEnlaces.filter(res => res.idResponsable === responsables[0].id);
-    this.getDbEnlacesByCentauro = [...hostAdminByUser];
+    if (responsables.length !== 0) {
+      const hostAdminByUser = this.getDbEnlaces.filter(
+        (res) => res.idResponsable === responsables[0].id
+      );
+      this.getDbEnlacesByCentauro = [...hostAdminByUser];
 
-    const secciones = this.getDbSecciones.filter(res => res.id === hostAdminByUser[0].idSeccion); 
-    this.getDbSeccionesByCentauro = [...secciones];
+      const secciones = this.getDbSecciones.filter(
+        (res) => res.id === hostAdminByUser[0].idSeccion
+      );
+      this.getDbSeccionesByCentauro = [...secciones];
 
-    const responsable = this.getDbResponsables.filter(res => res.codigoCentauro === responsables[0].codigoCentauro);
-    this.getDbResponsableByCentauro = [...responsable];
+      const responsable = this.getDbResponsables.filter(
+        (res) => res.codigoCentauro === responsables[0].codigoCentauro
+      );
+      this.getDbResponsableByCentauro = [...responsable];
 
-    const typeHost = this.getDbTypeHost.filter(res => res.id === hostAdminByUser[0].idTipoHost);
-    this.getDbTipoHostByCentauro = [...typeHost];
-  }else if(this.searchByCodeCentauro !== undefined){
-    alert("No se encontro el usuario");
+      const typeHost = this.getDbTypeHost.filter(
+        (res) => res.id === hostAdminByUser[0].idTipoHost
+      );
+      this.getDbTipoHostByCentauro = [...typeHost];
+    } else if (this.searchByCodeCentauro !== undefined) {
+      alert('No se encontro el usuario');
+    }
+    this.searchByCodeCentauro = '';
+    window.scroll(0, 1000);
   }
-  this.searchByCodeCentauro = "";
-  window.scroll(0,600)
-}
 
-/* busqueda por clic de item en la tabla busqueda por codigo de nomina y sección*/
-itemSelectByCodesCentauro($event: Event,itemSelect: string){
-  this.searchByCode = itemSelect
-  this.btnSearchByCodes();
-
-  if(document.querySelectorAll(".selectRowElement").length != 0){
-    const allElementsTable = document.querySelectorAll(".selectRowElement");
-    allElementsTable.forEach(ele => {
-      ele.classList.remove("selectRowElement");
-    })
-  }
-  const elementSelect = $event.target as HTMLTableRowElement;
-  const el = elementSelect.parentNode as Element;
-  el.classList.add("selectRowElement");
-  window.scroll(0,200)
-  
-}
-
-/* buscar por sección */
-btnSearchByCodesSeccion(){
-  this.selectTypeSearch = "sección";
-  const getSecciones = this.getDbSecciones.filter(res => res.nombreSeccion == this.searchBySeccion);
-  
-  if(this.searchBySeccion !== undefined && getSecciones[0] !== undefined){
-    /* enlaces */
-   const filterEnlaces = this.getDbEnlaces.filter(res => res.idSeccion == getSecciones[0].id)
-   this.getEnlacesFilter = filterEnlaces; 
-   /* secciones */
-   this.getSeccionesFilter = getSecciones[0].nombreSeccion; 
-   /* responsables */
-   const filterResponsables = this.getDbResponsables.filter(res => res.idSeccion === getSecciones[0].id)
-   this.getResponsablesFilter = filterResponsables;
-  /* tipohost */
-  
-  this.getTypeHostFilter = [];
-  let getTypeHost: Set<IfiltersTipoHosts> = new Set();
-  this.getDbTypeHost.filter(host => {
-    filterEnlaces.filter(enlaces => {
-      if(enlaces.idTipoHost === host.id){
-        getTypeHost.add(host);
-      }
-    })
-  })
-  let convertGetTypeHost = Array.from(getTypeHost);
-  this.getTypeHostFilter = convertGetTypeHost;
-  this.searchBySeccion = "";
-  }else{
-    alert("No se encontraton resultados");
-  }
-  window.scroll(0,600)
-}
-
-validateSearch(): void{
-  if(this.searchByCode !== undefined && this.searchByCode !== ""){
+  /* busqueda por clic de item en la tabla busqueda por codigo de nomina y sección*/
+  itemSelectByCodesCentauro($event: Event, itemSelect: string) {
+    this.searchByCode = itemSelect;
     this.btnSearchByCodes();
-  }else if(this.searchByCodeCentauro !== undefined && this.searchByCodeCentauro !== ""){
-    this.btnSearchByCodesCentauro();
-  }else if(this.searchBySeccion !== undefined && this.searchBySeccion !== ""){
-    this.btnSearchByCodesSeccion()
-  }
-}
 
-   /* Presionando la tecla enter hace la busqueda por codigo activo,nomina o sección */
-   @HostListener('window:keydown', ['$event'])
-   handleKeyboardEvent(event: KeyboardEvent): void {
-     if (event.key === 'Enter') {
+    if (document.querySelectorAll('.selectRowElement').length != 0) {
+      const allElementsTable = document.querySelectorAll('.selectRowElement');
+      allElementsTable.forEach((ele) => {
+        ele.classList.remove('selectRowElement');
+      });
+    }
+    const elementSelect = $event.target as HTMLTableRowElement;
+    const el = elementSelect.parentNode as Element;
+    el.classList.add('selectRowElement');
+    window.scroll(0, 250);
+  }
+
+  /* buscar por sección */
+  btnSearchByCodesSeccion() {
+    this.selectTypeSearch = 'sección';
+    const getSecciones = this.getDbSecciones.filter(
+      (res) => res.nombreSeccion == this.searchBySeccion
+    );
+
+    if (this.searchBySeccion !== undefined && getSecciones[0] !== undefined) {
+      /* enlaces */
+      const filterEnlaces = this.getDbEnlaces.filter(
+        (res) => res.idSeccion == getSecciones[0].id
+      );
+      this.getEnlacesFilter = filterEnlaces;
+      /* secciones */
+      this.getSeccionesFilter = getSecciones[0].nombreSeccion;
+      /* responsables */
+      const filterResponsables = this.getDbResponsables.filter(
+        (res) => res.idSeccion === getSecciones[0].id
+      );
+      this.getResponsablesFilter = filterResponsables;
+      /* tipohost */
+
+      this.getTypeHostFilter = [];
+      let getTypeHost: Set<IfiltersTipoHosts> = new Set();
+      this.getDbTypeHost.filter((host) => {
+        filterEnlaces.filter((enlaces) => {
+          if (enlaces.idTipoHost === host.id) {
+            getTypeHost.add(host);
+          }
+        });
+      });
+      let convertGetTypeHost = Array.from(getTypeHost);
+      this.getTypeHostFilter = convertGetTypeHost;
+      this.searchBySeccion = '';
+    } else {
+      alert('No se encontraton resultados');
+    }
+    window.scroll(0, 1000);
+  }
+
+  validateSearch(): void {
+    if (this.searchByCode !== undefined && this.searchByCode !== '') {
+      this.btnSearchByCodes();
+    } else if (
+      this.searchByCodeCentauro !== undefined &&
+      this.searchByCodeCentauro !== ''
+    ) {
+      this.btnSearchByCodesCentauro();
+    } else if (
+      this.searchBySeccion !== undefined &&
+      this.searchBySeccion !== ''
+    ) {
+      this.btnSearchByCodesSeccion();
+    }
+  }
+
+  /* Presionando la tecla enter hace la busqueda por codigo activo,nomina o sección */
+  @HostListener('window:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent): void {
+    if (event.key === 'Enter') {
       this.validateSearch();
-     }
-   }
-   
+    }
+  }
 }

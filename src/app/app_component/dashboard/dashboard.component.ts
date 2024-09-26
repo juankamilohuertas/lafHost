@@ -8,6 +8,7 @@ import { BreadCrumbComponent } from '../bread-crumb/bread-crumb.component';
 import { Router, RouterOutlet } from '@angular/router';
 import { OptConfigurationComponent } from '../opt-configuration/opt-configuration.component';
 import { LoginService } from '../../app_services/login/login.service';
+import { BtnCloseOrOpenComponent } from './btn-close-or-open/btn-close-or-open.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -21,6 +22,7 @@ import { LoginService } from '../../app_services/login/login.service';
     SearchAndFilterComponent,
     RecentSearchesComponent,
     OptConfigurationComponent,
+    BtnCloseOrOpenComponent
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.sass',
