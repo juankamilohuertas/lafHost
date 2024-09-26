@@ -8,11 +8,12 @@ import {
   IfiltersSecciones,
   IfiltersTipoHosts,
 } from '../../app_models/filter/search-and-filter.models';
+import { ListHostComponent } from '../list-host/list-host.component';
 
 @Component({
   selector: 'app-search-and-filter',
   standalone: true,
-  imports: [FormsModule, BreadCrumbComponent],
+  imports: [FormsModule, BreadCrumbComponent,ListHostComponent],
   templateUrl: './search-and-filter.component.html',
   styleUrl: './search-and-filter.component.sass',
 })

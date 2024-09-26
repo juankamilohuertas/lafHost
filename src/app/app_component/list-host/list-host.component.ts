@@ -21,9 +21,13 @@ export class ListHostComponent implements OnInit {
   /* variables que obtiene la escritura de los campos de texto */
   filterCodigoActivo = '';
   filterSeccion = '';
+  filterCodigoNomina = '';
   filterResponsable = '';
   filterTypeHost = '';
   filterNumeroSerie = '';
+  filterDescripcion = '';
+  filterDireccionIp = '';
+  filterFecha = '';
   /* variables que obtienen los resultados desde la db */
   getDbEnlaces: IfiltersEnlaces[] = [];
   getDbSecciones: IfiltersSecciones[] = [];
@@ -32,10 +36,13 @@ export class ListHostComponent implements OnInit {
   /* variables que obtienen los resultados de la db filtrados */
   getDbCodigoAactivoFilters: IfiltersEnlaces[] = [];
   getDbSeccionesFilters: IfiltersEnlaces[] = [];
+  getDbCodigoNominaFilters: IfiltersEnlaces[] = [];
   getDbResponsablesFilters: IfiltersEnlaces[] = [];
   getDbTypeHostFilters: IfiltersEnlaces[] = [];
   getDbNumeroSerieFilters: IfiltersEnlaces[] = [];
-
+  getDbDescripcionFilters: IfiltersEnlaces[] = [];
+  getDbDireccionIpFilters: IfiltersEnlaces[] = [];
+  getDbFechaFilters: IfiltersEnlaces[] = [];
   ngOnInit(): void {
     this._serviceDataFilter.setBreadCrumb('Lista de dispositivos');
     /* get db enlaces */
@@ -56,19 +63,28 @@ export class ListHostComponent implements OnInit {
     });
   }
 
-  validateInputTable(inputSelect: string) {
-    const elementsCheck = document.querySelectorAll(
+  validateInputTable(event: Event, inputSelect: string) {
+    const selectElementInput = document.querySelectorAll(
       '.conte__tableRegisters input'
     );
-    const Id = elementsCheck[0] as HTMLInputElement;
-    const CodigoActivo = elementsCheck[1] as HTMLInputElement;
-    const Seccion = elementsCheck[2] as HTMLInputElement;
-    const Responsable = elementsCheck[3] as HTMLInputElement;
-    const TypoHost = elementsCheck[4] as HTMLInputElement;
-    const NumeroSerie = elementsCheck[5] as HTMLInputElement;
-    const Descripcion = elementsCheck[6] as HTMLInputElement;
-    const DireccionIp = elementsCheck[7] as HTMLInputElement;
-    const FechaCompra = elementsCheck[8] as HTMLInputElement;
+
+    const ElementSelect = event.target as HTMLInputElement;
+
+    for (let index = 0; index < selectElementInput.length; index++) {
+      const converElement = selectElementInput[index] as HTMLInputElement;
+      if (converElement !== ElementSelect) {
+        converElement.value = '';
+        this.getDbCodigoAactivoFilters = [];
+        this.getDbSeccionesFilters = [];
+        this.getDbResponsablesFilters = [];
+        this.getDbTypeHostFilters = [];
+        this.getDbNumeroSerieFilters = [];
+        this.getDbDescripcionFilters = [];
+        this.getDbDireccionIpFilters = [];
+        this.getDbFechaFilters = [];
+      }
+    }
+
     this.filterInputValue(inputSelect);
   }
 
@@ -95,6 +111,20 @@ export class ListHostComponent implements OnInit {
           });
         });
         this.getDbSeccionesFilters = dataSecciones;
+        break;
+        case 'Código Nomina':
+        /* busqueda por Código Nomina */
+        let dataCodigoNomina: IfiltersEnlaces[] = [];
+        this.getDbEnlaces.filter((enlaces) => {
+          this.getDbResponsables.filter((codigoNomina) => {
+            if (codigoNomina.codigoCentauro == parseInt(this.filterCodigoNomina)) {
+              if (enlaces.idResponsable === codigoNomina.id) {
+                dataCodigoNomina.push(enlaces);
+              }
+            }
+          });
+        });
+        this.getDbCodigoNominaFilters = dataCodigoNomina;
         break;
       case 'Responsable':
         /* busqueda por responsables */
@@ -134,7 +164,36 @@ export class ListHostComponent implements OnInit {
         });
         this.getDbNumeroSerieFilters = dataNumeroSerie;
         break;
-
+      case 'Descripción':
+        /* busqueda por Descripción */
+        let dataDescripcion: IfiltersEnlaces[] = [];
+        this.getDbEnlaces.filter((descripcion) => {
+          if (descripcion.descripcion == this.filterDescripcion) {
+            dataDescripcion.push(descripcion);
+          }
+        });
+        this.getDbDescripcionFilters = dataDescripcion;
+        break;
+      case 'Dirección IP':
+        /* busqueda por Dirección IP */
+        let dataDireccionIp: IfiltersEnlaces[] = [];
+        this.getDbEnlaces.filter((direccionIp) => {
+          if (direccionIp.direccionIp == this.filterDireccionIp) {
+            dataDireccionIp.push(direccionIp);
+          }
+        });
+        this.getDbDireccionIpFilters = dataDireccionIp;
+        break;
+      case 'Fecha de Compra':
+        /* busqueda por Fecha de Compra */
+        let dataFecha: IfiltersEnlaces[] = [];
+        this.getDbEnlaces.filter((fecha) => {
+          if (fecha.fecha == this.filterFecha) {
+            dataFecha.push(fecha);
+          }
+        });
+        this.getDbFechaFilters = dataFecha;
+        break;
       default:
         break;
     }

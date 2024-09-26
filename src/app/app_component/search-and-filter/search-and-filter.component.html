@@ -146,24 +146,9 @@ aria-hidden="true"
 </div>
 <!-- TIPOS DE BUSQUEDAS EN LA PAGINA DE INICIO -->
 <h1 class="h4 m-3">Buscar por...</h1>
-<div class="typesOfSearches d-flex align-items-center mb-3">
+<div class="typesOfSearches">
   <div class="d-flex me-4">
-    <!-- busqueda por codigo activo y S/N -->
-    <input
-      class="inputSearchByCode me-1"
-      type="text"
-      [(ngModel)]="searchByCode"
-      placeholder="codigo activo"
-    />
-    <button
-      class="btn btn-secondary btn-sm rounded-0 rounded-end"
-      (click)="btnSearchByCodes()"
-    >
-      Buscar
-    </button>
-  </div>
-  <div class="d-flex me-4">
-    <!-- busqueda por codigo de centauro -->
+    <!-- busqueda por codigo de nomina -->
     <input
       class="inputSearchByCodeCentauro me-1"
       type="text"
@@ -173,27 +158,6 @@ aria-hidden="true"
     <button
       class="btn btn-secondary btn-sm rounded-0 rounded-end"
       (click)="btnSearchByCodesCentauro()"
-    >
-      Buscar
-    </button>
-  </div>
-  <div class="d-flex">
-    <!-- busqueda por sección -->
-    <input
-      class="inputSearchByseccion me-1"
-      [(ngModel)]="searchBySeccion"
-      list="inputSearchByseccion"
-      placeholder="seccion"
-    />
-    <datalist id="inputSearchByseccion">
-      @for (item of getDbSecciones; track $index) {
-        <option value="{{item.nombreSeccion}}"></option>
-      }
-      
-    </datalist>
-    <button
-      class="btn btn-secondary btn-sm rounded-0 rounded-end"
-      (click)="btnSearchByCodesSeccion()"
     >
       Buscar
     </button>
@@ -369,5 +333,5 @@ aria-hidden="true"
   </table>
 </section>
 <!-- ********************* ACTUALIZAR REGISTROS O CREAR UNO NUEVO ************************** -->
-
+<app-list-host/>
 

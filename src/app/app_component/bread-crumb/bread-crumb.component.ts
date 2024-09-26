@@ -20,7 +20,7 @@ export class BreadCrumbComponent implements OnInit {
         if(v == "Opciones de configuración"){
           this.urlBreadCrum = "http://localhost:4200/panel/configuration";
         }else if(v == "Lista de dispositivos"){
-          this.urlBreadCrum = "http://localhost:4200/panel/listHost";
+          this.urlBreadCrum = "http://localhost:4200/panel/configuration";
         }
       });  
   }
