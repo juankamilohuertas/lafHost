@@ -1,5 +1,14 @@
-<!-- mostrando detalles del registro filtrado -->
-<section class="d-flex bg-dark" style="font-size: small;">
+<!-- BOTON DE ACTUALIZAR LA DB -->
+<button
+  type="button"
+  style="background-color: #990008"
+  class="btn m-3 text-light py-1 d-flex align-items-center shadow p-3 mb-1 rounded"
+  (click)="updateDb()"
+>
+  Actualizar
+</button>
+<!-- MOSTRANDO LA INFO MAS DETALLADA DEL REGISTRO SELECCIONADO -->
+<section class="d-flex bg-dark" style="font-size: small">
   <div class="table d-flex text-light p-2">
     <div>
       @for (item of moreInfoHeaders; track $index) {
@@ -10,219 +19,110 @@
     </div>
     <div>
       @for (item of moreInfo; track $index) {
-      <div class="border border-start-0 p-2">
+      <div (click)="elementSelect($event)" class="border border-start-0 p-2">
         {{ item }}
       </div>
       }
     </div>
   </div>
   <div class="d-flex justify-content-center align-items-center">
-    <a class="d-inline-block w-50 text-center" href="http://{{direccionIp}}" target="_blank" rel="noopener noreferrer">
-        <img class="w-100" src="assets/Kyocera.jpg" alt="Img-Kyocera-Printer">
+    <!-- imagen contiene la IP del registro seleccionado -->
+    <a
+      class="d-inline-block w-50 text-center"
+      href="http://{{ direccionIp }}"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <img class="w-100" src="assets/Kyocera.jpg" alt="Img-Kyocera-Printer" />
     </a>
+    <!-- botones para editar, o guardar cabios del registro -->
+    <div>
+      <button
+        type="button"
+        style="background-color: #404040"
+        class="btn m-3 text-light py-1 d-flex align-items-center shadow p-3 mb-1 rounded"
+        (click)="updateRegister()"
+      >
+        Editar registro
+      </button>
+    </div>
   </div>
 </section>
-<!-- muestra todos los registros de los dispositivos -->
+<!-- ENCABEZADO DE BUSQUEDA -->
 <section class="conte__tableRegisters">
   <table class="table table-secondary table-hover">
-    <thead>
-      <tr style="font-size: small">
-        <th class="position-relative">
-          <p class="pb-2">ID</p>
-        </th>
-        <th class="position-relative">
-          <input
-            class="w-100 position-absolute bottom-0 start-0 border border-secondary"
-            style="outline-color: #990008;"
-            type="text"
-            list="inputSearchByCodigoActivo"
-            [(ngModel)]="filterCodigoActivo"
-            (input)="validateInputTable($event, 'Codigo Activo')"
-          />
-          <datalist id="inputSearchByCodigoActivo">
-            @for (codigoActivo of getDbEnlaces; track $index) {
-            <option value="{{ codigoActivo.codigoActivo }}"></option>
-            }
-          </datalist>
-          <p class="pb-2">Codigo Activo</p>
-        </th>
-        <th class="position-relative">
-          <input
-            class="w-100 position-absolute bottom-0 start-0 border border-secondary"
-            style="outline-color: #990008"
-            type="text"
-            list="inputSearchBySeccion"
-            [(ngModel)]="filterSeccion"
-            (input)="validateInputTable($event, 'Sección')"
-          />
-          <datalist id="inputSearchBySeccion">
-            @for (secciones of getDbSecciones; track $index) {
-            <option value="{{ secciones.nombreSeccion }}"></option>
-            }
-          </datalist>
-          <p class="pb-2">Sección</p>
-        </th>
-        <th class="position-relative">
-          <input
-            class="w-100 position-absolute bottom-0 start-0 border border-secondary"
-            style="outline-color: #990008"
-            type="text"
-            list="inputSearchByCodigoNomina"
-            [(ngModel)]="filterCodigoNomina"
-            (input)="validateInputTable($event, 'Código Nomina')"
-          />
-          <datalist id="inputSearchByCodigoNomina">
-            @for (codigoNomina of getDbResponsables; track $index) {
-            <option value="{{ codigoNomina.codigoCentauro }}"></option>
-            }
-          </datalist>
-          <p class="pb-2">Código Nomina</p>
-        </th>
-        <th class="position-relative">
-          <input
-            class="w-100 position-absolute bottom-0 start-0 border border-secondary"
-            style="outline-color: #990008"
-            type="text"
-            list="inputSearchByResponsable"
-            [(ngModel)]="filterResponsable"
-            (input)="validateInputTable($event, 'Responsable')"
-          />
-          <datalist id="inputSearchByResponsable">
-            @for (responsables of getDbResponsables; track $index) {
-            <option value="{{ responsables.nombreResponsable }}"></option>
-            }
-          </datalist>
-          <p class="pb-2">Responsable</p>
-        </th>
-        <th class="position-relative">
-          <input
-            class="w-100 position-absolute bottom-0 start-0 border border-secondary"
-            style="outline-color: #990008"
-            type="text"
-            list="inputSearchByTypeHost"
-            [(ngModel)]="filterTypeHost"
-            (input)="validateInputTable($event, 'Tipo de Host')"
-          />
-          <datalist id="inputSearchByTypeHost">
-            @for (typeHost of getDbTypeHost; track $index) {
-            <option value="{{ typeHost.nombreTipoHost }}"></option>
-            }
-          </datalist>
-          <p class="pb-2">Tipo de Host</p>
-        </th>
-        <th class="position-relative">
-          <input
-            class="w-100 position-absolute bottom-0 start-0 border border-secondary"
-            style="outline-color: #990008"
-            list="inputSearchByNumeroSerie"
-            [(ngModel)]="filterNumeroSerie"
-            (input)="validateInputTable($event, 'Número de Serie')"
-          />
-          <datalist id="inputSearchByNumeroSerie">
-            @for (numeroSerie of getDbEnlaces; track $index) {
-            <option value="{{ numeroSerie.numeroSerie }}"></option>
-            }
-          </datalist>
-          <p class="pb-2">Número de Serie</p>
-        </th>
-        <th class="position-relative">
-          <input
-            class="w-100 position-absolute bottom-0 start-0 border border-secondary"
-            style="outline-color: #990008"
-            list="inputSearchBydDescripcion"
-            [(ngModel)]="filterDescripcion"
-            (input)="validateInputTable($event, 'Descripción')"
-          />
-          <datalist id="inputSearchBydDescripcion">
-            @for (descripcion of getDbEnlaces; track $index) {
-            <option value="{{ descripcion.descripcion }}"></option>
-            }
-          </datalist>
-          <p class="pb-2">Descripción</p>
-        </th>
-        <th class="position-relative">
-          <input
-            class="w-100 position-absolute bottom-0 start-0 border border-secondary"
-            style="outline-color: #990008"
-            type="text"
-            list="inputSearchBydDireccionIp"
-            [(ngModel)]="filterDireccionIp"
-            (input)="validateInputTable($event, 'Dirección IP')"
-          />
-          <datalist id="inputSearchBydDireccionIp">
-            @for (direccionIp of getDbEnlaces; track $index) {
-            <option value="{{ direccionIp.direccionIp }}"></option>
-            }
-          </datalist>
-          <p class="pb-2">Dirección IP</p>
-        </th>
-        <th class="position-relative">
-          <input
-            class="w-100 position-absolute bottom-0 start-0 border border-secondary"
-            style="outline-color: #990008"
-            type="text"
-            list="inputSearchByFecha"
-            [(ngModel)]="filterFecha"
-            (input)="validateInputTable($event, 'Fecha de Compra')"
-          />
-          <datalist id="inputSearchByFecha">
-            @for (fechaCompra of getDbEnlaces; track $index) {
-            <option value="{{ fechaCompra.fecha }}"></option>
-            }
-          </datalist>
-          <p class="pb-2">Fecha de Compra</p>
-        </th>
-      </tr>
+    <thead style="font-size: 0.8rem">
+      <th>Id</th>
+      <th>
+        <input
+          class="bottom-0 start-0 border border-secondary"
+          style="outline-color: #990008"
+          type="text"
+          list="inputSearchByCodigoActivo"
+          [(ngModel)]="filterCodigoActivo"
+          (input)="validateInputTable($event, 'Codigo Activo')"
+        />
+        <datalist id="inputSearchByCodigoActivo">
+          @for (codigoActivo of getDbActualizarDb; track $index) {
+          <option value="{{ codigoActivo.codigoActivo }}"></option>
+          }
+        </datalist>
+        <p class="pb-2">Codigo Activo</p>
+      </th>
+      <th>
+        <input
+          class="bottom-0 start-0 border border-secondary"
+          style="outline-color: #990008"
+          type="text"
+          list="inputSearchByfilterSeccion"
+          [(ngModel)]="filterSeccion"
+          (input)="validateInputTable($event, 'Sección')"
+        />
+        <datalist id="inputSearchByfilterSeccion">
+          @for (filterSeccion of getDbActualizarDb; track $index) {
+          <option value="{{ filterSeccion.nombreSeccion }}"></option>
+          }
+        </datalist>
+        <p class="pb-2">Nombre de Sección</p>
+      </th>
+      <th>Código de Nómina</th>
+      <th>Nombre de Responsable</th>
+      <th>Nombre de Dispositivo</th>
+      <th>Número de Serie</th>
+      <th>Descripción</th>
+      <th>Dirección IP</th>
+      <th>Fecha de Compra</th>
+      <th>Estado</th>
     </thead>
-    <tbody (click)="selectRegisterStyles($event)" class="conte__resultSearches">
-      <!-- FILTRADO DE BUSQUEDA  -->
-      @if (filterCodigoActivo.length > 0 || filterSeccion.length > 0 ||
-      filterCodigoNomina.length > 0 || filterResponsable.length > 0 ||
-      filterTypeHost.length > 0 || filterNumeroSerie.length > 0 ||
-      filterDescripcion.length > 0 || filterDireccionIp.length > 0 ||
-      filterFecha.length > 0 && getDbFilters.length > 0) { @for (enlaces of
-      getDbFilters; track $index) {
-      <tr class="searchByCodigoActivo">
-        <td>#</td>
-        <td>{{ enlaces.codigoActivo }}</td>
-        @for (secciones of getDbSecciones; track $index) { @if(secciones.id ===
-        enlaces.idSeccion){
-        <td>{{ secciones.nombreSeccion }}</td>
-        } } @for (responsable of getDbResponsables; track $index) {
-        @if(responsable.id === enlaces.idResponsable){
-        <td>{{ responsable.codigoCentauro }}</td>
-        <td>{{ responsable.nombreResponsable }}</td>
-        } } @for (typoHost of getDbTypeHost; track $index) { @if(typoHost.id ===
-        enlaces.idTipoHost){
-        <td>{{ typoHost.nombreTipoHost }}</td>
-        } }
-        <td>{{ enlaces.numeroSerie }}</td>
-        <td>{{ enlaces.descripcion }}</td>
-        <td>{{ enlaces.direccionIp }}</td>
-        <td>{{ enlaces.fecha }}</td>
-      </tr>
-      } }
-      <!-- MUESTRA TODOS LOS REGISTROS DE LOS DISPOSITIVOS -->
-      @if(getDbFilters.length == 0){ @for (enlaces of getDbEnlaces; track
-      $index) {
-      <tr tabindex="{{ $index + 1 }}">
+    <tbody>
+      @if (getDbFilters.length !== 0 || filterCodigoActivo !== "" || filterSeccion !== "") { @for (item
+      of getDbFilters; track $index) {
+      <tr style="font-size: 0.8rem">
         <td>{{ $index + 1 }}</td>
-        <td>{{ enlaces.codigoActivo }}</td>
-        @for (secciones of getDbSecciones; track $index) { @if(secciones.id ===
-        enlaces.idSeccion){
-        <td>{{ secciones.nombreSeccion }}</td>
-        } } @for (responsable of getDbResponsables; track $index) {
-        @if(responsable.id === enlaces.idResponsable){
-        <td>{{ responsable.codigoCentauro }}</td>
-        <td>{{ responsable.nombreResponsable }}</td>
-        } } @for (typoHost of getDbTypeHost; track $index) { @if(typoHost.id ===
-        enlaces.idTipoHost){
-        <td>{{ typoHost.nombreTipoHost }}</td>
-        } }
-        <td>{{ enlaces.numeroSerie }}</td>
-        <td>{{ enlaces.descripcion }}</td>
-        <td>{{ enlaces.direccionIp }}</td>
-        <td>{{ enlaces.fecha }}</td>
+        <td>{{ item.codigoActivo }}</td>
+        <td>{{ item.nombreSeccion }}</td>
+        <td>{{ item.codigoNomina }}</td>
+        <td>{{ item.nombreResponsable }}</td>
+        <td>{{ item.nombreTipoHost }}</td>
+        <td>{{ item.numeroSerie }}</td>
+        <td>{{ item.descripcion }}</td>
+        <td>{{ item.direccionIp }}</td>
+        <td>{{ item.fecha }}</td>
+        <td>{{ item.estado }}</td>
+      </tr>
+      } }@else { @for (item of getDbActualizarDb; track $index) {
+      <tr style="font-size: 0.8rem">
+        <td>{{ $index + 1 }}</td>
+        <td>{{ item.codigoActivo }}</td>
+        <td>{{ item.nombreSeccion }}</td>
+        <td>{{ item.codigoNomina }}</td>
+        <td>{{ item.nombreResponsable }}</td>
+        <td>{{ item.nombreTipoHost }}</td>
+        <td>{{ item.numeroSerie }}</td>
+        <td>{{ item.descripcion }}</td>
+        <td>{{ item.direccionIp }}</td>
+        <td>{{ item.fecha }}</td>
+        <td>{{ item.estado }}</td>
       </tr>
       } }
     </tbody>

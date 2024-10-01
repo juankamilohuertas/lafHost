@@ -1,13 +1,11 @@
 import { Component, inject, OnInit } from '@angular/core';
 import {
-  IfiltersEnlaces,
-  IfiltersResponsables,
-  IfiltersSecciones,
-  IfiltersTipoHosts,
+  IfiltersActualizarDesdeArchivo,
 } from '../../app_models/filter/search-and-filter.models';
 import { DataFilterService } from '../../app_services/filter/data-filter.service';
 import { BreadCrumbComponent } from '../bread-crumb/bread-crumb.component';
 import { FormsModule } from '@angular/forms';
+import { FilesService } from '../../app_services/files/files.service';
 
 @Component({
   selector: 'app-list-host',
@@ -18,7 +16,9 @@ import { FormsModule } from '@angular/forms';
 })
 export class ListHostComponent implements OnInit {
   private readonly _serviceDataFilter = inject(DataFilterService);
+  private readonly _serviceDataFiles = inject(FilesService);
   /* variables que obtiene la escritura de los campos de texto */
+  filterId?: number;
   filterCodigoActivo = '';
   filterSeccion = '';
   filterCodigoNomina = '';
@@ -28,38 +28,23 @@ export class ListHostComponent implements OnInit {
   filterDescripcion = '';
   filterDireccionIp = '';
   filterFecha = '';
-  /* variables que obtienen los resultados desde la db */
-  getDbEnlaces: IfiltersEnlaces[] = [];
-  getDbSecciones: IfiltersSecciones[] = [];
-  getDbResponsables: IfiltersResponsables[] = [];
-  getDbTypeHost: IfiltersTipoHosts[] = [];
+
   /* variables que obtienen los resultados de la db filtrados */
-  getDbFilters: IfiltersEnlaces[] = [];
+  getDbFilters: IfiltersActualizarDesdeArchivo[] = [];
   /* variable que obtiene el registro seleccionado y muestra mejor la informacion */
   moreInfo: string[] = [];
   moreInfoHeaders: string[] = [];
   direccionIp: string | null = "";
+  /* varible que actualiza toda la base de datos */
+  getDbActualizarDb: IfiltersActualizarDesdeArchivo[] = []; 
   /* *************************************************** */
   ngOnInit(): void {
-    this._serviceDataFilter.setBreadCrumb('Lista de dispositivos');
-    /* get db enlaces */
-    this._serviceDataFilter.getEnlacesApi().subscribe((res) => {
-      this.getDbEnlaces = res;
-    });
-    /* get db secciones*/
-    this._serviceDataFilter.getSeccionesApi().subscribe((res) => {
-      this.getDbSecciones = res;
-    });
-    /* get db responsables */
-    this._serviceDataFilter.getResponsablesApi().subscribe((res) => {
-      this.getDbResponsables = res;
-    });
-    /* get db typehost */
-    this._serviceDataFilter.getTypeHostApi().subscribe((res) => {
-      this.getDbTypeHost = res;
-    });
+    /* get db ActualizarDb */
+    this._serviceDataFiles.postApiFile().subscribe((res)=> {
+      this.getDbActualizarDb = res;
+    })
   }
-  /* elimina los campos que no estan en focus */
+  /* ELIMINA LOS CAMPOS QUE NO ESTAN EN FOCUS */
   validateInputTable(event: Event, inputSelect: string) {
     const selectElementInput = document.querySelectorAll(
       '.conte__tableRegisters input'
@@ -77,16 +62,16 @@ export class ListHostComponent implements OnInit {
 
     this.filterInputValue(inputSelect);
      /* actualizando los registros de la tabla enlaces */
-     this._serviceDataFilter.getEnlacesApi().subscribe((res) => {
-      this.getDbEnlaces = res;
+     this._serviceDataFiles.postApiFile().subscribe((res) => {
+      this.getDbActualizarDb = res;
     });
   }
-  /* asigna el contenido de filtrado para mostrar en el DOM */
+  /* ASIGNA EL CONTENIDO DE FILTRADO PARA MOSTRAR EN EL DOM */
   filterInputValue(inputSelect: string) {
     switch (inputSelect) {
       case 'Codigo Activo':
         /* buscar por codigo activo */
-        this.getDbEnlaces.filter((res) => {
+        this.getDbActualizarDb.filter((res) => {
           if (res.codigoActivo == this.filterCodigoActivo) {
             this.getDbFilters = [res];
           }
@@ -94,107 +79,21 @@ export class ListHostComponent implements OnInit {
         break;
       case 'Sección':
         /* busqueda por sección */
-        let dataSecciones: IfiltersEnlaces[] = [];
-        this.getDbEnlaces.filter((enlaces) => {
-          this.getDbSecciones.filter((secciones) => {
-            if (secciones.nombreSeccion == this.filterSeccion) {
-              if (enlaces.idSeccion === secciones.id) {
-                dataSecciones.push(enlaces);
+        let dataSecciones: IfiltersActualizarDesdeArchivo[] = [];
+        this.getDbActualizarDb.filter((res) => {
+              if (res.nombreSeccion === this.filterSeccion) {
+                dataSecciones.push(res);
               }
-            }
-          });
         });
         this.getDbFilters = dataSecciones;
         break;
-      case 'Código Nomina':
-        /* busqueda por Código Nomina */
-        let dataCodigoNomina: IfiltersEnlaces[] = [];
-        this.getDbEnlaces.filter((enlaces) => {
-          this.getDbResponsables.filter((codigoNomina) => {
-            if (
-              codigoNomina.codigoCentauro == parseInt(this.filterCodigoNomina)
-            ) {
-              if (enlaces.idResponsable === codigoNomina.id) {
-                dataCodigoNomina.push(enlaces);
-              }
-            }
-          });
-        });
-        this.getDbFilters = dataCodigoNomina;
-        break;
-      case 'Responsable':
-        /* busqueda por responsables */
-        let dataResponsables: IfiltersEnlaces[] = [];
-        this.getDbEnlaces.filter((enlaces) => {
-          this.getDbResponsables.filter((responsables) => {
-            if (responsables.nombreResponsable == this.filterResponsable) {
-              if (enlaces.idResponsable === responsables.id) {
-                dataResponsables.push(enlaces);
-              }
-            }
-          });
-        });
-        this.getDbFilters = dataResponsables;
-        break;
-      case 'Tipo de Host':
-        /* busqueda por responsables */
-        let dataTypeHost: IfiltersEnlaces[] = [];
-        this.getDbEnlaces.filter((enlaces) => {
-          this.getDbTypeHost.filter((typeHost) => {
-            if (typeHost.nombreTipoHost == this.filterTypeHost) {
-              if (enlaces.idTipoHost === typeHost.id) {
-                dataTypeHost.push(enlaces);
-              }
-            }
-          });
-        });
-        this.getDbFilters = dataTypeHost;
-        break;
-      case 'Número de Serie':
-        /* busqueda por número de serie */
-        let dataNumeroSerie: IfiltersEnlaces[] = [];
-        this.getDbEnlaces.filter((enlaces) => {
-          if (enlaces.numeroSerie == this.filterNumeroSerie) {
-            dataNumeroSerie.push(enlaces);
-          }
-        });
-        this.getDbFilters = dataNumeroSerie;
-        break;
-      case 'Descripción':
-        /* busqueda por Descripción */
-        let dataDescripcion: IfiltersEnlaces[] = [];
-        this.getDbEnlaces.filter((descripcion) => {
-          if (descripcion.descripcion == this.filterDescripcion) {
-            dataDescripcion.push(descripcion);
-          }
-        });
-        this.getDbFilters = dataDescripcion;
-        break;
-      case 'Dirección IP':
-        /* busqueda por Dirección IP */
-        let dataDireccionIp: IfiltersEnlaces[] = [];
-        this.getDbEnlaces.filter((direccionIp) => {
-          if (direccionIp.direccionIp == this.filterDireccionIp) {
-            dataDireccionIp.push(direccionIp);
-          }
-        });
-        this.getDbFilters = dataDireccionIp;
-        break;
-      case 'Fecha de Compra':
-        /* busqueda por Fecha de Compra */
-        let dataFecha: IfiltersEnlaces[] = [];
-        this.getDbEnlaces.filter((fecha) => {
-          if (fecha.fecha == this.filterFecha) {
-            dataFecha.push(fecha);
-          }
-        });
-        this.getDbFilters = dataFecha;
-        break;
+      
+       
       default:
         break;
     }
   }
-  /* agerga estilos a los elementos filtrados seleccionados */
+  /* AGREGA ESTILOS A LOS ELEMENTOS FILTRADOS SELECCIONADOS */
   selectRegisterStyles(event: Event) {
     const pruebaConverEle = document.querySelector(
       '.conte__resultSearches'
@@ -210,7 +109,7 @@ export class ListHostComponent implements OnInit {
     }
     this.selectRegisterInfo(event);
   }
-  /* muestra la informacion a detalle del registro buscado */
+  /* MUESTRA LA INFO FILTRADA DETALLADA Y ASIGNA LA IP PARA INGRESAR AL DISPOSITIVO*/
   selectRegisterInfo(event: Event) {
     const elementSelect = event.target as HTMLTableRowElement;
     const elementSelectFilter = elementSelect.parentElement;
@@ -233,6 +132,31 @@ export class ListHostComponent implements OnInit {
     'DIRECCIÓN IP',
     'FECHA DE COMPRA',]
     this.direccionIp = elementSelectFilter!.children[8].textContent;
-    window.scroll(0,100);
+    window.scroll(0,70);
   }
+/* ************************************** */
+  /* NUESTRA EL REGISTRO SELECCIONADO */
+  registerIdSelect(registerSelect: number){
+    this.filterId = registerSelect;
+  }
+  /* EDITA EL REGISTRO SELECCIONADO */
+  elementSelected!: unknown;
+  updateRegister(){
+    console.log(this.elementSelected)
+  }
+  /* HABILITA LOS PERMISOS PARA LA EDICIÓN */
+  elementSelect(event: Event){
+      const data = event.target as HTMLElement;
+      const direccionIp = data.parentNode;
+      this.elementSelected = direccionIp;
+  }
+/* ***************************************************** */
+/* ****************** ACTUALIZACION DB *******************/
+/* ***************************************************** */
+/* ACTUALIZAR LA DB DESDE UN ARCHIVO TXT*/
+updateDb(){
+  if(confirm("Estas seguro que deseas actualizar la db")){
+    this._serviceDataFiles.postApiFile().subscribe();
+  }
+}
 }

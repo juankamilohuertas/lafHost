@@ -49,7 +49,6 @@ export class BtncreateNewComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    this._serviceDataFilter.setBreadCrumb('');
     /* get db enlaces */
     this._serviceDataFilter.getEnlacesApi().subscribe((res) => {
       this.getDbEnlaces = res;

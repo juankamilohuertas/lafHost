@@ -23,3 +23,17 @@ export interface IfiltersResponsables{
   nombreResponsable: string,
   idSeccion: number
 }
+/* actualiza la toda la db */
+export interface IfiltersActualizarDesdeArchivo{
+  "id": number,
+  "codigoActivo": string,
+  "nombreSeccion": string,
+  "codigoNomina": string,
+  "nombreResponsable": string,
+  "nombreTipoHost": string,
+  "numeroSerie": string,
+  "descripcion": string,
+  "direccionIp": string,
+  "fecha": string,
+  "estado": string
+}

@@ -5,17 +5,19 @@ import {
   IfiltersSecciones,
   IfiltersTipoHosts,
 } from '../../app_models/filter/search-and-filter.models';
-import { BreadCrumbComponent } from '../bread-crumb/bread-crumb.component';
+import { FilesService } from '../../app_services/files/files.service';
 
 @Component({
   selector: 'app-opt-configuration',
   standalone: true,
-  imports: [FormsModule,BreadCrumbComponent],
+  imports: [FormsModule],
   templateUrl: './opt-configuration.component.html',
   styleUrl: './opt-configuration.component.sass',
 })
 export class OptConfigurationComponent implements OnInit {
   private readonly _serviceDataFilter = inject(DataFilterService);
+  private readonly _serviceDataFiles = inject(FilesService);
+
   inputText = ''; //lo que el usuario escribe en el input seccion
   inputTextCentauro = ''; //lo que el usuario escribe en el input Usuario Centauro
   nameForm!: string; //nombre del formulario seleccionado
@@ -26,7 +28,6 @@ export class OptConfigurationComponent implements OnInit {
   getDBcodigoCentauro: number[] = []; // trae los registros de la columna CodigoCentauro de la tabla Responsable
   constructor() {}
   ngOnInit(): void {
-    this._serviceDataFilter.setBreadCrumb("Opciones de configuración");
     /* get db secciones */
     this._serviceDataFilter.getSeccionesApi().subscribe((res) => {
       this.getDBSecciones = res;
