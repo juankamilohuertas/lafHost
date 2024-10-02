@@ -1,8 +1,21 @@
-tr {
+.conte__headTableRegisters {
+  width: calc(100vw - 361px);
+  height: 300px;
+  overflow: scroll;
+  position: relative;
+}
+.conte__headTableRegisters thead {
   font-size: small;
+  position: sticky;
+  top: 0;
+  box-shadow: 0 0 10px 1px #c7000a;
+}
+.conte__headTableRegisters tr {
+  font-size: small;
+  cursor: pointer;
 }
 
 .validateRegisters {
   outline: 1px solid #c7000a;
-  filter: contrast(150%);
+  filter: sepia(60%);
 }/*# sourceMappingURL=list-host.component.css.map */

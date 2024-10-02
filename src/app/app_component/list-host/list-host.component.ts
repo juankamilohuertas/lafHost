@@ -1,8 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import {
-  IfiltersActualizarDesdeArchivo,
-} from '../../app_models/filter/search-and-filter.models';
-import { DataFilterService } from '../../app_services/filter/data-filter.service';
+import {IfiltersActualizarDesdeArchivo} from '../../app_models/filter/search-and-filter.models';
 import { BreadCrumbComponent } from '../bread-crumb/bread-crumb.component';
 import { FormsModule } from '@angular/forms';
 import { FilesService } from '../../app_services/files/files.service';
@@ -15,8 +12,9 @@ import { FilesService } from '../../app_services/files/files.service';
   styleUrl: './list-host.component.sass',
 })
 export class ListHostComponent implements OnInit {
-  private readonly _serviceDataFilter = inject(DataFilterService);
   private readonly _serviceDataFiles = inject(FilesService);
+  /* variable obtiene toda la db */
+  getDbFilters: IfiltersActualizarDesdeArchivo[] = [];
   /* variables que obtiene la escritura de los campos de texto */
   filterId?: number;
   filterCodigoActivo = '';
@@ -28,9 +26,10 @@ export class ListHostComponent implements OnInit {
   filterDescripcion = '';
   filterDireccionIp = '';
   filterFecha = '';
+  filterEstado = '';
 
   /* variables que obtienen los resultados de la db filtrados */
-  getDbFilters: IfiltersActualizarDesdeArchivo[] = [];
+  
   /* variable que obtiene el registro seleccionado y muestra mejor la informacion */
   moreInfo: string[] = [];
   moreInfoHeaders: string[] = [];
@@ -87,8 +86,91 @@ export class ListHostComponent implements OnInit {
         });
         this.getDbFilters = dataSecciones;
         break;
-      
-       
+      case 'Código Nomina':
+        /* busqueda por Código Nomina */
+        let dataCodigoNomina: IfiltersActualizarDesdeArchivo[] = [];
+        this.getDbActualizarDb.filter((res) => {
+              if (res.codigoNomina === this.filterCodigoNomina) {
+                dataCodigoNomina.push(res);
+              }
+          
+        });
+        this.getDbFilters = dataCodigoNomina;
+        break;
+      case 'Responsable':
+        /* busqueda por responsables */
+        let dataResponsables: IfiltersActualizarDesdeArchivo[] = [];
+        this.getDbActualizarDb.filter((res) => {
+              if (res.nombreResponsable === this.filterResponsable) {
+                dataResponsables.push(res);
+              }
+        });
+        this.getDbFilters = dataResponsables;
+        break;
+      case 'Tipo de Host':
+        /* busqueda por responsables */
+        let dataTypeHost: IfiltersActualizarDesdeArchivo[] = [];
+        this.getDbActualizarDb.filter((res) => {
+          
+           
+              if (res.nombreTipoHost === this.filterTypeHost) {
+                dataTypeHost.push(res);
+              }
+            
+         
+        });
+        this.getDbFilters = dataTypeHost;
+        break;
+      case 'Número de Serie':
+        /* busqueda por número de serie */
+        let dataNumeroSerie: IfiltersActualizarDesdeArchivo[] = [];
+        this.getDbActualizarDb.filter((res) => {
+          if (res.numeroSerie == this.filterNumeroSerie) {
+            dataNumeroSerie.push(res);
+          }
+        });
+        this.getDbFilters = dataNumeroSerie;
+        break;
+      case 'Descripción':
+        /* busqueda por Descripción */
+        let dataDescripcion: IfiltersActualizarDesdeArchivo[] = [];
+        this.getDbActualizarDb.filter((res) => {
+          if (res.descripcion == this.filterDescripcion) {
+            dataDescripcion.push(res);
+          }
+        });
+        this.getDbFilters = dataDescripcion;
+        break;
+      case 'Dirección IP':
+        /* busqueda por Dirección IP */
+        let dataDireccionIp: IfiltersActualizarDesdeArchivo[] = [];
+        this.getDbActualizarDb.filter((res) => {
+          if (res.direccionIp == this.filterDireccionIp) {
+            dataDireccionIp.push(res);
+          }
+        });
+        this.getDbFilters = dataDireccionIp;
+        break;
+      case 'Fecha de Compra':
+        /* busqueda por Fecha de Compra */
+        let dataFecha: IfiltersActualizarDesdeArchivo[] = [];
+        this.getDbActualizarDb.filter((res) => {
+          if (res.fecha == this.filterFecha) {
+            dataFecha.push(res);
+          }
+        });
+        this.getDbFilters = dataFecha;
+        break;
+        case 'Estado':
+        /* busqueda por estado */
+        let dataEstado: IfiltersActualizarDesdeArchivo[] = [];
+        this.getDbActualizarDb.filter((res) => {
+          if (res.estado == this.filterEstado) {
+            dataEstado.push(res);
+          }
+        });
+        this.getDbFilters = dataEstado;
+        break;
       default:
         break;
     }

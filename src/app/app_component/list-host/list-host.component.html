@@ -49,56 +49,181 @@
   </div>
 </section>
 <!-- ENCABEZADO DE BUSQUEDA -->
-<section class="conte__tableRegisters">
-  <table class="table table-secondary table-hover">
-    <thead style="font-size: 0.8rem">
-      <th>Id</th>
-      <th>
-        <input
-          class="bottom-0 start-0 border border-secondary"
-          style="outline-color: #990008"
-          type="text"
-          list="inputSearchByCodigoActivo"
-          [(ngModel)]="filterCodigoActivo"
-          (input)="validateInputTable($event, 'Codigo Activo')"
-        />
-        <datalist id="inputSearchByCodigoActivo">
-          @for (codigoActivo of getDbActualizarDb; track $index) {
-          <option value="{{ codigoActivo.codigoActivo }}"></option>
-          }
-        </datalist>
-        <p class="pb-2">Codigo Activo</p>
-      </th>
-      <th>
-        <input
-          class="bottom-0 start-0 border border-secondary"
-          style="outline-color: #990008"
-          type="text"
-          list="inputSearchByfilterSeccion"
-          [(ngModel)]="filterSeccion"
-          (input)="validateInputTable($event, 'Sección')"
-        />
-        <datalist id="inputSearchByfilterSeccion">
-          @for (filterSeccion of getDbActualizarDb; track $index) {
-          <option value="{{ filterSeccion.nombreSeccion }}"></option>
-          }
-        </datalist>
-        <p class="pb-2">Nombre de Sección</p>
-      </th>
-      <th>Código de Nómina</th>
-      <th>Nombre de Responsable</th>
-      <th>Nombre de Dispositivo</th>
-      <th>Número de Serie</th>
-      <th>Descripción</th>
-      <th>Dirección IP</th>
-      <th>Fecha de Compra</th>
-      <th>Estado</th>
+<section class="conte__headTableRegisters">
+  <table class="table table-secondary table-hover overflow-auto">
+    <thead>
+      <tr>
+        <th><p class="pb-2">Id</p></th>
+        <th>
+          <input
+            class="border border-secondary"
+            style="outline-color: #990008"
+            type="text"
+            list="inputSearchByCodigoActivo"
+            [(ngModel)]="filterCodigoActivo"
+            (input)="validateInputTable($event, 'Codigo Activo')"
+          />
+          <datalist id="inputSearchByCodigoActivo">
+            @for (codigoActivo of getDbActualizarDb; track $index) {
+            <option value="{{ codigoActivo.codigoActivo }}"></option>
+            }
+          </datalist>
+          <p class="pb-2">Codigo Activo</p>
+        </th>
+        <th>
+          <input
+            class="border border-secondary"
+            style="outline-color: #990008"
+            type="text"
+            list="inputSearchByfilterSeccion"
+            [(ngModel)]="filterSeccion"
+            (input)="validateInputTable($event, 'Sección')"
+          />
+          <datalist id="inputSearchByfilterSeccion">
+            @for (filterSeccion of getDbActualizarDb; track $index) {
+                <option value="{{ filterSeccion.nombreSeccion }}"></option>
+            }
+          </datalist>
+          <p class="pb-2">Nombre de Sección</p>
+        </th>
+        <th>
+          <input
+            class="border border-secondary"
+            style="outline-color: #990008"
+            type="text"
+            list="inputSearchByfilterNomina"
+            [(ngModel)]="filterCodigoNomina"
+            (input)="validateInputTable($event, 'Código Nomina')"
+          />
+          <datalist id="inputSearchByfilterNomina">
+            @for (filterSeccion of getDbActualizarDb; track $index) {
+            <option value="{{ filterSeccion.codigoNomina }}"></option>
+            }
+          </datalist>
+          <p class="pb-2">Código de Nómina</p>
+        </th>
+        <th>
+          <input
+            class="border border-secondary"
+            style="outline-color: #990008"
+            type="text"
+            list="inputSearchByfilterResponsable"
+            [(ngModel)]="filterResponsable"
+            (input)="validateInputTable($event, 'Responsable')"
+          />
+          <datalist id="inputSearchByfilterResponsable">
+            @for (filterResponsable of getDbActualizarDb; track $index) {
+            <option value="{{ filterResponsable.nombreResponsable }}"></option>
+            }
+          </datalist>
+          <p class="pb-2">Nombre de Responsable</p>
+        </th>
+        <th>
+          <input
+            class="border border-secondary"
+            style="outline-color: #990008"
+            type="text"
+            list="inputSearchByfilterTypeHost"
+            [(ngModel)]="filterTypeHost"
+            (input)="validateInputTable($event, 'Tipo de Host')"
+          />
+          <datalist id="inputSearchByfilterTypeHost">
+            @for (filterDispositivo of getDbActualizarDb; track $index) {
+            <option value="{{ filterDispositivo.nombreTipoHost }}"></option>
+            }
+          </datalist>
+          <p class="pb-2">Dispositivo</p>
+        </th>
+        <th>
+          <input
+            class="border border-secondary"
+            style="outline-color: #990008"
+            type="text"
+            list="inputSearchByfilterSerie"
+            [(ngModel)]="filterNumeroSerie"
+            (input)="validateInputTable($event, 'Número de Serie')"
+          />
+          <datalist id="inputSearchByfilterSerie">
+            @for (filterSerie of getDbActualizarDb; track $index) {
+            <option value="{{ filterSerie.numeroSerie }}"></option>
+            }
+          </datalist>
+          <p class="pb-2">N° Serie</p>
+        </th>
+        <th>
+          <input
+            class="border border-secondary"
+            style="outline-color: #990008"
+            type="text"
+            list="inputSearchByfilterDescripcion"
+            [(ngModel)]="filterDescripcion"
+            (input)="validateInputTable($event, 'Descripción')"
+          />
+          <datalist id="inputSearchByfilterDescripcion">
+            @for (filterDescripcion of getDbActualizarDb; track $index) {
+            <option value="{{ filterDescripcion.descripcion }}"></option>
+            }
+          </datalist>
+          <p class="pb-2">Descripción</p>
+        </th>
+        <th>
+          <input
+            class="border border-secondary"
+            style="outline-color: #990008"
+            type="text"
+            list="inputSearchByfilterIp"
+            [(ngModel)]="filterDireccionIp"
+            (input)="validateInputTable($event, 'Dirección IP')"
+          />
+          <datalist id="inputSearchByfilterIp">
+            @for (filterIp of getDbActualizarDb; track $index) {
+            <option value="{{ filterIp.direccionIp }}"></option>
+            }
+          </datalist>
+          <p class="pb-2">Dirección IP</p>
+        </th>
+        <th>
+          <input
+            class="border border-secondary"
+            style="outline-color: #990008"
+            type="text"
+            list="inputSearchByfilterFecha"
+            [(ngModel)]="filterFecha"
+            (input)="validateInputTable($event, 'Fecha de Compra')"
+          />
+          <datalist id="inputSearchByfilterFecha">
+            @for (filterIp of getDbActualizarDb; track $index) {
+            <option value="{{ filterIp.fecha }}"></option>
+            }
+          </datalist>
+          <p class="pb-2">Fecha de Compra</p>
+        </th>
+        <th>
+          <input
+            class="border border-secondary"
+            style="outline-color: #990008"
+            type="text"
+            list="inputSearchByfilterEstado"
+            [(ngModel)]="filterEstado"
+            (input)="validateInputTable($event, 'Estado')"
+          />
+          <datalist id="inputSearchByfilterEstado">
+            @for (filterEstado of getDbActualizarDb; track $index) {
+            <option value="{{ filterEstado.estado }}"></option>
+            }
+          </datalist>
+          <p class="pb-2">Estado</p>
+        </th>
+      </tr>
     </thead>
     <tbody>
-      @if (getDbFilters.length !== 0 || filterCodigoActivo !== "" || filterSeccion !== "") { @for (item
-      of getDbFilters; track $index) {
+      @if (filterCodigoActivo !== "" || filterSeccion !== "" ||
+      filterCodigoNomina !== "" || filterResponsable !== "" || filterTypeHost
+      !== "" || filterNumeroSerie !== "" || filterDescripcion !== "" ||
+      filterDireccionIp !== "" || filterFecha !== "" || filterEstado !== "" &&
+      getDbFilters.length !== 0) { @for (item of getDbFilters; track $index) {
       <tr style="font-size: 0.8rem">
-        <td>{{ $index + 1 }}</td>
+        <th>{{ $index + 1 }}</th>
         <td>{{ item.codigoActivo }}</td>
         <td>{{ item.nombreSeccion }}</td>
         <td>{{ item.codigoNomina }}</td>
