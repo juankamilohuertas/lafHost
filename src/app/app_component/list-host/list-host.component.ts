@@ -3,6 +3,8 @@ import {IfiltersActualizarDesdeArchivo} from '../../app_models/filter/search-and
 import { BreadCrumbComponent } from '../bread-crumb/bread-crumb.component';
 import { FormsModule } from '@angular/forms';
 import { FilesService } from '../../app_services/files/files.service';
+import { DataFilterService } from '../../app_services/filter/data-filter.service';
+import { get } from 'node:http';
 
 @Component({
   selector: 'app-list-host',
@@ -13,10 +15,11 @@ import { FilesService } from '../../app_services/files/files.service';
 })
 export class ListHostComponent implements OnInit {
   private readonly _serviceDataFiles = inject(FilesService);
-  /* variable obtiene toda la db */
+  private readonly _serviceDataFilters = inject(DataFilterService);
+  getAllInputsValues = '';
+  /* variable que obtiene la db filtrada por tipo de busqueda */
   getDbFilters: IfiltersActualizarDesdeArchivo[] = [];
   /* variables que obtiene la escritura de los campos de texto */
-  filterId?: number;
   filterCodigoActivo = '';
   filterSeccion = '';
   filterCodigoNomina = '';
@@ -28,8 +31,17 @@ export class ListHostComponent implements OnInit {
   filterFecha = '';
   filterEstado = '';
 
-  /* variables que obtienen los resultados de la db filtrados */
-  
+  /* variables que obtienen los resultados filtrados en la busqueda sin que se repitan */
+  getDbfilterByCodigoActivo: string[] = [];
+  getDbfilterByNombreSeccion: string[] = [];
+  getDbfilterByCodigoNomina: string[] = [];
+  getDbfilterByNombreResponsable: string[] = [];
+  getDbfilterByTipoHost: string[] = [];
+  getDbfilterByNumeroSerie: string[] = [];
+  getDbfilterByDescripcion: string[] = [];
+  getDbfilterByDireccionIp: string[] = [];
+  getDbfilterByFecha: string[] = [];
+  getDbfilterByEstado: string[] = [];
   /* variable que obtiene el registro seleccionado y muestra mejor la informacion */
   moreInfo: string[] = [];
   moreInfoHeaders: string[] = [];
@@ -39,18 +51,27 @@ export class ListHostComponent implements OnInit {
   /* *************************************************** */
   ngOnInit(): void {
     /* get db ActualizarDb */
-    this._serviceDataFiles.postApiFile().subscribe((res)=> {
-      this.getDbActualizarDb = res;
-    })
+      this._serviceDataFiles.postApiFile().pipe(
+      ).subscribe(res => {
+        this.getDbActualizarDb = [...res];
+      })
+    
+    
+
+    setTimeout(() => {
+      /* actualizando la db secciones */
+    this.validateValuesRepeats();
+    
+    }, 2000);
+    
   }
   /* ELIMINA LOS CAMPOS QUE NO ESTAN EN FOCUS */
   validateInputTable(event: Event, inputSelect: string) {
     const selectElementInput = document.querySelectorAll(
-      '.conte__tableRegisters input'
+      '.conte__headTableRegisters input'
     );
 
     const ElementSelect = event.target as HTMLInputElement;
-
     for (let index = 0; index < selectElementInput.length; index++) {
       const converElement = selectElementInput[index] as HTMLInputElement;
       if (converElement !== ElementSelect) {
@@ -58,18 +79,50 @@ export class ListHostComponent implements OnInit {
         this.getDbFilters = [];
       }
     }
-
+    this.validateValuesRepeats();
     this.filterInputValue(inputSelect);
-     /* actualizando los registros de la tabla enlaces */
-     this._serviceDataFiles.postApiFile().subscribe((res) => {
-      this.getDbActualizarDb = res;
-    });
+    this.getAllInputsValues = ElementSelect.value;
+  }
+  /* FILTRA CADA AREA QUE LOS VALORES NO SE REPITAN A MEDIDA QUE EL USUARIO HACE UNA BUSQUEDA */
+  validateValuesRepeats(){
+    const valuesRepeatsCodigoActivo: Set<string> = new Set();
+    const valuesRepeatsNombreSeccion: Set<string> = new Set();
+    const  valuesRepeatsCodigoNomina: Set<string> = new Set();
+    const  valuesRepeatsNombreResponsable: Set<string> = new Set();
+    const  valuesRepeatsNombreTipoHost: Set<string> = new Set();
+    const  valuesRepeatsNumeroSerie: Set<string> = new Set();
+    const  valuesRepeatsDescripcion: Set<string> = new Set();
+    const  valuesRepeatsDireccionIp: Set<string> = new Set();
+    const  valuesRepeatsFecha: Set<string> = new Set();
+    const  valuesRepeatsEstado: Set<string> = new Set();
+    for (const element of this.getDbActualizarDb) {
+      valuesRepeatsCodigoActivo.add(element.codigoActivo);
+      valuesRepeatsNombreSeccion.add(element.nombreSeccion);
+      valuesRepeatsCodigoNomina.add(element.codigoNomina);
+      valuesRepeatsNombreResponsable.add(element.nombreResponsable);
+      valuesRepeatsNombreTipoHost.add(element.nombreTipoHost);
+      valuesRepeatsNumeroSerie.add(element.numeroSerie);
+      valuesRepeatsDescripcion.add(element.descripcion);
+      valuesRepeatsDireccionIp.add(element.direccionIp);
+      valuesRepeatsFecha.add(element.fecha);
+      valuesRepeatsEstado.add(element.estado);
+    }
+    this.getDbfilterByCodigoActivo = [...valuesRepeatsCodigoActivo];
+    this.getDbfilterByNombreSeccion = [...valuesRepeatsNombreSeccion];
+    this.getDbfilterByCodigoNomina = [...valuesRepeatsCodigoNomina];
+    this.getDbfilterByNombreResponsable = [...valuesRepeatsNombreResponsable];
+    this.getDbfilterByTipoHost = [...valuesRepeatsNombreTipoHost];
+    this.getDbfilterByNumeroSerie = [...valuesRepeatsNumeroSerie];
+    this.getDbfilterByDescripcion = [...valuesRepeatsDescripcion];
+    this.getDbfilterByDireccionIp = [...valuesRepeatsDireccionIp];
+    this.getDbfilterByFecha = [...valuesRepeatsFecha];
+    this.getDbfilterByEstado = [...valuesRepeatsEstado];
   }
   /* ASIGNA EL CONTENIDO DE FILTRADO PARA MOSTRAR EN EL DOM */
   filterInputValue(inputSelect: string) {
     switch (inputSelect) {
       case 'Codigo Activo':
-        /* buscar por codigo activo */
+        /* buscar por codigo activo */       
         this.getDbActualizarDb.filter((res) => {
           if (res.codigoActivo == this.filterCodigoActivo) {
             this.getDbFilters = [res];
@@ -174,6 +227,7 @@ export class ListHostComponent implements OnInit {
       default:
         break;
     }
+    
   }
   /* AGREGA ESTILOS A LOS ELEMENTOS FILTRADOS SELECCIONADOS */
   selectRegisterStyles(event: Event) {
@@ -183,11 +237,13 @@ export class ListHostComponent implements OnInit {
 
     /* elimina los elementos que estan seleccionados */
     for (let index = 0; index < pruebaConverEle.children.length; index++) {
+      
       if (
         pruebaConverEle.children[index].classList.contains('validateRegisters')
       ) {
         pruebaConverEle.children[index].classList.remove('validateRegisters');
       }
+      
     }
     this.selectRegisterInfo(event);
   }
@@ -212,15 +268,12 @@ export class ListHostComponent implements OnInit {
     'NÚMERO DE SERIE',
     'DESCRIPCIÓN',
     'DIRECCIÓN IP',
-    'FECHA DE COMPRA',]
+    'FECHA DE COMPRA',
+    'ESTADO']
     this.direccionIp = elementSelectFilter!.children[8].textContent;
     window.scroll(0,70);
   }
 /* ************************************** */
-  /* NUESTRA EL REGISTRO SELECCIONADO */
-  registerIdSelect(registerSelect: number){
-    this.filterId = registerSelect;
-  }
   /* EDITA EL REGISTRO SELECCIONADO */
   elementSelected!: unknown;
   updateRegister(){
@@ -237,8 +290,12 @@ export class ListHostComponent implements OnInit {
 /* ***************************************************** */
 /* ACTUALIZAR LA DB DESDE UN ARCHIVO TXT*/
 updateDb(){
-  if(confirm("Estas seguro que deseas actualizar la db")){
-    this._serviceDataFiles.postApiFile().subscribe();
+  if(confirm("Estas seguro de actualizar la db")){
+    /* get db ActualizarDb */
+    this._serviceDataFiles.postApiFile().subscribe((res)=> {
+      this.getDbActualizarDb = res;
+    })
+    alert("Se actualizó correctamente.")
   }
 }
 }

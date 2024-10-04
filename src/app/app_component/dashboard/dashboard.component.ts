@@ -6,10 +6,8 @@ import { AsideComponent } from './aside/aside.component';
 import { RecentSearchesComponent } from '../recent-searches/recent-searches.component';
 import { BreadCrumbComponent } from '../bread-crumb/bread-crumb.component';
 import { Router, RouterOutlet } from '@angular/router';
-import { OptConfigurationComponent } from '../opt-configuration/opt-configuration.component';
 import { LoginService } from '../../app_services/login/login.service';
 import { BtnCloseOrOpenComponent } from '../btn-close-or-open/btn-close-or-open.component';
-
 
 @Component({
   selector: 'app-dashboard',
@@ -22,7 +20,6 @@ import { BtnCloseOrOpenComponent } from '../btn-close-or-open/btn-close-or-open.
     BreadCrumbComponent,
     BtncreateNewComponent,
     RecentSearchesComponent,
-    OptConfigurationComponent,
     BtnCloseOrOpenComponent
   ],
   templateUrl: './dashboard.component.html',

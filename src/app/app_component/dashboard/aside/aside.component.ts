@@ -2,12 +2,11 @@ import { Component, inject, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { LoginService } from '../../../app_services/login/login.service';
 import { BtncreateNewComponent } from '../../btn-create-new/btn-create-new.component';
-import { OptConfigurationComponent } from '../../opt-configuration/opt-configuration.component';
 
 @Component({
   selector: 'app-aside',
   standalone: true,
-  imports: [RouterLink,BtncreateNewComponent,OptConfigurationComponent],
+  imports: [RouterLink,BtncreateNewComponent],
   templateUrl: './aside.component.html',
   styleUrl: './aside.component.sass',
 })

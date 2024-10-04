@@ -33,7 +33,19 @@
       target="_blank"
       rel="noopener noreferrer"
     >
-      <img class="w-100" src="assets/Kyocera.jpg" alt="Img-Kyocera-Printer" />
+    @if (moreInfo[5] !== undefined) {
+      @if (moreInfo[5].includes("UPS")) {
+        <img class="w-100" src="assets/UPS.jpg" alt="Img-ups" />
+      }@else if(moreInfo[5].includes("IMPRESORA")){
+        <img class="w-100" src="assets/Kyocera.jpg" alt="Img-Kyocera-Printer" />
+      }@else if (moreInfo[5].includes("ACCESSPOINT")) {
+        <img class="w-100" src="assets/Kyocera.jpg" alt="Img-Kyocera-Printer" />
+      }@else {
+        <img class="w-100" src="" alt="Img-Kyocera-Printer" />
+      }
+    }
+   
+     
     </a>
     <!-- botones para editar, o guardar cabios del registro -->
     <div>
@@ -64,8 +76,8 @@
             (input)="validateInputTable($event, 'Codigo Activo')"
           />
           <datalist id="inputSearchByCodigoActivo">
-            @for (codigoActivo of getDbActualizarDb; track $index) {
-            <option value="{{ codigoActivo.codigoActivo }}"></option>
+            @for (codigoActivo of getDbfilterByCodigoActivo; track $index) {
+            <option value="{{ codigoActivo }}"></option>
             }
           </datalist>
           <p class="pb-2">Codigo Activo</p>
@@ -80,8 +92,8 @@
             (input)="validateInputTable($event, 'Sección')"
           />
           <datalist id="inputSearchByfilterSeccion">
-            @for (filterSeccion of getDbActualizarDb; track $index) {
-                <option value="{{ filterSeccion.nombreSeccion }}"></option>
+            @for (filterSeccion of getDbfilterByNombreSeccion; track $index) {
+                <option value="{{ filterSeccion }}"></option>
             }
           </datalist>
           <p class="pb-2">Nombre de Sección</p>
@@ -96,8 +108,8 @@
             (input)="validateInputTable($event, 'Código Nomina')"
           />
           <datalist id="inputSearchByfilterNomina">
-            @for (filterSeccion of getDbActualizarDb; track $index) {
-            <option value="{{ filterSeccion.codigoNomina }}"></option>
+            @for (filterSeccion of getDbfilterByCodigoNomina; track $index) {
+            <option value="{{ filterSeccion }}"></option>
             }
           </datalist>
           <p class="pb-2">Código de Nómina</p>
@@ -112,8 +124,8 @@
             (input)="validateInputTable($event, 'Responsable')"
           />
           <datalist id="inputSearchByfilterResponsable">
-            @for (filterResponsable of getDbActualizarDb; track $index) {
-            <option value="{{ filterResponsable.nombreResponsable }}"></option>
+            @for (filterResponsable of getDbfilterByNombreResponsable; track $index) {
+            <option value="{{ filterResponsable }}"></option>
             }
           </datalist>
           <p class="pb-2">Nombre de Responsable</p>
@@ -128,8 +140,8 @@
             (input)="validateInputTable($event, 'Tipo de Host')"
           />
           <datalist id="inputSearchByfilterTypeHost">
-            @for (filterDispositivo of getDbActualizarDb; track $index) {
-            <option value="{{ filterDispositivo.nombreTipoHost }}"></option>
+            @for (filterDispositivo of getDbfilterByTipoHost; track $index) {
+            <option value="{{ filterDispositivo }}"></option>
             }
           </datalist>
           <p class="pb-2">Dispositivo</p>
@@ -144,8 +156,8 @@
             (input)="validateInputTable($event, 'Número de Serie')"
           />
           <datalist id="inputSearchByfilterSerie">
-            @for (filterSerie of getDbActualizarDb; track $index) {
-            <option value="{{ filterSerie.numeroSerie }}"></option>
+            @for (filterSerie of getDbfilterByNumeroSerie; track $index) {
+            <option value="{{ filterSerie }}"></option>
             }
           </datalist>
           <p class="pb-2">N° Serie</p>
@@ -160,8 +172,8 @@
             (input)="validateInputTable($event, 'Descripción')"
           />
           <datalist id="inputSearchByfilterDescripcion">
-            @for (filterDescripcion of getDbActualizarDb; track $index) {
-            <option value="{{ filterDescripcion.descripcion }}"></option>
+            @for (filterDescripcion of getDbfilterByDescripcion; track $index) {
+            <option value="{{ filterDescripcion }}"></option>
             }
           </datalist>
           <p class="pb-2">Descripción</p>
@@ -176,8 +188,8 @@
             (input)="validateInputTable($event, 'Dirección IP')"
           />
           <datalist id="inputSearchByfilterIp">
-            @for (filterIp of getDbActualizarDb; track $index) {
-            <option value="{{ filterIp.direccionIp }}"></option>
+            @for (filterIp of getDbfilterByDireccionIp; track $index) {
+            <option value="{{ filterIp }}"></option>
             }
           </datalist>
           <p class="pb-2">Dirección IP</p>
@@ -192,8 +204,8 @@
             (input)="validateInputTable($event, 'Fecha de Compra')"
           />
           <datalist id="inputSearchByfilterFecha">
-            @for (filterIp of getDbActualizarDb; track $index) {
-            <option value="{{ filterIp.fecha }}"></option>
+            @for (filterIp of getDbfilterByFecha; track $index) {
+            <option value="{{ filterIp }}"></option>
             }
           </datalist>
           <p class="pb-2">Fecha de Compra</p>
@@ -208,21 +220,18 @@
             (input)="validateInputTable($event, 'Estado')"
           />
           <datalist id="inputSearchByfilterEstado">
-            @for (filterEstado of getDbActualizarDb; track $index) {
-            <option value="{{ filterEstado.estado }}"></option>
+            @for (filterEstado of getDbfilterByEstado; track $index) {
+            <option value="{{ filterEstado }}"></option>
             }
           </datalist>
           <p class="pb-2">Estado</p>
         </th>
       </tr>
     </thead>
-    <tbody>
-      @if (filterCodigoActivo !== "" || filterSeccion !== "" ||
-      filterCodigoNomina !== "" || filterResponsable !== "" || filterTypeHost
-      !== "" || filterNumeroSerie !== "" || filterDescripcion !== "" ||
-      filterDireccionIp !== "" || filterFecha !== "" || filterEstado !== "" &&
+    <tbody class="conte__resultSearches">
+      @if (this.getAllInputsValues !== "" &&
       getDbFilters.length !== 0) { @for (item of getDbFilters; track $index) {
-      <tr style="font-size: 0.8rem">
+      <tr (click)="selectRegisterStyles($event)" style="font-size: 0.8rem">
         <th>{{ $index + 1 }}</th>
         <td>{{ item.codigoActivo }}</td>
         <td>{{ item.nombreSeccion }}</td>
@@ -236,7 +245,7 @@
         <td>{{ item.estado }}</td>
       </tr>
       } }@else { @for (item of getDbActualizarDb; track $index) {
-      <tr style="font-size: 0.8rem">
+      <tr (click)="selectRegisterStyles($event)" style="font-size: 0.8rem">
         <td>{{ $index + 1 }}</td>
         <td>{{ item.codigoActivo }}</td>
         <td>{{ item.nombreSeccion }}</td>

@@ -1,32 +1,28 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { IfiltersActualizarDesdeArchivo } from '../../app_models/filter/search-and-filter.models';
+import { catchError, map, of, retry, timeout } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class FilesService {
-
   private readonly _urlsApis = environment;
   constructor(private httpClient: HttpClient) {}
 
-  /* POST API FILE */
-  /* postApiFile(codigoActivo: string,nombreSeccion: string,nombreResponsable: string,nombreTipoHost: string,numeroSerie: string,descripcion: string,direccionIp: string,fecha: string){
-    this.httpClient.post(this._urlsApis.apiActualizarDb,{
-      "codigoActivo": codigoActivo,
-      "nombreSeccion": nombreSeccion,
-      "nombreResponsable": nombreResponsable,
-      "nombreTipoHost": nombreTipoHost,
-      "numeroSerie": numeroSerie,
-      "descripcion": descripcion,
-      "direccionIp": direccionIp,
-      "fecha": fecha
-    }).subscribe();
-  } */
+  /* GET ACTUALIZAR DB DESDE EL ARCHIVO */
+  postApiFile() {
+    return this.httpClient.post<IfiltersActualizarDesdeArchivo[]>(
+      `${this._urlsApis.apiActualizarDb}/actualizarDesdeArchivo`,
+      {}
+    );
+  }
+  /* GET ACTUALIZAR DB DESDE EL ARCHIVO */
 
-  /* ACTUALIZAR DB DESDE EL ARCHIVO */
-  postApiFile(){
-    return this.httpClient.post<IfiltersActualizarDesdeArchivo[]>(this._urlsApis.apiActualizarDb,{});
+  getApiFile() {
+    return this.httpClient.get<IfiltersActualizarDesdeArchivo[]>(
+      this._urlsApis.apiActualizarDb
+    );
   }
 }
