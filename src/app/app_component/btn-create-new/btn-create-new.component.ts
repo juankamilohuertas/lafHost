@@ -39,6 +39,7 @@ export class BtncreateNewComponent implements OnInit {
   /* ***************************** */
   getDbCodigoActivoFilters: string[] = [];
   getDbDireccionIpFilters: string[] = [];
+  getDbNumeroSerieFilters: string[] = [];
 
   ngOnInit(): void {
     /* obtener solo los (nombresSecciones)*/
@@ -60,7 +61,7 @@ export class BtncreateNewComponent implements OnInit {
       res.map((res) => dispositivo.add(res.nombreTipoHost));
       this.getDbDispositivosFilters = [...dispositivo];
     });
-    /* ********************************************** */
+    /* validar que los campos codigo activo, Ip y numero de serie no se repitan */
     const codigoActivo: Set<string> = new Set();
     this._serviceDataFilter.getActivosFijosManualesApi().subscribe((res) => {
       res.map((res) => codigoActivo.add(res.codigoActivo));
@@ -71,6 +72,12 @@ export class BtncreateNewComponent implements OnInit {
     this._serviceDataFilter.getActivosFijosManualesApi().subscribe((res) => {
       res.map((res) => direccionIp.add(res.direccionIp));
       this.getDbDireccionIpFilters = [...direccionIp];
+    });
+
+    const numeroSerie: Set<string> = new Set();
+    this._serviceDataFilter.getActivosFijosManualesApi().subscribe((res) => {
+      res.map((res) => numeroSerie.add(res.numeroSerie));
+      this.getDbNumeroSerieFilters = [...numeroSerie];
     });
   }
 
@@ -84,7 +91,7 @@ export class BtncreateNewComponent implements OnInit {
       nombreResponsable: [/^(?=.*[a-zA-Z0-9])[a-zA-Z0-9][a-zA-Z0-9\s]{1,100}$/],
       nombreDispositivo: [/^(?=.*[a-zA-Z0-9])[a-zA-Z0-9][a-zA-Z0-9\s]{1,100}$/],
       numeroSerie: [/^(?=.*[a-zA-Z0-9])[a-zA-Z0-9]{1,30}$/],
-      descripcion: [/^(?=.*[a-zA-Z0-9])[a-zA-Z0-9]{1,50}$/],
+      descripcion: [/^(?=.*[a-zA-Z0-9])[a-zA-Z0-9][a-zA-Z0-9 ]{0,49}$/],
       direccionIp: [
         /^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$|^([0-9a-fA-F]{1,4}:){7}([0-9a-fA-F]{1,4}|:|[0-9a-fA-F]{1,4}:){1,7}$/,
       ],
@@ -98,81 +105,91 @@ export class BtncreateNewComponent implements OnInit {
           (res) => this.codigo_activo == res
         );
         if (noRepeatCodigoActivo !== undefined) {
-          this.validateByStyle(event, 1, 'error');
+          this.validateByStyle(event, 1, 1);
           alert('El codigo activo ya existe');
         } else {
           !expFormCreateNewHost.codigoActivo[0].test(this.codigo_activo)
-            ? this.validateByStyle(event, 1, 'error')
-            : this.validateByStyle(event, 1, '');
+            ? this.validateByStyle(event, 1, 1)
+            : this.validateByStyle(event, 1, 0);
         }
         break;
       case 'nombre_seccion':
         !expFormCreateNewHost.nombreSeccion[0].test(this.nombre_seccion)
-          ? this.validateByStyle(event, 2, 'error')
-          : this.validateByStyle(event, 2, '');
+          ? this.validateByStyle(event, 2, 1)
+          : this.validateByStyle(event, 2, 0);
         break;
       case 'codigo_nomina':
         !expFormCreateNewHost.codigoNomina[0].test(this.codigo_nomina)
-          ? this.validateByStyle(event, 3, 'error')
-          : this.validateByStyle(event, 3, '');
+          ? this.validateByStyle(event, 3, 1)
+          : this.validateByStyle(event, 3, 0);
         break;
       case 'nombre_responsable':
         !expFormCreateNewHost.nombreResponsable[0].test(this.nombre_responsable)
-          ? this.validateByStyle(event, 4, 'error')
-          : this.validateByStyle(event, 4, '');
+          ? this.validateByStyle(event, 4, 1)
+          : this.validateByStyle(event, 4, 0);
         break;
       case 'nombre_dispositivo':
         !expFormCreateNewHost.nombreDispositivo[0].test(this.nombre_dispositivo)
-          ? this.validateByStyle(event, 5, 'error')
-          : this.validateByStyle(event, 5, '');
+          ? this.validateByStyle(event, 5, 1)
+          : this.validateByStyle(event, 5, 0);
         break;
       case 'numero_serie':
-        !expFormCreateNewHost.numeroSerie[0].test(this.numero_serie)
-          ? this.validateByStyle(event, 6, 'error')
-          : this.validateByStyle(event, 6, '');
+        const noRepeatNumeroSerie = this.getDbNumeroSerieFilters.find(
+          (res) => this.numero_serie == res
+        );
+        if (noRepeatNumeroSerie !== undefined) {
+          alert('El numero de serie ya existe');
+          this.validateByStyle(event, 6, 1);
+        } else {
+          !expFormCreateNewHost.numeroSerie[0].test(this.numero_serie)
+            ? this.validateByStyle(event, 6, 1)
+            : this.validateByStyle(event, 6, 0);
+        }
         break;
       case 'descripcion':
         !expFormCreateNewHost.descripcion[0].test(this.descripcion)
-          ? this.validateByStyle(event, 7, 'error')
-          : this.validateByStyle(event, 7, '');
+          ? this.validateByStyle(event, 7, 1)
+          : this.validateByStyle(event, 7, 0);
         break;
       case 'direccion_ip':
         /* no se repita la dirección ip */
-        const noRepeatDireccionIp = this.getDbDireccionIpFilters.find(res => this.direccion_ip === res)
-        if(noRepeatDireccionIp != undefined){
-         alert("La dirección Ip ya existe");
-         this.validateByStyle(event, 8, 'error');
-        }else{
+        const noRepeatDireccionIp = this.getDbDireccionIpFilters.find(
+          (res) => this.direccion_ip === res
+        );
+        if (noRepeatDireccionIp != undefined) {
+          alert('La dirección Ip ya existe');
+          this.validateByStyle(event, 8, 1);
+        } else {
           !expFormCreateNewHost.direccionIp[0].test(this.direccion_ip)
-          ? this.validateByStyle(event, 8, 'error')
-          : this.validateByStyle(event, 8, '');
+            ? this.validateByStyle(event, 8, 1)
+            : this.validateByStyle(event, 8, 0);
         }
         break;
       case 'fecha_compra':
         !expFormCreateNewHost.fechaCompra[0].test(this.fecha_compra)
-          ? this.validateByStyle(event, 9, 'error')
-          : this.validateByStyle(event, 9, '');
+          ? this.validateByStyle(event, 9, 1)
+          : this.validateByStyle(event, 9, 0);
         break;
       case 'estado':
         !expFormCreateNewHost.estado[0].test(this.estado)
-          ? this.validateByStyle(event, 10, 'error')
-          : this.validateByStyle(event, 10, '');
+          ? this.validateByStyle(event, 10, 1)
+          : this.validateByStyle(event, 10, 0);
         break;
     }
   }
   /* validar campos por estilos */
   allValuesValidates: Set<number> = new Set();
   allInputs: number[] = [];
-  validateByStyle(element: Event, validate: number, message: string) {
+  validateByStyle(element: Event, validate: number, message: number) {
     this.allInputs[0] = validate;
-    if (message !== 'error') {
+    if (message !== 1) {
       (element.target as HTMLInputElement).classList.remove('validateInput');
       this.allValuesValidates.add(
         Array.from(this.allInputs)[this.allInputs.length - 1]
       );
     } else if (
       Array.from(this.allValuesValidates).indexOf(this.allInputs[0]) != -1 &&
-      message === 'error'
+      message === 1
     ) {
       (element.target as HTMLInputElement).classList.add('validateInput');
       this.allValuesValidates.delete(this.allInputs[0]);
@@ -184,20 +201,21 @@ export class BtncreateNewComponent implements OnInit {
       this._serviceDataFilter
         .postActivosFijosManualesApi(
           this.codigo_activo,
-          this.nombre_seccion,
+          this.nombre_seccion.toUpperCase(),
           this.codigo_nomina,
-          this.nombre_responsable,
-          this.nombre_dispositivo,
-          this.numero_serie,
-          this.descripcion,
+          this.nombre_responsable.toUpperCase(),
+          this.nombre_dispositivo.toUpperCase(),
+          this.numero_serie.toUpperCase(),
+          this.descripcion.toUpperCase(),
           this.direccion_ip,
           this.fecha_compra,
-          this.estado
+          this.estado.toUpperCase()
         )
         .subscribe();
       alert('El dispositivo se creo correctamente');
+      window.location.reload();
     } else {
-      alert('llena todos los campos');
+      alert('Verifica todos los campos');
     }
 
     /* actualizando los registros de la tabla enlaces */

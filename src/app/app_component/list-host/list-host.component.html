@@ -9,22 +9,94 @@
 </button>
 <!-- MOSTRANDO LA INFO MAS DETALLADA DEL REGISTRO SELECCIONADO -->
 <section class="d-flex bg-dark" style="font-size: small">
-  <div class="table d-flex text-light p-2">
-    <div>
+  <table class="table d-flex text-light p-2">
+    <thead>
       @for (item of moreInfoHeaders; track $index) {
-      <div class="border p-2">
-        {{ item }}
-      </div>
+      <tr>
+        <td>{{ item }}</td>
+      </tr>
       }
-    </div>
-    <div>
+    </thead>
+    <tbody>
       @for (item of moreInfo; track $index) {
-      <div (click)="elementSelect($event)" class="border border-start-0 p-2">
-        {{ item }}
-      </div>
+      <tr class="editInputs">
+        @switch($index){ @case (2) {
+        <td>
+          <input
+            style="height: 18px"
+            disabled
+            type="text"
+            list="editByCodigoActivo"
+            value="{{ item }}"
+          />
+          <datalist id="editByCodigoActivo">
+            @for (codigoActivo of getDbfilterByNombreSeccion; track $index) {
+            <option value="{{ codigoActivo }}"></option>
+            }
+          </datalist>
+        </td>
+        } @case (3) {
+        <td>
+          <input
+            style="height: 18px"
+            disabled
+            type="text"
+            (input)="searchNameByCodigoNomina()"
+            [(ngModel)]="editCodigoNomina"
+            value="{{ item }}"
+          />
+        </td>
+        }@case (4) {
+        <td>
+          @if(enableButtonEdit){
+          <input
+            style="height: 18px"
+            disabled
+            type="text"
+            value="{{ editNombreResponsabe }}"
+          />
+          }@else {
+          <input style="height: 18px" disabled type="text" value="{{ item }}" />
+          }
+        </td>
+
+        }@case (9) {
+        <td>
+          @if(enableButtonEdit){
+          <input style="height: 18px" disabled type="date" value="{{ item }}" />
+          }@else{
+          <input style="height: 18px" disabled type="text" value="{{ item }}" />
+          }
+        </td>
+        }@case (10) {
+        <td>
+          @if(enableButtonEdit){
+          <select class="editElementSelect" disabled>
+            <option selected disabled value="estado">{{ item }}</option>
+            <option value="INACTIVO">INACTIVO</option>
+            <option value="ACTIVO">ACTIVO</option>
+          </select>
+          }@else{
+          <input style="height: 18px" disabled type="text" value="{{ item }}" />
+          }
+        </td>
+        } @default {
+
+        <td>
+          {{ $index
+          }}<input
+            style="height: 18px"
+            disabled
+            type="text"
+            value="{{ item }}"
+          />
+        </td>
+
+        } }
+      </tr>
       }
-    </div>
-  </div>
+    </tbody>
+  </table>
   <div class="d-flex justify-content-center align-items-center">
     <!-- imagen contiene la IP del registro seleccionado -->
     <a
@@ -33,38 +105,62 @@
       target="_blank"
       rel="noopener noreferrer"
     >
-    @if (moreInfo[5] !== undefined) {
-      @if (moreInfo[5].includes("UPS")) {
-        <img class="w-100" src="assets/UPS.jpg" alt="Img-ups" />
+      @if (moreInfo[5] !== undefined) { @if (moreInfo[5].includes("UPS")) {
+      <img class="w-100" src="assets/UPS.jpg" alt="Img-ups" />
       }@else if(moreInfo[5].includes("IMPRESORA")){
-        <img class="w-100" src="assets/Kyocera.jpg" alt="Img-Kyocera-Printer" />
+      <img class="w-100" src="assets/Kyocera.jpg" alt="Img-Kyocera-Printer" />
       }@else if (moreInfo[5].includes("ACCESSPOINT")) {
-        <img class="w-100" src="assets/Kyocera.jpg" alt="Img-Kyocera-Printer" />
+      <img class="w-100" src="assets/Kyocera.jpg" alt="Img-Kyocera-Printer" />
       }@else {
-        <img class="w-100" src="" alt="Img-Kyocera-Printer" />
-      }
-    }
-   
-     
+      <img class="w-100" src="" alt="Img-Kyocera-Printer" />
+      } }
     </a>
     <!-- botones para editar, o guardar cabios del registro -->
     <div>
       <button
         type="button"
         style="background-color: #404040"
-        class="btn m-3 text-light py-1 d-flex align-items-center shadow p-3 mb-1 rounded"
-        (click)="updateRegister()"
+        class="btnEditRegister btn m-3 text-light py-1 d-flex align-items-center shadow p-3 mb-1 rounded d-none"
+        (click)="editRegister()"
       >
         Editar registro
       </button>
     </div>
   </div>
 </section>
+<!-- SELECCIONANDO EL TIPO DE TABLA -->
+<section class="d-flex text-light" style="background-color: #990008">
+  <h4 class="fs-6">Activo Fijo:</h4>
+  <div class="ms-2">
+    <label for="selectTable1" class="me-3">
+      <input
+        type="radio"
+        name="tableAssets"
+        [(ngModel)]="viewActiveTables"
+        value="si"
+        id="selectTable1"
+        (click)="selectTable($event)"
+      />
+      si
+    </label>
+    <label for="selectTable2">
+      <input
+        type="radio"
+        name="tableAssets"
+        [(ngModel)]="viewActiveTables"
+        value="no"
+        id="selectTable2"
+        (click)="selectTable($event)"
+      />
+      no
+    </label>
+  </div>
+</section>
 <!-- ENCABEZADO DE BUSQUEDA -->
 <section class="conte__headTableRegisters">
   <table class="table table-secondary table-hover overflow-auto">
     <thead>
-      <tr>
+      <tr class="rowHeadersTables">
         <th><p class="pb-2">Id</p></th>
         <th>
           <input
@@ -93,7 +189,7 @@
           />
           <datalist id="inputSearchByfilterSeccion">
             @for (filterSeccion of getDbfilterByNombreSeccion; track $index) {
-                <option value="{{ filterSeccion }}"></option>
+            <option value="{{ filterSeccion }}"></option>
             }
           </datalist>
           <p class="pb-2">Nombre de Sección</p>
@@ -124,7 +220,8 @@
             (input)="validateInputTable($event, 'Responsable')"
           />
           <datalist id="inputSearchByfilterResponsable">
-            @for (filterResponsable of getDbfilterByNombreResponsable; track $index) {
+            @for (filterResponsable of getDbfilterByNombreResponsable; track
+            $index) {
             <option value="{{ filterResponsable }}"></option>
             }
           </datalist>
@@ -229,8 +326,8 @@
       </tr>
     </thead>
     <tbody class="conte__resultSearches">
-      @if (this.getAllInputsValues !== "" &&
-      getDbFilters.length !== 0) { @for (item of getDbFilters; track $index) {
+      @if (this.getAllInputsValues !== "" && getDbFilters.length !== 0) { @for
+      (item of getDbFilters; track $index) {
       <tr (click)="selectRegisterStyles($event)" style="font-size: 0.8rem">
         <th>{{ $index + 1 }}</th>
         <td>{{ item.codigoActivo }}</td>
@@ -244,7 +341,7 @@
         <td>{{ item.fecha }}</td>
         <td>{{ item.estado }}</td>
       </tr>
-      } }@else { @for (item of getDbActualizarDb; track $index) {
+      } }@else { @for (item of tableView; track $index) {
       <tr (click)="selectRegisterStyles($event)" style="font-size: 0.8rem">
         <td>{{ $index + 1 }}</td>
         <td>{{ item.codigoActivo }}</td>

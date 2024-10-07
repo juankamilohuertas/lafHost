@@ -18,6 +18,7 @@
   width: 280px;
   height: 64px;
   color: #dddddd;
+  z-index: 10;
 }
 .aside__user-icon {
   font-size: 30px;
