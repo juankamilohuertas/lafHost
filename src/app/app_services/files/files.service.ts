@@ -12,8 +12,12 @@ export class FilesService {
   constructor(private httpClient: HttpClient) {}
   
   /* GET ACTUALIZAR DB DESDE EL ARCHIVO */
-  postApiFile() {
+  getApiFile() {
     return this.httpClient.get<IfiltersActualizarDesdeArchivo[]>(
       this._urlsApis.apiActualizarDb);
+  }
+  postApiFile() {
+    return this.httpClient.post<IfiltersActualizarDesdeArchivo[]>(
+      `${this._urlsApis.apiActualizarDb}/actualizarDesdeArchivo`,{});
   }
 }

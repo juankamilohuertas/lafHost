@@ -66,7 +66,7 @@ export class ListHostComponent implements OnInit {
   ngOnInit(): void {
     /* get db ActualizarDb */
     this._serviceDataFiles
-      .postApiFile()
+      .getApiFile()
       .subscribe((res) => {
         this.getDbActualizarDb = [...res];
         this.tableView = [...res]
