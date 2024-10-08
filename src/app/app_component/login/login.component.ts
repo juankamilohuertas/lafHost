@@ -34,6 +34,10 @@ export class LoginComponent {
         .subscribe((dataApi: IrequestApiCentauro) => {
           if (dataApi.result.usuario != undefined) {
             this._dataService.getUser$ = dataApi.result.usuario;
+            if(typeof(dataApi.result) == 'object' && dataApi.token != null){
+              localStorage.setItem("token",String(dataApi.token))
+            }
+            
             this._router.navigateByUrl('/panel');
           } else {
             alert('Usuario o Contraseña Invalido');

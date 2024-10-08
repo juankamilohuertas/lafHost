@@ -1,103 +1,109 @@
 <!-- BOTON DE ACTUALIZAR LA DB -->
 <button
   type="button"
-  style="background-color: #990008"
+  style="background-color: #990008; position: relative; top: 100px; left: -310px;"
   class="btn m-3 text-light py-1 d-flex align-items-center shadow p-3 mb-1 rounded"
   (click)="updateDb()"
 >
   Actualizar
 </button>
 <!-- MOSTRANDO LA INFO MAS DETALLADA DEL REGISTRO SELECCIONADO -->
-<section class="d-flex bg-dark" style="font-size: small">
-  <table class="table d-flex text-light p-2">
-    <thead>
-      @for (item of moreInfoHeaders; track $index) {
-      <tr>
-        <td>{{ item }}</td>
-      </tr>
-      }
-    </thead>
-    <tbody>
-      @for (item of moreInfo; track $index) {
-      <tr class="editInputs">
-        @switch($index){ @case (2) {
-        <td>
-          <input
-            style="height: 18px"
-            disabled
-            type="text"
-            list="editByCodigoActivo"
-            value="{{ item }}"
-          />
-          <datalist id="editByCodigoActivo">
-            @for (codigoActivo of getDbfilterByNombreSeccion; track $index) {
-            <option value="{{ codigoActivo }}"></option>
+<section class="row-12 d-flex justify-content-center" style="font-size: small; border: 1px solid #990008; background-color: #40404011;">
+  <div class="col-6">
+    <table class="table d-flex justify-content-center text-light p-2">
+      <thead>
+        @for (item of moreInfoHeaders; track $index) {
+        <tr>
+          <td>{{ item }}</td>
+        </tr>
+        }
+      </thead>
+      <tbody>
+        @for (item of moreInfo; track $index) {
+        <tr class="editInputs">
+          @switch($index){ @case (2) {
+          <td>
+            <input
+              style="height: 18px"
+              disabled
+              type="text"
+              list="editByCodigoActivo"
+              value="{{ item }}"
+            />
+            <datalist id="editByCodigoActivo">
+              @for (codigoActivo of getDbfilterByNombreSeccion; track $index) {
+              <option value="{{ codigoActivo }}"></option>
+              }
+            </datalist>
+          </td>
+          } @case (3) {
+          <td>
+            <input
+              style="height: 18px"
+              disabled
+              type="text"
+              (input)="searchNameByCodigoNomina()"
+              [(ngModel)]="editCodigoNomina"
+              value="{{ item }}"
+            />
+          </td>
+          }@case (4) {
+          <td>
+            @if(enableButtonEdit){
+            <input
+              style="height: 18px"
+              disabled
+              type="text"
+              value="{{ editNombreResponsabe }}"
+            />
+            }@else {
+            <input style="height: 18px" disabled type="text" value="{{ item }}" />
             }
-          </datalist>
-        </td>
-        } @case (3) {
-        <td>
-          <input
-            style="height: 18px"
-            disabled
-            type="text"
-            (input)="searchNameByCodigoNomina()"
-            [(ngModel)]="editCodigoNomina"
-            value="{{ item }}"
-          />
-        </td>
-        }@case (4) {
-        <td>
-          @if(enableButtonEdit){
-          <input
-            style="height: 18px"
-            disabled
-            type="text"
-            value="{{ editNombreResponsabe }}"
-          />
-          }@else {
-          <input style="height: 18px" disabled type="text" value="{{ item }}" />
-          }
-        </td>
-
-        }@case (9) {
-        <td>
-          @if(enableButtonEdit){
-          <input style="height: 18px" disabled type="date" value="{{ item }}" />
-          }@else{
-          <input style="height: 18px" disabled type="text" value="{{ item }}" />
-          }
-        </td>
-        }@case (10) {
-        <td>
-          @if(enableButtonEdit){
-          <select class="editElementSelect" disabled>
-            <option selected disabled value="estado">{{ item }}</option>
-            <option value="INACTIVO">INACTIVO</option>
-            <option value="ACTIVO">ACTIVO</option>
-          </select>
-          }@else{
-          <input style="height: 18px" disabled type="text" value="{{ item }}" />
-          }
-        </td>
-        } @default {
-
-        <td>
-          {{ $index
-          }}<input
-            style="height: 18px"
-            disabled
-            type="text"
-            value="{{ item }}"
-          />
-        </td>
-
-        } }
-      </tr>
-      }
-    </tbody>
-  </table>
-  <div class="d-flex justify-content-center align-items-center">
+          </td>
+  
+          }@case (9) {
+          <td>
+            @if(enableButtonEdit){
+            <input style="height: 18px" disabled type="date" value="{{ item }}" />
+            }@else{
+            <input style="height: 18px" disabled type="text" value="{{ item }}" />
+            }
+          </td>
+          }@case (10) {
+          <td>
+            @if(enableButtonEdit){
+            <select
+              style="border: none; outline: 1px solid #c4c4c4"
+              class="editElementSelect"
+              disabled
+              [(ngModel)]="editEstado"
+            >
+              <option selected disabled value="estado">{{ item }}</option>
+              <option value="INACTIVO">INACTIVO</option>
+              <option value="ACTIVO">ACTIVO</option>
+            </select>
+            }@else{
+            <input style="height: 18px" disabled type="text" value="{{ item }}" />
+            }
+          </td>
+          } @default {
+  
+          <td>
+           <input
+              style="height: 18px"
+              disabled
+              type="text"
+              value="{{ item }}"
+            />
+          </td>
+  
+          } }
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  <div class="col-6 d-flex flex-column align-items-center justify-content-center">
     <!-- imagen contiene la IP del registro seleccionado -->
     <a
       class="d-inline-block w-50 text-center"
@@ -110,21 +116,29 @@
       }@else if(moreInfo[5].includes("IMPRESORA")){
       <img class="w-100" src="assets/Kyocera.jpg" alt="Img-Kyocera-Printer" />
       }@else if (moreInfo[5].includes("ACCESSPOINT")) {
-      <img class="w-100" src="assets/Kyocera.jpg" alt="Img-Kyocera-Printer" />
+      <img class="w-100" src="assets/accessPoint.jpg" alt="Img-accessPoint" />
       }@else {
-      <img class="w-100" src="" alt="Img-Kyocera-Printer" />
+      <img class="w-100" src="assets/Kyocera.jpg" alt="Img-Kyocera-Printer" />
       } }
     </a>
-    <!-- botones para editar, o guardar cabios del registro -->
     <div>
       <button
         type="button"
         style="background-color: #404040"
-        class="btnEditRegister btn m-3 text-light py-1 d-flex align-items-center shadow p-3 mb-1 rounded d-none"
+        class="btnEditRegister btn m-3 text-light py-1 d-flex align-items-center shadow mb-1 rounded d-none"
         (click)="editRegister()"
       >
         Editar registro
       </button>
+    </div>
+    <div>
+      <button
+        disabled
+        type="button"
+        style="background-color: #990008"
+        class="btnSaveChanges btn m-3 text-light py-1 d-flex align-items-center shadow mb-1 rounded d-none"
+        (click)="updateDbActivosFijosManuales()"
+      >Guardar cambios</button>
     </div>
   </div>
 </section>
@@ -328,7 +342,7 @@
     <tbody class="conte__resultSearches">
       @if (this.getAllInputsValues !== "" && getDbFilters.length !== 0) { @for
       (item of getDbFilters; track $index) {
-      <tr (click)="selectRegisterStyles($event)" style="font-size: 0.8rem">
+      <tr (click)="selectRegisterStyles($event,item.id)" style="font-size: 0.8rem">
         <th>{{ $index + 1 }}</th>
         <td>{{ item.codigoActivo }}</td>
         <td>{{ item.nombreSeccion }}</td>
@@ -342,7 +356,7 @@
         <td>{{ item.estado }}</td>
       </tr>
       } }@else { @for (item of tableView; track $index) {
-      <tr (click)="selectRegisterStyles($event)" style="font-size: 0.8rem">
+      <tr (click)="selectRegisterStyles($event,item.id)" style="font-size: 0.8rem">
         <td>{{ $index + 1 }}</td>
         <td>{{ item.codigoActivo }}</td>
         <td>{{ item.nombreSeccion }}</td>

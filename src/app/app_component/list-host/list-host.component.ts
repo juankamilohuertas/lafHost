@@ -27,6 +27,7 @@ export class ListHostComponent implements OnInit {
   /* obtiene la db filtrada por tipo de busqueda */
   getDbFilters: IfiltersActualizarDesdeArchivo[] = [];
   /* obtiene la escritura de los campos de texto */
+  id!: number;
   filterCodigoActivo = '';
   filterSeccion = '';
   filterCodigoNomina = '';
@@ -56,6 +57,7 @@ export class ListHostComponent implements OnInit {
   direccionIp: string | null = '';
   editCodigoNomina: string | null = '';
   editNombreResponsabe: string | null = '';
+  editEstado: string | null = ''
   /* actualiza toda la db */
   getDbActualizarDb: IfiltersActualizarDesdeArchivo[] = [];
   getDbActivosFijosManuales: IfiltersActivosFijosManuales[] = [];
@@ -65,7 +67,6 @@ export class ListHostComponent implements OnInit {
     /* get db ActualizarDb */
     this._serviceDataFiles
       .postApiFile()
-      .pipe()
       .subscribe((res) => {
         this.getDbActualizarDb = [...res];
         this.tableView = [...res]
@@ -103,7 +104,8 @@ export class ListHostComponent implements OnInit {
     const tableSelect = event.target as HTMLInputElement;
     if (tableSelect.value == 'si') {
       this.tableView = this.getDbActualizarDb;
-      (document.querySelector(".btnEditRegister")as HTMLElement).classList.add("d-none");
+      (document.querySelector(".btnEditRegister") as HTMLElement).classList.add("d-none");
+      (document.querySelector(".btnSaveChanges") as HTMLElement).classList.add("d-none");
       this.enableButtonEdit = false;
     } else {
       this.tableView = this.getDbActivosFijosManuales;
@@ -271,7 +273,7 @@ export class ListHostComponent implements OnInit {
     }
   }
   /* AGREGA ESTILOS A LOS ELEMENTOS FILTRADOS SELECCIONADOS */
-  selectRegisterStyles(event: Event) {
+  selectRegisterStyles(event: Event,id: number) {
     const pruebaConverEle = document.querySelector(
       '.conte__resultSearches'
     ) as HTMLElement;
@@ -285,7 +287,7 @@ export class ListHostComponent implements OnInit {
       }
     }
     this.selectRegisterInfo(event);
-    
+    this.id = id;
   }
   /* MUESTRA LA INFO FILTRADA DETALLADA Y ASIGNA LA IP PARA INGRESAR AL DISPOSITIVO*/
   selectRegisterInfo(event: Event) {
@@ -314,10 +316,12 @@ export class ListHostComponent implements OnInit {
     this.direccionIp = elementSelectFilter!.children[8].textContent;
     this.editCodigoNomina = elementSelectFilter!.children[3].textContent
     this.editNombreResponsabe = elementSelectFilter!.children[4].textContent
+    this.editEstado = elementSelectFilter!.children[10].textContent
     if(this.enableButtonEdit){//habilita el botton para la edicción
-      (document.querySelector(".btnEditRegister")as HTMLElement).classList.remove("d-none");
+      (document.querySelector(".btnEditRegister") as HTMLElement).classList.remove("d-none");
+      (document.querySelector(".btnSaveChanges") as HTMLElement).classList.remove("d-none");
     }
-    window.scroll(0, 70);
+    window.scroll(0, 100);
   }
   /* ************************************** */
   /* HABILITA LOS PERMISOS PARA LA EDICIÓN */
@@ -332,11 +336,12 @@ export class ListHostComponent implements OnInit {
     ]
     if(this.enableButtonEdit){
       (document.querySelector(".editElementSelect") as HTMLSelectElement).disabled = false;
+      (document.querySelector(".btnSaveChanges") as HTMLInputElement).disabled = false;
     }
     for (const elementInput of selectEditInputs) {
       elementInput.disabled = false;
     }
-    
+    return selectEditInputs;
   }
 /* ESTANDO EN EDICCION BUSCA EL NOMBRE POR CODIGO DE NOMINA */
 searchNameByCodigoNomina(){
@@ -346,20 +351,64 @@ searchNameByCodigoNomina(){
   }else{
     this.editNombreResponsabe = "NO ASIGNADO";
   }
-
-}
   
+}
+/* VALIDACION DE CAMPOS */
+validateInputsEdits(){
+  let message = "";
+  const elementsEdit = this.editRegister() as HTMLInputElement[];
+  const expIp = /^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$|^([0-9a-fA-F]{1,4}:){7}([0-9a-fA-F]{1,4}|:|[0-9a-fA-F]{1,4}:){1,7}$/;
+  const expFecha = /^(?:(?:\d{2}\/\d{2}\/\d{4}|(?:\d{4}-\d{2}-\d{2}))|)$/;
+  const expEstado = /^(ACTIVO|INACTIVO)$/;
+  if(!expIp.test(elementsEdit[2].value)){
+    message = "La ip no es valida";
+  }else if(!expFecha.test(elementsEdit[3].value)){
+    message = "La fecha no es valida";
+  }else if(!expEstado.test(this.editEstado!)){
+    message = "El estado no es valido";
+  }
+  
+  return message;
+}
+/* BOTON QUE ACTUALIZA LA DB EDITADA POR EL USUARIO */
+updateDbActivosFijosManuales(){
+  try {
+    if(this.validateInputsEdits() === ""){
+      const elementsEdit = this.editRegister() as HTMLInputElement[];
+      if(this.enableButtonEdit){
+        this._serviceDataFilters.putActivosFijosManualesApi(
+          this.id,
+          this.moreInfo[1],
+          elementsEdit[0].value,
+          elementsEdit[1].value,
+          this.editNombreResponsabe!,
+          this.moreInfo[5],
+          this.moreInfo[6],
+          this.moreInfo[7],
+          elementsEdit[2].value,
+          elementsEdit[3].value,
+          this.editEstado!
+        ).subscribe();
+      alert("Se guardó correctamente");
+      window.location.reload();
+    }
+    }else{
+      alert(this.validateInputsEdits());
+    }
+  } catch (error) {
+    alert("Ocurrió un error, por favor inténtalo de nuevo.");
+  }
+}
   /* ***************************************************** */
   /* ****************** ACTUALIZACION DB *******************/
   /* ***************************************************** */
   /* ACTUALIZAR LA DB DESDE UN ARCHIVO TXT*/
   updateDb() {
-    if (confirm('Estas seguro de actualizar la db')) {
       /* get db ActualizarDb */
       this._serviceDataFiles.postApiFile().subscribe((res) => {
         this.getDbActualizarDb = res;
       });
+      window.location.reload();
       alert('Se actualizó correctamente.');
     }
-  }
 }

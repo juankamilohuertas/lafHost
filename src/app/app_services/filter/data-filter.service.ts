@@ -51,26 +51,30 @@ export class DataFilterService {
   putActivosFijosManualesApi(
     id: number,
     codigoActivo: string,
-    idSeccion: number,
-    idResponsable: number,
-    idTipoHost: number,
+    nombreSeccion: string,
+    codigoNomina: string,
+    nombreResponsable: string,
+    nombreTipoHost: string,
     numeroSerie: string,
     descripcion: string,
     direccionIp: string,
-    fecha: string
+    fecha: string,
+    estado: string
   ) {
     return this.httpClient.post<IfiltersActivosFijosManuales[]>(
-      `${this._urlsApis.apiActivosFijosManuales}/${id}$`,
+      `${this._urlsApis.apiActivosFijosManuales}/${id}`,
       {
         id: id,
         codigoActivo: codigoActivo,
-        idSeccion: idSeccion,
-        idResponsable: idResponsable,
-        idTipoHost: idTipoHost,
+        nombreSeccion: nombreSeccion.toLocaleUpperCase(),
+        codigoNomina: codigoNomina,
+        nombreResponsable: nombreResponsable.toLocaleUpperCase(),
+        nombreTipoHost: nombreTipoHost.toLocaleUpperCase(),
         numeroSerie: numeroSerie.toLocaleUpperCase(),
         descripcion: descripcion.toLocaleUpperCase(),
         direccionIp: direccionIp,
         fecha: fecha,
+        estado: estado.toLocaleUpperCase(),
       }
     );
   }

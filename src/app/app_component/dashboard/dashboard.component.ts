@@ -26,14 +26,5 @@ import { BtnCloseOrOpenComponent } from '../btn-close-or-open/btn-close-or-open.
   styleUrl: './dashboard.component.sass',
 })
 export class DashboardComponent{
-  private readonly _dataService = inject(LoginService);
-  private readonly _router = inject(Router);
-  constructor() {
-    /* this._dataService.getUser$ == undefined?this._router.navigateByUrl("login"):undefined; */
-  }
-  
-  
-
-  
-
+  constructor() {}
 }

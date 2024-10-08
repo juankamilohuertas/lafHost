@@ -4,7 +4,6 @@
 }
 .aside__container-items {
   height: 100vh;
-  overflow-y: scroll;
   background-color: #ffffff;
 }
 .aside__user {

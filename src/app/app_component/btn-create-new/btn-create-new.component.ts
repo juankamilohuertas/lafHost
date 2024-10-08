@@ -44,20 +44,20 @@ export class BtncreateNewComponent implements OnInit {
   ngOnInit(): void {
     /* obtener solo los (nombresSecciones)*/
     const seccion: Set<string> = new Set();
-    this._serviceDataFiles.getApiFile().subscribe((res) => {
+    this._serviceDataFiles.postApiFile().subscribe((res) => {
       res.map((res) => seccion.add(res.nombreSeccion));
       this.getDbSeccionesFilters = [...seccion];
     });
     /* obtener solo los (nombresResponsables)*/
     const responsable: Set<string> = new Set();
-    this._serviceDataFiles.getApiFile().subscribe((res) => {
+    this._serviceDataFiles.postApiFile().subscribe((res) => {
       res.map((res) => responsable.add(res.nombreResponsable));
       this.getDbResponsablesFilters = [...responsable];
     });
 
     /* obtener solo los (nombresDispositivos)*/
     const dispositivo: Set<string> = new Set();
-    this._serviceDataFiles.getApiFile().subscribe((res) => {
+    this._serviceDataFiles.postApiFile().subscribe((res) => {
       res.map((res) => dispositivo.add(res.nombreTipoHost));
       this.getDbDispositivosFilters = [...dispositivo];
     });

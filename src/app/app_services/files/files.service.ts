@@ -10,19 +10,10 @@ import { catchError, map, of, retry, timeout } from 'rxjs';
 export class FilesService {
   private readonly _urlsApis = environment;
   constructor(private httpClient: HttpClient) {}
-
+  
   /* GET ACTUALIZAR DB DESDE EL ARCHIVO */
   postApiFile() {
-    return this.httpClient.post<IfiltersActualizarDesdeArchivo[]>(
-      `${this._urlsApis.apiActualizarDb}/actualizarDesdeArchivo`,
-      {}
-    );
-  }
-  /* GET ACTUALIZAR DB DESDE EL ARCHIVO */
-
-  getApiFile() {
     return this.httpClient.get<IfiltersActualizarDesdeArchivo[]>(
-      this._urlsApis.apiActualizarDb
-    );
+      this._urlsApis.apiActualizarDb);
   }
 }

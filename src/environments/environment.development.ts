@@ -1,9 +1,6 @@
 export const environment = {
     production:false,
-    apiCentauro: "https://pruebasapis.lafayette.com:5200",
-    apiActivosFijosManuales: "https://localhost:44328/api/activosFijosManuales",
-    apiResponsables: "https://pruebasapis.lafayette.com:5220/api/Responsables",
-    apiSecciones: "https://localhost:44328/api/Secciones",
-    apiTipoHosts: "https://pruebasapis.lafayette.com:5220/api/TipoHosts",
+    apiCentauro: "https://pruebasapis.lafayette.com:5203/api/SISMO01/IniciarSesion",
+    apiActivosFijosManuales: "https://pruebasapis.lafayette.com:5216/api/activosFijosManuales",
     apiActualizarDb: "https://localhost:44328/api/ActualizarDbs"
 };
