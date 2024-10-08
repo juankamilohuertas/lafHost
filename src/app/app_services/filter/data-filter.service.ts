@@ -81,7 +81,7 @@ export class DataFilterService {
   /* DELETE API ActivosFijosManuales */
   deleteActivosFijosManualesApi(id: number) {
     return this.httpClient.post(
-      `${this._urlsApis.apiActivosFijosManuales}/${id}`,
+      `${this._urlsApis.apiActivosFijosManuales}/${id}$`,
       {}
     );
   }

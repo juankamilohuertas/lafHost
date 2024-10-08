@@ -106,6 +106,8 @@ export class ListHostComponent implements OnInit {
       this.tableView = this.getDbActualizarDb;
       (document.querySelector(".btnEditRegister") as HTMLElement).classList.add("d-none");
       (document.querySelector(".btnSaveChanges") as HTMLElement).classList.add("d-none");
+      (document.querySelector(".btnDelete") as HTMLElement).classList.add("d-none");
+      
       this.enableButtonEdit = false;
     } else {
       this.tableView = this.getDbActivosFijosManuales;
@@ -320,6 +322,8 @@ export class ListHostComponent implements OnInit {
     if(this.enableButtonEdit){//habilita el botton para la edicción
       (document.querySelector(".btnEditRegister") as HTMLElement).classList.remove("d-none");
       (document.querySelector(".btnSaveChanges") as HTMLElement).classList.remove("d-none");
+      (document.querySelector(".btnDelete") as HTMLElement).classList.remove("d-none");
+      
     }
     window.scroll(0, 100);
   }
@@ -337,6 +341,7 @@ export class ListHostComponent implements OnInit {
     if(this.enableButtonEdit){
       (document.querySelector(".editElementSelect") as HTMLSelectElement).disabled = false;
       (document.querySelector(".btnSaveChanges") as HTMLInputElement).disabled = false;
+      (document.querySelector(".btnDelete") as HTMLInputElement).disabled = false;
     }
     for (const elementInput of selectEditInputs) {
       elementInput.disabled = false;
@@ -398,6 +403,15 @@ updateDbActivosFijosManuales(){
   } catch (error) {
     alert("Ocurrió un error, por favor inténtalo de nuevo.");
   }
+}
+/* ELIMINA EL REGISTRO DE LA TABLA QUE NO TIENE CODIGOS ACTIVOS */
+deleteDbActivosFijosManuales(){
+  if(confirm("Estas seguro que deseas eliminar el registro")){
+    this._serviceDataFilters.deleteActivosFijosManualesApi(this.id).subscribe();
+    window.location.reload();
+    alert("Se eliminó con éxito");
+  }
+ 
 }
   /* ***************************************************** */
   /* ****************** ACTUALIZACION DB *******************/
