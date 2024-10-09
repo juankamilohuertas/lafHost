@@ -1,3 +1,4 @@
+import { IfiltersActualizarIps } from './../../app_models/filter/search-and-filter.models';
 import { Component, inject, OnInit } from '@angular/core';
 import {
   IfiltersActivosFijosManuales,
@@ -20,6 +21,7 @@ export class ListHostComponent implements OnInit {
   private readonly _serviceDataFilters = inject(DataFilterService);
   /* selecciona la tabla con los registros que se deben mostrar */
   tableView: IfiltersActualizarDesdeArchivo[] = [];
+  tableViewIps: string[] = [];
   /* valida los redio buttons de activo fijo */
   viewActiveTables: string = 'si';
   /* ontiene el valor de cada input de busqueda en la tabla cuando esta en focus */
@@ -61,6 +63,7 @@ export class ListHostComponent implements OnInit {
   /* actualiza toda la db */
   getDbActualizarDb: IfiltersActualizarDesdeArchivo[] = [];
   getDbActivosFijosManuales: IfiltersActivosFijosManuales[] = [];
+  getDbActualizarIps: IfiltersActualizarIps[] = [];
   /* *************************************************** */
 
   ngOnInit(): void {
@@ -78,11 +81,28 @@ export class ListHostComponent implements OnInit {
       .subscribe((res) => {
         this.getDbActivosFijosManuales = [...res];
       });
+    /* get db actualizar ip */
+    this._serviceDataFiles.getApiActualizarIp().subscribe(res => {
+      this.getDbActualizarIps = [...res];
+    });
 
-    this.validateValuesRepeats();
+    
+    setTimeout(() => {
+      this.validateValuesRepeats();
+      if(this.getDbActualizarDb.length > this.getDbActualizarIps.length){
+        for (const res of this.getDbActualizarDb) {
+          this._serviceDataFiles.postApiActualizarIp(res.codigoActivo).subscribe();
+        }
+      }else{
+        console.log("no");
+      }
+     
+    }, 1000);
+    
     
   }
 
+  
   /* MOSTRAR TABLA SELECCIONADA */
   selectTable(event: Event) {
      /* borra la de la info detallada */
@@ -107,7 +127,6 @@ export class ListHostComponent implements OnInit {
       (document.querySelector(".btnEditRegister") as HTMLElement).classList.add("d-none");
       (document.querySelector(".btnSaveChanges") as HTMLElement).classList.add("d-none");
       (document.querySelector(".btnDelete") as HTMLElement).classList.add("d-none");
-      
       this.enableButtonEdit = false;
     } else {
       this.tableView = this.getDbActivosFijosManuales;
@@ -154,6 +173,7 @@ export class ListHostComponent implements OnInit {
       valuesRepeatsNombreTipoHost.add(element.nombreTipoHost);
       valuesRepeatsNumeroSerie.add(element.numeroSerie);
       valuesRepeatsDescripcion.add(element.descripcion);
+      /* agregando la direccion ip */
       valuesRepeatsDireccionIp.add(element.direccionIp);
       valuesRepeatsFecha.add(element.fecha);
       valuesRepeatsEstado.add(element.estado);
@@ -411,18 +431,27 @@ deleteDbActivosFijosManuales(){
     window.location.reload();
     alert("Se eliminó con éxito");
   }
- 
 }
   /* ***************************************************** */
   /* ****************** ACTUALIZACION DB *******************/
   /* ***************************************************** */
   /* ACTUALIZAR LA DB DESDE UN ARCHIVO TXT*/
   updateDb() {
-      /* get db ActualizarDb */
-      this._serviceDataFiles.postApiFile().subscribe((res) => {
-        this.getDbActualizarDb = res;
-      });
-      window.location.reload();
-      alert('Se actualizó correctamente.');
+    try {
+        /* get db ActualizarDb */
+        this._serviceDataFiles.postApiFile().subscribe((res) => {
+          this.getDbActualizarDb = res;
+        });
+        /* delete db ActualizarIp */
+        this.getDbActualizarIps.map(res => {
+          this._serviceDataFiles.deleteApiActualizarIp(res.id).subscribe();
+        })
+        window.location.reload();
+        alert('Se actualizó correctamente.');
+        
+    } catch (error) {
+      alert("Ocurrió un error, inténtalo nuevamente")
+    }
+    
     }
 }

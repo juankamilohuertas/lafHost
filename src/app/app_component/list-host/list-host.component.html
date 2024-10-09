@@ -308,8 +308,8 @@
             (input)="validateInputTable($event, 'Dirección IP')"
           />
           <datalist id="inputSearchByfilterIp">
-            @for (filterIp of getDbfilterByDireccionIp; track $index) {
-            <option value="{{ filterIp }}"></option>
+            @for (filterIp of getDbActualizarIps; track $index) {
+            <option value="{{ filterIp.direccionIp }}"></option>
             }
           </datalist>
           <p class="pb-2">Dirección IP</p>
@@ -360,7 +360,11 @@
         <td>{{ item.nombreTipoHost }}</td>
         <td>{{ item.numeroSerie }}</td>
         <td>{{ item.descripcion }}</td>
-        <td>{{ item.direccionIp }}</td>
+
+        
+            <td>{{ tableViewIps }}</td>
+          
+
         <td>{{ item.fecha }}</td>
         <td>{{ item.estado }}</td>
       </tr>
@@ -374,7 +378,12 @@
         <td>{{ item.nombreTipoHost }}</td>
         <td>{{ item.numeroSerie }}</td>
         <td>{{ item.descripcion }}</td>
-        <td>{{ item.direccionIp }}</td>
+        
+      @for (ip of tableViewIps; track $index) {
+        <td>{{ ip }}</td>
+      }
+            
+         
         <td>{{ item.fecha }}</td>
         <td>{{ item.estado }}</td>
       </tr>

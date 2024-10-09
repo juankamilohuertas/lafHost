@@ -1,6 +1,7 @@
-export interface IfiltersTipoHosts {
-  id: number;
-  nombreTipoHost: string
+export interface IfiltersActualizarIps {
+  id: number,
+  activosId: string,
+  direccionIp: string
 }
 export interface IfiltersActivosFijosManuales{
   id: number,
@@ -15,16 +16,7 @@ export interface IfiltersActivosFijosManuales{
   fecha: string,
   estado: string
 }
-export interface IfiltersSecciones{
-  id: number,
-  nombreSeccion: string
-}
-export interface IfiltersResponsables{
-  id: number,
-  codigoCentauro: number,
-  nombreResponsable: string,
-  idSeccion: number
-}
+
 /* actualiza la toda la db */
 export interface IfiltersActualizarDesdeArchivo{
   "id": number,
