@@ -1,0 +1,188 @@
+<!-- BOTON DE CREAR NUEVO DISPOSITIVO -->
+<button
+  type="button"
+  style="background-color: #990008"
+  class="btn m-3 text-light py-1 d-flex align-items-center shadow p-3 mb-1 rounded"
+  data-bs-toggle="modal"
+  data-bs-target="#dispositivo"
+>
+  <span>Crear Nuevo Dispositivo</span><i class="bi bi-plus fs-5"></i>
+</button>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="dispositivo"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">
+          Crear nuevo dispositivo
+        </h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <!-- **************FORMULARIO*************** -->
+        <div class="form__createHost px-4 py-3 row">
+          <div class="col-6">
+            <!-- codigo activo -->
+            <div class="mb-3">
+              <input
+                type="text"
+                class="form-control validateInput"
+                [(ngModel)]="codigo_activo"
+                placeholder="codigo activo"
+                (input)="
+                  validateInputs($event, codigo_activo!, 'codigo_activo')
+                "
+              />
+            </div>
+            <!-- campo nombre secciones -->
+            <div>
+              <input
+                class="form-control validateInput mb-3"
+                style="outline-color: #990008"
+                type="text"
+                list="nombreSeccion"
+                [(ngModel)]="nombre_seccion"
+                placeholder="nombre de sección"
+                (input)="
+                  validateInputs($event, nombre_seccion!,'nombre_seccion')
+                "
+              />
+              <datalist id="nombreSeccion">
+                @for (nombreSeccion of getDbSeccionesFilters; track $index) {
+                <option value="{{ nombreSeccion }}"></option>
+                }
+              </datalist>
+            </div>
+            <!-- codigo de nomina -->
+            <div class="mb-3">
+              <input
+                type="text"
+                class="form-control validateInput mb-3"
+                [(ngModel)]="codigo_nomina"
+                placeholder="codigo de nomina"
+                (input)="
+                  validateInputs($event, codigo_nomina!,'codigo_nomina')
+                "
+              />
+            </div>
+            <!-- campo nombre responsable -->
+            <div>
+              <input
+                class="form-control validateInput mb-3"
+                style="outline-color: #990008"
+                type="text"
+                list="nombreResponsable"
+                [(ngModel)]="nombre_responsable"
+                placeholder="nombre de Responsable"
+                (input)="
+                  validateInputs($event, nombre_responsable!,'nombre_responsable')
+                "
+              />
+              <datalist id="nombreResponsable">
+                @for (nombreResponsable of getDbResponsablesFilters; track
+                $index) {
+                <option value="{{ nombreResponsable }}"></option>
+                }
+              </datalist>
+            </div>
+            <!-- campo de dispositivo o host -->
+            <div>
+              <input
+                class="form-control validateInput mb-3"
+                style="outline-color: #990008"
+                type="text"
+                list="nombreDispositivo"
+                [(ngModel)]="nombre_dispositivo"
+                placeholder="nombre de Dispositivo"
+                (input)="
+                  validateInputs($event, nombre_dispositivo!,'nombre_dispositivo')
+                "
+              />
+              <datalist id="nombreDispositivo">
+                @for (nombreDispositivo of getDbDispositivosFilters; track
+                $index) {
+                <option value="{{ nombreDispositivo }}"></option>
+                }
+              </datalist>
+            </div>
+          </div>
+          <div class="col-6">
+            <!-- campo serie -->
+            <div class="mb-3">
+              <input
+                type="text"
+                class="form-control validateInput mb-3"
+                [(ngModel)]="numero_serie"
+                placeholder="número de serie"
+                (input)="validateInputs($event, numero_serie,'numero_serie')"
+              />
+            </div>
+            <!-- campo descripcion -->
+            <div class="mb-3">
+              <input
+                type="text"
+                class="form-control validateInput mb-3"
+                [(ngModel)]="descripcion"
+                placeholder="descripcion"
+                (input)="validateInputs($event, descripcion,'descripcion')"
+              />
+            </div>
+            <!-- campo direccion IP -->
+            <div class="mb-3">
+              <input
+                type="text"
+                class="form-control validateInput"
+                [(ngModel)]="direccion_ip"
+                placeholder="Dirección IP"
+                (input)="validateInputs($event, direccion_ip,'direccion_ip')"
+              />
+            </div>
+            <!-- campo fecha -->
+            <div class="mb-3">
+              <input
+                type="date"
+                class="form-control validateInput"
+                [(ngModel)]="fecha_compra"
+                (input)="validateInputs($event, fecha_compra,'fecha_compra')"
+              />
+            </div>
+            <!-- campo fecha -->
+            <div class="mb-3">
+              <select class="form-select validateInput" aria-label="Default select example" [(ngModel)]="estado" (click)="validateInputs($event, estado,'estado')">
+                <option selected disabled value="estado">estado</option>
+                <option value="INACTIVO">INACTIVO</option>
+                <option value="ACTIVO">ACTIVO</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <!-- **************Botones de guardar o cerrar*************** -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Cerrar
+        </button>
+        <button
+          type="button"
+          style="background-color: #990008"
+          class="btn text-light"
+          (click)="postNewHost()"
+        >
+          Guardar Cambios
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

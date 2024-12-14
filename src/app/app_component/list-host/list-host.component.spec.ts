@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SearchAndFilterComponent } from './search-and-filter.component';
+import { ListHostComponent } from './list-host.component';
 
-describe('SearchAndFilterComponent', () => {
-  let component: SearchAndFilterComponent;
-  let fixture: ComponentFixture<SearchAndFilterComponent>;
+describe('ListHostComponent', () => {
+  let component: ListHostComponent;
+  let fixture: ComponentFixture<ListHostComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SearchAndFilterComponent]
+      imports: [ListHostComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(SearchAndFilterComponent);
+    fixture = TestBed.createComponent(ListHostComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

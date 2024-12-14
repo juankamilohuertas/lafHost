@@ -2,16 +2,18 @@ export interface IfiltersTipoHosts {
   id: number;
   nombreTipoHost: string
 }
-export interface IfiltersEnlaces{
-  id: 0,
+export interface IfiltersActivosFijosManuales{
+  id: number,
   codigoActivo: string,
-  idSeccion: number,
-  idResponsable: number,
-  idTipoHost: number,
+  nombreSeccion: string,
+  codigoNomina: string,
+  nombreResponsable: string,
+  nombreTipoHost: string,
   numeroSerie: string,
   descripcion: string,
   direccionIp: string,
-  fecha: string
+  fecha: string,
+  estado: string
 }
 export interface IfiltersSecciones{
   id: number,
@@ -22,4 +24,18 @@ export interface IfiltersResponsables{
   codigoCentauro: number,
   nombreResponsable: string,
   idSeccion: number
+}
+/* actualiza la toda la db */
+export interface IfiltersActualizarDesdeArchivo{
+  "id": number,
+  "codigoActivo": string,
+  "nombreSeccion": string,
+  "codigoNomina": string,
+  "nombreResponsable": string,
+  "nombreTipoHost": string,
+  "numeroSerie": string,
+  "descripcion": string,
+  "direccionIp": string,
+  "fecha": string,
+  "estado": string
 }

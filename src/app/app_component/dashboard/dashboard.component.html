@@ -1,13 +1,13 @@
-<div class="content__dashboard">
+<div class="content__dashboard btnCloseOrOpen">
   <app-aside />
   <main class="content__dashboard-main">
     <section class="content__dashboard-section">
       <app-header />
       <div class="content__dashboard-content p-3 bg-light">
         <div class="row">
-         <div class="col-lg-12">
-          <router-outlet/>
-         </div>
+          <app-bread-crumb class="col-12"/>
+          <app-btn-close-or-open class="col-12"/>
+          <router-outlet class="col-12"/>
          <div class="col-lg-12">
          </div>
         </div>

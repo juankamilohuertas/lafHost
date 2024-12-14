@@ -1,0 +1,384 @@
+<!-- BOTON DE ACTUALIZAR LA DB -->
+<button
+  type="button"
+  style="background-color: #990008; position: relative; top: 100px; left: -310px;"
+  class="btn m-3 text-light py-1 d-flex align-items-center shadow p-3 mb-1 rounded"
+  (click)="updateDb()"
+>
+  Actualizar
+</button>
+<!-- MOSTRANDO LA INFO MAS DETALLADA DEL REGISTRO SELECCIONADO -->
+<section class="row-12 d-flex justify-content-center" style="font-size: small; border: 1px solid #990008; background-color: #40404011;">
+  <div class="col-6">
+    <table class="table d-flex justify-content-center text-light p-2">
+      <thead>
+        @for (item of moreInfoHeaders; track $index) {
+        <tr>
+          <td>{{ item }}</td>
+        </tr>
+        }
+      </thead>
+      <tbody>
+        @for (item of moreInfo; track $index) {
+        <tr class="editInputs">
+          @switch($index){ @case (2) {
+          <td>
+            <input
+              style="height: 18px"
+              disabled
+              type="text"
+              list="editByCodigoActivo"
+              value="{{ item }}"
+            />
+            <datalist id="editByCodigoActivo">
+              @for (codigoActivo of getDbfilterByNombreSeccion; track $index) {
+              <option value="{{ codigoActivo }}"></option>
+              }
+            </datalist>
+          </td>
+          } @case (3) {
+          <td>
+            <input
+              style="height: 18px"
+              disabled
+              type="text"
+              (input)="searchNameByCodigoNomina()"
+              [(ngModel)]="editCodigoNomina"
+              value="{{ item }}"
+            />
+          </td>
+          }@case (4) {
+          <td>
+            @if(enableButtonEdit){
+            <input
+              style="height: 18px"
+              disabled
+              type="text"
+              value="{{ editNombreResponsabe }}"
+            />
+            }@else {
+            <input style="height: 18px" disabled type="text" value="{{ item }}" />
+            }
+          </td>
+  
+          }@case (9) {
+          <td>
+            @if(enableButtonEdit){
+            <input style="height: 18px" disabled type="date" value="{{ item }}" />
+            }@else{
+            <input style="height: 18px" disabled type="text" value="{{ item }}" />
+            }
+          </td>
+          }@case (10) {
+          <td>
+            @if(enableButtonEdit){
+            <select
+              style="border: none; outline: 1px solid #c4c4c4"
+              class="editElementSelect"
+              disabled
+              [(ngModel)]="editEstado"
+            >
+              <option selected disabled value="estado">{{ item }}</option>
+              <option value="INACTIVO">INACTIVO</option>
+              <option value="ACTIVO">ACTIVO</option>
+            </select>
+            }@else{
+            <input style="height: 18px" disabled type="text" value="{{ item }}" />
+            }
+          </td>
+          } @default {
+  
+          <td>
+           <input
+              style="height: 18px"
+              disabled
+              type="text"
+              value="{{ item }}"
+            />
+          </td>
+  
+          } }
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  <div class="col-6 d-flex flex-column align-items-center justify-content-center">
+    <!-- imagen contiene la IP del registro seleccionado -->
+    <a
+      class="d-inline-block w-50 text-center"
+      href="http://{{ direccionIp }}"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      @if (moreInfo[5] !== undefined) { @if (moreInfo[5].includes("UPS")) {
+      <img class="w-100" src="assets/UPS.jpg" alt="Img-ups" />
+      }@else if(moreInfo[5].includes("IMPRESORA")){
+      <img class="w-100" src="assets/Kyocera.jpg" alt="Img-Kyocera-Printer" />
+      }@else if (moreInfo[5].includes("ACCESSPOINT")) {
+      <img class="w-100" src="assets/accessPoint.jpg" alt="Img-accessPoint" />
+      }@else {
+      <img class="w-100" src="assets/Kyocera.jpg" alt="Img-Kyocera-Printer" />
+      } }
+    </a>
+    <div>
+      <button
+        type="button"
+        style="background-color: #404040"
+        class="btnEditRegister btn m-3 text-light py-1 d-flex align-items-center shadow mb-1 rounded d-none"
+        (click)="editRegister()"
+      >
+        Editar registro
+      </button>
+    </div>
+    <div>
+      <button
+        disabled
+        type="button"
+        style="background-color: #990008"
+        class="btnSaveChanges btn m-3 text-light py-1 d-flex align-items-center shadow mb-1 rounded d-none"
+        (click)="updateDbActivosFijosManuales()"
+      >Guardar cambios</button>
+    </div>
+    <div>
+      <button
+        disabled
+        type="button"
+        style="background-color: #990008"
+        class="btnDelete btn m-3 text-light py-1 d-flex align-items-center shadow mb-1 rounded d-none"
+        (click)="deleteDbActivosFijosManuales()"
+      >Borrar</button>
+    </div>
+  </div>
+</section>
+<!-- SELECCIONANDO EL TIPO DE TABLA -->
+<section class="d-flex text-light" style="background-color: #990008">
+  <h4 class="fs-6">Activo Fijo:</h4>
+  <div class="ms-2">
+    <label for="selectTable1" class="me-3">
+      <input
+        type="radio"
+        name="tableAssets"
+        [(ngModel)]="viewActiveTables"
+        value="si"
+        id="selectTable1"
+        (click)="selectTable($event)"
+      />
+      si
+    </label>
+    <label for="selectTable2">
+      <input
+        type="radio"
+        name="tableAssets"
+        [(ngModel)]="viewActiveTables"
+        value="no"
+        id="selectTable2"
+        (click)="selectTable($event)"
+      />
+      no
+    </label>
+  </div>
+</section>
+<!-- ENCABEZADO DE BUSQUEDA -->
+<section class="conte__headTableRegisters">
+  <table class="table table-secondary table-hover overflow-auto">
+    <thead>
+      <tr class="rowHeadersTables">
+        <th><p class="pb-2">Id</p></th>
+        <th>
+          <input
+            class="border border-secondary"
+            style="outline-color: #990008"
+            type="text"
+            list="inputSearchByCodigoActivo"
+            [(ngModel)]="filterCodigoActivo"
+            (input)="validateInputTable($event, 'Codigo Activo')"
+          />
+          <datalist id="inputSearchByCodigoActivo">
+            @for (codigoActivo of getDbfilterByCodigoActivo; track $index) {
+            <option value="{{ codigoActivo }}"></option>
+            }
+          </datalist>
+          <p class="pb-2">Codigo Activo</p>
+        </th>
+        <th>
+          <input
+            class="border border-secondary"
+            style="outline-color: #990008"
+            type="text"
+            list="inputSearchByfilterSeccion"
+            [(ngModel)]="filterSeccion"
+            (input)="validateInputTable($event, 'Sección')"
+          />
+          <datalist id="inputSearchByfilterSeccion">
+            @for (filterSeccion of getDbfilterByNombreSeccion; track $index) {
+            <option value="{{ filterSeccion }}"></option>
+            }
+          </datalist>
+          <p class="pb-2">Nombre de Sección</p>
+        </th>
+        <th>
+          <input
+            class="border border-secondary"
+            style="outline-color: #990008"
+            type="text"
+            list="inputSearchByfilterNomina"
+            [(ngModel)]="filterCodigoNomina"
+            (input)="validateInputTable($event, 'Código Nomina')"
+          />
+          <datalist id="inputSearchByfilterNomina">
+            @for (filterSeccion of getDbfilterByCodigoNomina; track $index) {
+            <option value="{{ filterSeccion }}"></option>
+            }
+          </datalist>
+          <p class="pb-2">Código de Nómina</p>
+        </th>
+        <th>
+          <input
+            class="border border-secondary"
+            style="outline-color: #990008"
+            type="text"
+            list="inputSearchByfilterResponsable"
+            [(ngModel)]="filterResponsable"
+            (input)="validateInputTable($event, 'Responsable')"
+          />
+          <datalist id="inputSearchByfilterResponsable">
+            @for (filterResponsable of getDbfilterByNombreResponsable; track
+            $index) {
+            <option value="{{ filterResponsable }}"></option>
+            }
+          </datalist>
+          <p class="pb-2">Nombre de Responsable</p>
+        </th>
+        <th>
+          <input
+            class="border border-secondary"
+            style="outline-color: #990008"
+            type="text"
+            list="inputSearchByfilterTypeHost"
+            [(ngModel)]="filterTypeHost"
+            (input)="validateInputTable($event, 'Tipo de Host')"
+          />
+          <datalist id="inputSearchByfilterTypeHost">
+            @for (filterDispositivo of getDbfilterByTipoHost; track $index) {
+            <option value="{{ filterDispositivo }}"></option>
+            }
+          </datalist>
+          <p class="pb-2">Dispositivo</p>
+        </th>
+        <th>
+          <input
+            class="border border-secondary"
+            style="outline-color: #990008"
+            type="text"
+            list="inputSearchByfilterSerie"
+            [(ngModel)]="filterNumeroSerie"
+            (input)="validateInputTable($event, 'Número de Serie')"
+          />
+          <datalist id="inputSearchByfilterSerie">
+            @for (filterSerie of getDbfilterByNumeroSerie; track $index) {
+            <option value="{{ filterSerie }}"></option>
+            }
+          </datalist>
+          <p class="pb-2">N° Serie</p>
+        </th>
+        <th>
+          <input
+            class="border border-secondary"
+            style="outline-color: #990008"
+            type="text"
+            list="inputSearchByfilterDescripcion"
+            [(ngModel)]="filterDescripcion"
+            (input)="validateInputTable($event, 'Descripción')"
+          />
+          <datalist id="inputSearchByfilterDescripcion">
+            @for (filterDescripcion of getDbfilterByDescripcion; track $index) {
+            <option value="{{ filterDescripcion }}"></option>
+            }
+          </datalist>
+          <p class="pb-2">Descripción</p>
+        </th>
+        <th>
+          <input
+            class="border border-secondary"
+            style="outline-color: #990008"
+            type="text"
+            list="inputSearchByfilterIp"
+            [(ngModel)]="filterDireccionIp"
+            (input)="validateInputTable($event, 'Dirección IP')"
+          />
+          <datalist id="inputSearchByfilterIp">
+            @for (filterIp of getDbfilterByDireccionIp; track $index) {
+            <option value="{{ filterIp }}"></option>
+            }
+          </datalist>
+          <p class="pb-2">Dirección IP</p>
+        </th>
+        <th>
+          <input
+            class="border border-secondary"
+            style="outline-color: #990008"
+            type="text"
+            list="inputSearchByfilterFecha"
+            [(ngModel)]="filterFecha"
+            (input)="validateInputTable($event, 'Fecha de Compra')"
+          />
+          <datalist id="inputSearchByfilterFecha">
+            @for (filterIp of getDbfilterByFecha; track $index) {
+            <option value="{{ filterIp }}"></option>
+            }
+          </datalist>
+          <p class="pb-2">Fecha de Compra</p>
+        </th>
+        <th>
+          <input
+            class="border border-secondary"
+            style="outline-color: #990008"
+            type="text"
+            list="inputSearchByfilterEstado"
+            [(ngModel)]="filterEstado"
+            (input)="validateInputTable($event, 'Estado')"
+          />
+          <datalist id="inputSearchByfilterEstado">
+            @for (filterEstado of getDbfilterByEstado; track $index) {
+            <option value="{{ filterEstado }}"></option>
+            }
+          </datalist>
+          <p class="pb-2">Estado</p>
+        </th>
+      </tr>
+    </thead>
+    <tbody class="conte__resultSearches">
+      @if (this.getAllInputsValues !== "" && getDbFilters.length !== 0) { @for
+      (item of getDbFilters; track $index) {
+      <tr (click)="selectRegisterStyles($event,item.id)" style="font-size: 0.8rem">
+        <th>{{ $index + 1 }}</th>
+        <td>{{ item.codigoActivo }}</td>
+        <td>{{ item.nombreSeccion }}</td>
+        <td>{{ item.codigoNomina }}</td>
+        <td>{{ item.nombreResponsable }}</td>
+        <td>{{ item.nombreTipoHost }}</td>
+        <td>{{ item.numeroSerie }}</td>
+        <td>{{ item.descripcion }}</td>
+        <td>{{ item.direccionIp }}</td>
+        <td>{{ item.fecha }}</td>
+        <td>{{ item.estado }}</td>
+      </tr>
+      } }@else { @for (item of tableView; track $index) {
+      <tr (click)="selectRegisterStyles($event,item.id)" style="font-size: 0.8rem">
+        <td>{{ $index + 1 }}</td>
+        <td>{{ item.codigoActivo }}</td>
+        <td>{{ item.nombreSeccion }}</td>
+        <td>{{ item.codigoNomina }}</td>
+        <td>{{ item.nombreResponsable }}</td>
+        <td>{{ item.nombreTipoHost }}</td>
+        <td>{{ item.numeroSerie }}</td>
+        <td>{{ item.descripcion }}</td>
+        <td>{{ item.direccionIp }}</td>
+        <td>{{ item.fecha }}</td>
+        <td>{{ item.estado }}</td>
+      </tr>
+      } }
+    </tbody>
+  </table>
+</section>
