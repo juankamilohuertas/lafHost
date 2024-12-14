@@ -5,11 +5,12 @@ import {
   IfiltersSecciones,
   IfiltersTipoHosts,
 } from '../../app_models/filter/search-and-filter.models';
+import { BreadCrumbComponent } from '../bread-crumb/bread-crumb.component';
 
 @Component({
   selector: 'app-opt-configuration',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule,BreadCrumbComponent],
   templateUrl: './opt-configuration.component.html',
   styleUrl: './opt-configuration.component.sass',
 })
@@ -25,6 +26,7 @@ export class OptConfigurationComponent implements OnInit {
   getDBcodigoCentauro: number[] = []; // trae los registros de la columna CodigoCentauro de la tabla Responsable
   constructor() {}
   ngOnInit(): void {
+    this._serviceDataFilter.setBreadCrumb("Opciones de configuración");
     /* get db secciones */
     this._serviceDataFilter.getSeccionesApi().subscribe((res) => {
       this.getDBSecciones = res;

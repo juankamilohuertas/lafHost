@@ -1,6 +1,11 @@
+/* CONTENEDOR DE INPUTS DE LA OPAGINA PRINCIPAL */
+.typesOfSearches
+    display: flex
+    padding: 20px 0
+    
 /* INPUT DE BUSQUEDA POR CODIGO */
 .inputSearchByCode
-    outline-color: #990008  
+    outline-color: #c7000a  
     padding: 1.5px 0
     text-indent: 4px   
     margin-right: 2px 
@@ -15,31 +20,47 @@
         background-color: #212221
         color: #ffffff
         &:hover
-            background-color: #e20020
+            background-color: #c7000a 
     
 /* VALIDACION DE CAMPOS DE LA CREACION DEL HOST */
 
 .validateInput
-    border: 1px solid #f00      
+    border: 1px solid #c7000a       
 
 /* RESUTADOS DE LA BUSQUEDA POR CODIGO ACTIVO*/
+
 .tableInfoDispositivos
     tr
-        border: 1px solid #990008
+        border: 1px solid #c7000a 
         td
             text-transform: uppercase
             padding: 5px 10px
             &:hover
-                background-color: #990008
+                background-color: #c7000a 
                 color: #ffffff
             span
                 font-weight: 600
 /* RESULTADOS DE LA BUSQUEDA POR CODIGO DE NOMINA */
+.inputSearchByCodeCentauro
+    outline-color: #c7000a  
+
 .tableInfoByCodigoNomina
+    &__thead
+        font-size: medium
+        th
+            background-color: #ff8787
+            font-size: small
+            font-weight: 400
+            color: #000000
+            border: 1px solid #c7000a
+
     &__tr
         cursor: pointer
+        font-size: small
 .selectRowElement
-    outline: 1px solid #ff000d      
+    outline: 1px solid #c7000a      
     opacity: 0.8     
             
-    
+/* RESULTADOS DE LA BUSQUEDA POR CODIGO DE NOMINA */    
+.inputSearchByseccion
+    outline-color: #c7000a  

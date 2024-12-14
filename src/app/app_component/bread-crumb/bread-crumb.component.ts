@@ -10,14 +10,19 @@ import { DataFilterService } from '../../app_services/filter/data-filter.service
 })
 export class BreadCrumbComponent implements OnInit {
   private readonly _dataFilter = inject(DataFilterService);
-  breadCrumb?: string
-
+  breadCrumb!: string;
+  urlBreadCrum = "";
   constructor(){}
 
   ngOnInit(): void {
-    this._dataFilter.selectedFilterOptions$.subscribe(v => {
-      this.breadCrumb = v
-    });
+      this._dataFilter.selectedFilterOptions$.subscribe(v => {
+        this.breadCrumb = v
+        if(v == "Opciones de configuración"){
+          this.urlBreadCrum = "http://localhost:4200/panel/configuration";
+        }else if(v == "Lista de dispositivos"){
+          this.urlBreadCrum = "http://localhost:4200/panel/configuration";
+        }
+      });  
   }
 
 

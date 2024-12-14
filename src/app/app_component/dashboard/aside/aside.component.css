@@ -8,10 +8,10 @@
 .aside__user {
   display: flex;
   align-items: center;
+  justify-content: center;
   box-shadow: 2px 2px 10px #404040;
   background-color: #404040;
   padding: 10px;
-  margin-bottom: 15px;
   height: 64px;
   color: #000000;
 }
@@ -39,4 +39,36 @@
 .aside-link-icons {
   padding-right: 10px;
   font-size: 20px;
+}
+.aside__btnSession {
+  background: #fff;
+  color: #c7000a;
+  border: 2px solid #c7000a;
+  padding: 6px 12px;
+  margin: 100px 0 0 20px;
+  border-radius: 5px;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  display: inline-block;
+}
+.aside__btnSession:hover {
+  color: #fff;
+}
+.aside__btnSession::after {
+  content: "";
+  background: #c7000a;
+  position: absolute;
+  z-index: -1;
+  display: block;
+  left: -20%;
+  right: -20%;
+  top: 0;
+  bottom: 0;
+  transform: skewX(-45deg) scale(0, 1);
+  transition: all 0.3s ease;
+}
+.aside__btnSession:hover::after {
+  transition: all 0.3s ease-out;
+  transform: skewX(-45deg) scale(1, 1);
 }/*# sourceMappingURL=aside.component.css.map */

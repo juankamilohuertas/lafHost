@@ -93,7 +93,7 @@ export class DataFilterService {
     descripcion: string,
     direccionIp: string,
     fecha: string){
-    return this.httpClient.put<IfiltersEnlaces[]>(`${this._urlsApis.apiEnlaces}/${id}`,{
+    return this.httpClient.post<IfiltersEnlaces[]>(`${this._urlsApis.apiEnlaces}/${id}$`,{
       "id": id,
       "codigoActivo": codigoActivo,
       "idSeccion": idSeccion,
@@ -107,7 +107,7 @@ export class DataFilterService {
   }
   /* DELETE API ENLACES */
   deleteEnlacesApi(id:number){
-    return this.httpClient.delete<IfiltersEnlaces[]>(`${this._urlsApis.apiEnlaces}/${id}`);
+    return this.httpClient.post(`${this._urlsApis.apiEnlaces}/${id}`,{});
   }
   /* ************************************************************************ */
   private _dataBehavior = new BehaviorSubject('');

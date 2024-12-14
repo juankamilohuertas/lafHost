@@ -1,17 +1,17 @@
 <aside class="aside">
   <section class="aside__user">
-    <!-- <i class="aside__user-icon bi bi-person-circle"></i> -->
     <h1 class="aside__user-h1 fs-6">Administrador de Dispositivos</h1>
-    <!-- <span class="aside__user-span">{{loggedUser}}</span> -->
+    <span class="aside__user-span">{{loggedUser}}</span>
   </section>
+  <div>
+    <img class="w-100" src="assets/dispositivos.png" alt="dispositivos">
+  </div>
   <div class="aside-items">
     <li class="aside-link" routerLink='inicio'><i class="aside-link-icons bi bi-house"></i>INICIO</li>
-    <li class="aside-link" routerLink="configuration"><i class="aside-link-icons bi bi-sliders"></i>OPCIONES DE CONFIGURACIÓN</li>
-    <li class="aside-link"><i class="aside-link-icons bi bi-clock-history"></i>VER REGISTRO</li>
-    <li class="aside-link"><i class="aside-link-icons bi bi-file-earmark"></i>ENVIAR INFORME</li>
-    <li class="aside-link"><i class="aside-link-icons bi bi-list-columns"></i>LISTA DE HOST</li>
-    <li class="aside-link">CERRAR SESIÓN</li>
+    <app-btn-create-new/>
+    
   </div>
+  <button class="aside__btnSession" routerLink="login">CERRAR SESIÓN</button>
 </aside>
 
 

@@ -1,0 +1,146 @@
+<!-- BOTON DE CREAR NUEVO DISPOSITIVO -->
+<button
+  type="button"
+  style="background-color: #990008"
+  class="btn m-3 text-light py-0 d-flex align-items-center shadow p-3 mb-5 rounded"
+  data-bs-toggle="modal"
+  data-bs-target="#dispositivo"
+  (click)="controlCrud()"
+>
+  <span>Crear Nuevo Dispositivo</span><i class="bi bi-plus fs-5"></i>
+</button>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="dispositivo"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">
+          {{ saveChanges }}
+        </h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <!-- **************FORMULARIO*************** -->
+        <div class="form__createHost px-4 py-3">
+          <!-- campo nombre secciones -->
+          <select
+            class="secciones validateInput form-select mb-3"
+            aria-label="Default select example"
+            [(ngModel)]="id_seccion"
+            (click)="validateInputs($event, id_seccion, 'seccion')"
+          >
+            <option selected disabled>nombre de sección</option>
+            @for (item of getDbSecciones; track item.id) {
+            <option
+              (click)="validateInputs($event, id_seccion, 'seccion')"
+              value="{{ item.id }}"
+            >
+              {{ item.nombreSeccion }}
+            </option>
+            }
+          </select>
+          <!-- codigo responsable del dispositivo-->
+          <select
+            class="responsable validateInput form-select mb-3"
+            aria-label="Default select example"
+            [(ngModel)]="id_responsable"
+            (click)="validateInputs($event, id_responsable, 'responsable')"
+          >
+            <option selected disabled>nombre de responsable</option>
+            @for (item of getDbResponsables; track $index) { @if (id_seccion ===
+            item.idSeccion.toString()) {
+            <option value="{{ item.id }}">{{ item.nombreResponsable }}</option>
+            } }
+          </select>
+          <!-- campo host -->
+          <select
+            class="host validateInput form-select mb-3"
+            aria-label="Default select example"
+            [(ngModel)]="id_host"
+            (click)="validateInputs($event, id_host, 'host')"
+          >
+            <option selected disabled>tipo de host</option>
+            @for (item of getDbTypeHost; track $index) {
+            <option value="{{ item.id }}">{{ item.nombreTipoHost }}</option>
+            }
+          </select>
+          <!-- codigo activo -->
+          <div class="mb-3">
+            <input
+              type="text"
+              class="codigo_activo form-control validateInput"
+              [(ngModel)]="codigo_activo"
+              placeholder="codigo activo"
+              (input)="validateInputs($event, codigo_activo!, 'codigo activo')"
+            />
+          </div>
+          <!-- campo serie -->
+          <div class="mb-3">
+            <input
+              type="text"
+              class="numero_serie form-control"
+              [(ngModel)]="numero_serie"
+              placeholder="número de serie"
+              (input)="validateInputs($event, numero_serie, 'numero serie')"
+            />
+          </div>
+          <!-- campo descripcion -->
+          <div class="mb-3">
+            <input
+              type="text"
+              class="descripcion form-control"
+              [(ngModel)]="descripcion"
+              placeholder="descripcion"
+              (input)="validateInputs($event, descripcion, 'descripcion')"
+            />
+          </div>
+          <!-- campo direccion IP -->
+          <div class="mb-3">
+            <input
+              type="text"
+              class="direccion_ip form-control validateInput"
+              [(ngModel)]="direccion_ip"
+              placeholder="Dirección IP"
+              (input)="validateInputs($event, direccion_ip, 'direccion ip')"
+            />
+          </div>
+          <!-- campo fecha -->
+          <div class="mb-3">
+            <input
+              type="date"
+              class="form-control"
+              [(ngModel)]="fecha_compra"
+            />
+          </div>
+        </div>
+        <!-- ************************************ -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Cerrar
+        </button>
+        <button
+          type="button"
+          style="background-color: #990008"
+          class="btn text-light"
+          (click)="postNewHost(saveChanges)"
+        >
+          Guardar Cambios
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
